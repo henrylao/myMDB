@@ -1,17 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{d39a174b-c67a-40be-8520-7b658663cf96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="FileIO">
+      <UniqueIdentifier>{97572909-86b3-47cf-8169-a99982d8acdc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Util">
+      <UniqueIdentifier>{f954909d-0f97-400d-9b95-60ffea3415b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{af055974-a56a-450d-9892-90af525a6e07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection">
+      <UniqueIdentifier>{70b295e4-08af-4950-8cf3-a88424f60acf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection\List">
+      <UniqueIdentifier>{416230c9-1a80-4241-8437-e4544d039ecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection\Trees">
+      <UniqueIdentifier>{0f112123-41ec-4f0e-b510-0e27f7ce1e6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection\Stack &amp; Queue">
+      <UniqueIdentifier>{7fd77488-3c70-4c8d-940c-9dedbce87c1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
