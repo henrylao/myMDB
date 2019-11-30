@@ -1,4 +1,5 @@
 #include "StringUtil.h"
+
 std::string StringUtil::strip(const std::string& str) {
 	size_t first = str.find_first_not_of(' ');
 	if (std::string::npos == first)
@@ -17,6 +18,35 @@ std::string StringUtil::uppercase(const std::string& str) {
 		formatted += std::toupper(str[i], loc);
 	}
 	return formatted;
+}
+
+List<std::string>* StringUtil::split(const std::string & str, const std::string delim)
+{
+	if (str.empty())
+		return nullptr;
+	List<std::string>* tokens = new List<std::string>();
+	std::string::size_type start = 0;
+	while (true)
+	{
+		size_t idx = str.find(delim, start);
+		if (idx == std::string::npos)
+			break;
+		tokens->append(str.substr(start, idx - start));
+		start = idx + delim.size();
+	}
+	tokens->append(str.substr(start));
+
+	return tokens;
+}
+
+std::string StringUtil::join(const List<std::string>& tokens)
+{
+	std::string joined;
+	for (int i = 0; i < tokens.getLength(); i++)
+	{
+		joined += tokens.getEntry(i);
+	}
+	return joined;
 }
 
 std::string StringUtil::lowercase(const std::string& str) {
@@ -42,6 +72,16 @@ std::string StringUtil::replace(const std::string& data,
 		pos = formatted.find(to_search, pos + replace_str.size());
 	}
 	return formatted;
+}
+
+bool StringUtil::containsAlpha(const std::string & data)
+{
+	for (int i = 0; i < data.length(); i++)
+	{
+		if (isalpha(data[i]))
+			return true;
+	}
+	return false;
 }
 
 

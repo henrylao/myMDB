@@ -68,11 +68,11 @@ public:
 	@param position The list position of the entry to replace.
 	@param newEntry The replacement entry. */
 	void set_item(int index, T t_item);
+	bool sorted_insert(const T& newItem);
 protected:
 	/* Helper function for traversing through the list
 	@return*/
 	LinkNode<T>* navigate(int index) const;
-	void sortedInsert(LinkNode<T>*);
 
 private:
 	HeadNode<T> m_list;
@@ -261,5 +261,64 @@ LinkNode<T>* LinkedList<T>::navigate(int index) const{
 		nav = nav->get_next();
 	}
 	return nav;
+}
+template<class T>
+bool LinkedList<T>::sorted_insert(const T& newItem)
+{
+	if (m_list.size() < 2) {
+		if (m_list.size() == 0)
+		{
+			this->insert_back(newItem);
+			return true;
+		}
+		else if (m_list.size() == 1)
+		{
+			if (m_list.get_first()->get_item() < newItem)
+			{
+				this->insert_back(newItem);
+			}
+			else
+				this->insert_front(newItem);
+		}
+	}
+	else
+	{
+
+		if (m_list.get_last()->get_item() <= newItem) {
+			/*  new > last --> append */
+			LinkNode<T>* pNew = new LinkNode<T>(newItem);
+			m_list.get_last()->set_next(pNew);	// point old last to the new node
+			m_list.set_last(pNew);	// retarget head node's "last node" pointer to the new
+			m_list.set_size(m_list.size() + 1);
+			return true;
+			//this->display();		// DEBUG
+		}
+		else if (m_list.get_first()->get_item() >= newItem) {
+			/* first > new --> prepend */
+			LinkNode<T>* pNew = new LinkNode<T>(newItem);
+			pNew->set_next(m_list.get_first());	// new points to the old head
+			m_list.set_first(pNew);				// sentinel's "first node" pointer points to new node
+			m_list.set_size(m_list.size() + 1);
+			//this->display();	// DEBUG
+			return true;
+		}
+
+		LinkNode<T>* pNew = new LinkNode<T>(newItem);
+		LinkNode<T>* pPrev = nullptr;
+		LinkNode<T>* pCurr = m_list.get_first();
+		while (pCurr != m_list.get_last() && m_list.get_first()->get_item() < newItem
+			&& m_list.get_last()->get_item() > newItem)
+		{
+			pPrev = pCurr;
+			pCurr = pCurr->get_next();
+			if (newItem <= pCurr->get_item() && pPrev->get_item() < newItem) {
+				pPrev->set_next(pNew);
+				pNew->set_next(pCurr);
+				m_list.set_size(m_list.size() + 1);
+				return true;
+			}
+
+		}
+	}
 }
 #endif // LINKED_LIST_H

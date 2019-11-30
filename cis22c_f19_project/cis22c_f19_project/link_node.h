@@ -8,7 +8,7 @@ public:
 	LinkNode();
 	LinkNode(LinkNode<T>& t_node);
 	LinkNode(T t_data, LinkNode<T>* t_next);
-
+	LinkNode(const T& item);
 	T get_item() const;
 	T& __get_item();
 	void set_item(const T& t_data);
@@ -33,6 +33,13 @@ LinkNode<T>::LinkNode(LinkNode<T>& t_node) : m_item{ t_node.m_item }, m_next{ t_
 template <class T>
 LinkNode<T>::LinkNode(T t_data, LinkNode<T>* t_next) : m_item{ t_data }, m_next{ t_next } {
 
+}
+
+template<class T>
+LinkNode<T>::LinkNode(const T & item)
+{
+	m_item = item;
+	m_next = nullptr;
 }
 
 template <class T>

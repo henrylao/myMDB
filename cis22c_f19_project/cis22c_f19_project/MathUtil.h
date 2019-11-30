@@ -6,12 +6,13 @@
 #include <string>
 #include "CustomException.h"
 #include "List.h"
+#include "StringUtil.h"
 namespace MathUtil
 {
 	// holds value of the last generated prime number array
 	// resets at the start of a new generation
 	extern size_t ATKINS_ARRAY_SIZE;
-	const int MAX_PRIME = 9973;
+	const size_t MAX_PRIME = 207239;
 	/* Generates an array of prime numbers less than the
 	specified limit using an implementation of the Sieve of Atkin's algorithm
 	@parameter limit bounds the prime number generator

@@ -17,6 +17,7 @@ public:
 	/** Gets the current number of entries in this list.
 	@return The integer number of entries currently in the list. */
 	int getLength() const { return __list->size(); }
+	bool sortedInsert(const T* newEntry) { return __list->sorted_insert(newEntry); }
 	/** Inserts an entry into this list at a given position.
 	@pre None.
 	@post If 1 <= position <= getLength() + 1 and the insertion is

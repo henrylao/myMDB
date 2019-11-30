@@ -1,0 +1,492 @@
+
+//
+//void promptCRUD_ops(TableDatabase& db)
+//{
+//int choice;
+//// user interacts with database
+//bool done_interact = false;
+//while (!done_interact)
+//{
+//	choice = menu_prompt("Please select from the following:", menu_bst_operations, 6);
+//	// exit program case
+//	if (choice == 6)
+//	{
+//		done_interact = true;
+//		break;
+//	}
+//	// add a person to the database
+//	else if (choice == 1)
+//	{
+//		Person new_person;
+//		string input;
+//
+//		bool done_populate = false;
+//		while (!done_populate) {
+//			std::cout << "Please enter the full name of a person. For example: John Doe" << std::endl;
+//			getline(cin, input);
+//			if (isValidName(input))
+//				break;
+//			else
+//				std::cout << "Invalid input, please try again" << std::endl;
+//		}
+//		new_person.setName(input);
+//
+//		while (!done_populate) {
+//			std::cout << "Please enter the four-digit year of birth. For example 2001" << std::endl;
+//			getline(cin, input);
+//			if (isValidYear(input))
+//				break;
+//			else
+//				std::cout << "Invalid input, please try again" << std::endl;
+//		}
+//		new_person.setYear(input);
+//
+//		while (!done_populate)
+//		{
+//			std::cout << "Please enter the two-digit month of birth. For example 04 for April" << std::endl;
+//			getline(cin, input);
+//			if (isValidMonth(input))
+//				break;
+//			else
+//				std::cout << "Invalid input, please try again" << std::endl;
+//		}
+//		new_person.setMonth(input);
+//
+//		while (!done_populate)
+//		{
+//			std::cout << "Please enter the two-digit day of birth. For example 03" << std::endl;
+//			getline(cin, input);
+//			if (isValidDay(input))
+//				break;
+//			else
+//				std::cout << "Invalid input, please try again" << std::endl;
+//		}
+//
+//		new_person.setDay(input);
+//
+//		db.addPerson(new_person);
+//	}
+//	// remove a person from the database
+//	else if (choice == 2)
+//	{
+//		string input;
+//		int remove_choice;
+//		remove_choice = menu_prompt("Please select from the following: ", menu_remove, 3);
+//		// remove by name
+//		if (remove_choice == 1)
+//		{
+//			bool done_remove_date = false;
+//			while (!done_remove_date)
+//			{
+//				std::cout << "Enter the full name of the person (with proper capitalization) you want to remove. For example: John Doe" << std::endl;
+//				getline(cin, input);
+//				// person with only name
+//				Person to_delete;
+//				to_delete.setName(input);
+//
+//				// person containing full data
+//				Person found_to_delete;
+//
+//				bool success = db.deletePerson(input);
+//				// found case
+//				if (success)
+//				{
+//					int continue_remove_choice;
+//					db.displayPerson(to_delete);
+//					db.remove(found_to_delete);
+//					std::cout << "Successfully removed " << found_to_delete << std::endl;
+//					// leave after successful removal
+//					continue_remove_choice = menu_prompt("Please select from the following: ", menu_continue_remove, 2);
+//					if (continue_remove_choice == 2)
+//					{
+//						break;
+//					}
+//				}
+//				// not found
+//				else
+//				{
+//					int try_again;
+//					std::cout << "No one in the database could be found with the birth date " << to_delete.getBirthday() << std::endl;
+//					try_again = menu_prompt("Would you like to try again?", menu_yes_no, 2);
+//					// leave after failed attempt
+//					if (try_again == 2)
+//					{
+//						break;
+//					}
+//				}
+//			} // end remove by name loop
+//		}
+//		// remove by date
+//		else if (remove_choice == 2)
+//		{
+//			int continue_remove_choice;
+//			bool done_remove_date = false;
+//			while (!done_remove_date)
+//			{
+//				Person to_delete;
+//				// populate date
+//				bool done_populate = false;
+//				while (!done_populate) {
+//					std::cout << "Please enter the four-digit year of birth. For example 2001" << std::endl;
+//					getline(cin, input);
+//					if (isValidYear(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				to_delete.setYear(input);
+//
+//				while (!done_populate)
+//				{
+//					std::cout << "Please enter the two-digit month of birth. For example 04 for April" << std::endl;
+//					getline(cin, input);
+//					if (isValidMonth(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				to_delete.setMonth(input);
+//
+//				while (!done_populate)
+//				{
+//					std::cout << "Please enter the two-digit day of birth. For example 03" << std::endl;
+//					getline(cin, input);
+//					if (isValidDay(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				to_delete.setYear(input);
+//				// end date valid populating
+//				bool found;
+//
+//				found = db.remove(to_delete);
+//				int try_again;
+//
+//				// found case
+//				if (found)
+//				{
+//					Person deleted = db.get_person_by_date(to_delete);
+//					std::cout << "Successfully removed " << deleted << std::endl;
+//					// leave after successful removal
+//					continue_remove_choice = menu_prompt("Please select from the following: ", menu_continue_remove, 2);
+//					if (continue_remove_choice == 2)
+//					{
+//						break;
+//					}
+//				}
+//				// not found
+//				else
+//				{
+//					std::cout << to_delete.getName() << " could not be found in the database" << std::endl;
+//					try_again = menu_prompt("Would you like to try again?", menu_yes_no, 2);
+//					// leave after failed attempt
+//					if (try_again == 2)
+//					{
+//						break;
+//					}
+//				}
+//			}	// end remove by date loop
+//		}
+//		// exit to main menu
+//		else if (remove_choice == 3)
+//			break;
+//	}	// end remove person case
+//	// modify person case
+//	else if (choice == 3)
+//	{
+//		bool success_found;
+//		Person editted_person;
+//		Person to_edit;
+//		string input;
+//		bool done_editting = false;
+//
+//		while (!done_editting)
+//		{
+//			/* CONSTRCUT PERSON TO SEARCH */
+//			bool done_populate = false;
+//			// populate name
+//			while (!done_populate) {
+//				std::cout << "Enter the full name of the person (with proper capitalization) you want to edit. For example: John Doe" << std::endl;
+//				getline(cin, input);
+//				if (isValidName(input))
+//					break;
+//				else
+//					std::cout << "Invalid input, please try again" << std::endl;
+//			}
+//			to_edit.setName(input);
+//
+//			// popualte date
+//			while (!done_populate) {
+//				std::cout << "Please enter the four-digit year of birth. For example 2001" << std::endl;
+//				getline(cin, input);
+//				if (isValidYear(input))
+//					break;
+//				else
+//					std::cout << "Invalid input, please try again" << std::endl;
+//			}
+//			to_edit.setYear(input);
+//
+//			while (!done_populate)
+//			{
+//				std::cout << "Please enter the two-digit month of birth. For example 04 for April" << std::endl;
+//				getline(cin, input);
+//				if (isValidMonth(input))
+//					break;
+//				else
+//					std::cout << "Invalid input, please try again" << std::endl;
+//			}
+//			to_edit.setMonth(input);
+//
+//			while (!done_populate)
+//			{
+//				std::cout << "Please enter the two-digit day of birth. For example 03" << std::endl;
+//				getline(cin, input);
+//				if (isValidDay(input))
+//					break;
+//				else
+//					std::cout << "Invalid input, please try again" << std::endl;
+//			}
+//			to_edit.setDay(input);
+//
+//			success_found = db.find(to_edit);
+//			Person found = db.get_person_by_name(to_edit);
+//			//std::cout << found << std::endl;	//DEBUG
+//			// found in database
+//			if (success_found)
+//			{
+//				std::cout << "Found the person you are looking to edit: \n" << found << std::endl;
+//				while (!done_populate) {
+//					std::cout << "Enter the new full name of the person (with proper capitalization) you want to edit. For example: John Doe" << std::endl;
+//					getline(cin, input);
+//					if (isValidName(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				editted_person.setName(input);
+//
+//				// popualte date
+//				while (!done_populate) {
+//					std::cout << "Please enter new the four-digit year of birth. For example 2001" << std::endl;
+//					getline(cin, input);
+//					if (isValidYear(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				editted_person.setYear(input);
+//
+//				while (!done_populate)
+//				{
+//					std::cout << "Please enter the new two-digit month of birth. For example 04 for April" << std::endl;
+//					getline(cin, input);
+//					if (isValidMonth(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				editted_person.setMonth(input);
+//
+//				while (!done_populate)
+//				{
+//					std::cout << "Please enter the new two-digit day of birth. For example 03" << std::endl;
+//					getline(cin, input);
+//					if (isValidDay(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				editted_person.setDay(input);
+//
+//				db.remove(found);
+//				db.add(editted_person);
+//
+//				std::cout << "Successfully editted " << found << " to " << editted_person;
+//
+//				int stay_edit = menu_prompt("What would you like to do?", menu_continue_edit, 2);
+//				if (stay_edit == 2)
+//					break;
+//			}
+//			// not found in database
+//			else if (!success_found)
+//			{
+//				std::cout << to_edit.getName() << " could not be found in the database" << std::endl;
+//				int try_again = menu_prompt("Would you like to try again?", menu_yes_no, 2);
+//				// exit case
+//				if (try_again == 2)
+//					break;
+//				else
+//					continue;
+//			}
+//		}	// end edit loop
+//	} // end edit case
+//	// search for a person case
+//	else if (choice == 4)
+//	{
+//		string input;
+//		Person to_search;
+//		bool done_search = false;
+//		// start search loop
+//		while (!done_search)
+//		{
+//			int search_choice = menu_prompt("Please select from the following: ", menu_search, 3);
+//			// search by name
+//			if (search_choice == 1)
+//			{
+//
+//				std::cout << "Enter the full name of the person (with proper capitalization) to search. For example: John Doe" << std::endl;
+//				getline(cin, input);
+//				to_search.setName(input);
+//
+//				// search by name to find if the person exists
+//				Person found;
+//				bool success_found = db.find(to_search);
+//
+//				if (success_found) {
+//					found = db.get_person_by_name(to_search);
+//					std::cout << "Found the person you are looking for: \n" << found << std::endl;
+//				}
+//				else {
+//					std::cout << "I couldn't find the person you were looking for" << std::endl;
+//				}
+//
+//				int stay_search = menu_prompt("What would you like to do?", menu_continue_search, 2);
+//				if (stay_search == 2)
+//					break;
+//			}
+//			// search by date
+//			else if (search_choice == 2)
+//			{
+//				// populate date
+//				bool done_populate = false;
+//				while (!done_populate) {
+//					std::cout << "Please enter the four-digit year of birth. For example 2001" << std::endl;
+//					getline(cin, input);
+//					if (isValidYear(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				to_search.setYear(input);
+//
+//				while (!done_populate)
+//				{
+//					std::cout << "Please enter the two-digit month of birth. For example 04 for April" << std::endl;
+//					getline(cin, input);
+//					if (isValidMonth(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				to_search.setMonth(input);
+//
+//				while (!done_populate)
+//				{
+//					std::cout << "Please enter the two-digit day of birth. For example 03" << std::endl;
+//					getline(cin, input);
+//					if (isValidDay(input))
+//						break;
+//					else
+//						std::cout << "Invalid input, please try again" << std::endl;
+//				}
+//				to_search.setYear(input);
+//				// end date valid populating
+//
+//				// search by date to find if the person exists
+//				Person found;
+//				bool success_found = db.find(to_search);
+//
+//				if (success_found) {
+//					found = db.get_person_by_date(to_search);
+//					std::cout << "Found the person you are looking for: \n" << found << std::endl;
+//				}
+//				else {
+//					std::cout << "I couldn't find the person you were looking for" << std::endl;
+//				}
+//				int stay_search = menu_prompt("What would you like to do?", menu_continue_search, 2);
+//				if (stay_search == 2)
+//					break;
+//			}
+//			// return to menu
+//			else if (search_choice == 3)
+//			{
+//				break;
+//			}
+//		} // end serach loop
+//	}
+//	// display database
+//	else if (choice == 5)
+//	{
+//		bool done_displaying = false;
+//		int display_choice;
+//		while (!done_displaying)
+//		{
+//			display_choice = menu_prompt("Please select from the following: ", menu_display, 5);
+//			// display by descending birth age
+//			if (display_choice == 1)
+//			{
+//				db.displayByDate(display);
+//				// continue or not
+//				display_choice = menu_prompt("Please select from the following: ", menu_continue_display, 2);
+//				if (display_choice == 2)
+//					break;
+//			}
+//			// display name alphabetiucally
+//			else if (display_choice == 2)
+//			{
+//				db.displayByName(display);
+//				// continue or not
+//				display_choice = menu_prompt("Please select from the following: ", menu_continue_display, 2);
+//				if (display_choice == 2)
+//					break;
+//			}
+//			// display BFS sorted names
+//			else if (display_choice == 3)
+//			{
+//				db.displaybyNameInBreadthFirst(display);
+//				// continue or not
+//				display_choice = menu_prompt("Please select from the following: ", menu_continue_display, 2);
+//				if (display_choice == 2)
+//					break;
+//			}
+//			// display BFS sorted dates
+//			else if (display_choice == 4)
+//			{
+//				db.displaybyDateInBreadthFirst(display);
+//				// continue or not
+//				display_choice = menu_prompt("Please select from the following: ", menu_continue_display, 2);
+//				if (display_choice == 2)
+//					break;
+//			}
+//			// return to main menu
+//			else if (display_choice == 5)
+//			{
+//				break;
+//			}
+//		} // end done interacting with database
+//	}
+//	// user specified file case
+//	else if (user_in.size() > 1)
+//	{
+//		//attempt to open
+//		infile.open(user_in, ios::in);
+//		if (infile.fail())
+//		{
+//			std::cout << "I couldn't open the file from the path entered\n";
+//		}
+//		else {
+//			db.load_from_file(user_in);
+//		}
+//		// prompt for a try again
+//		try_again = menu_prompt("Would you like to try again?", menu_continue_program, 2);
+//		if (try_again == 2)
+//			break;
+//	}
+//}	// end user interaction loop
+//
+//std::cout << "Saving to file...\n";
+//db.save_to_file();
+//system("pause");
+//}
+//

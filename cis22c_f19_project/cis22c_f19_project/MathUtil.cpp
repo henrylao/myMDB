@@ -12,7 +12,6 @@ size_t* MathUtil::generatePrimesAtkins(size_t limit)
 	// Initialise the sieve array with false values 
 	for (size_t i = 0; i < limit; i++)
 		sieve[i] = false;
-
 	/* Mark sieve[n] true if one of the following is true:
 		a) n = (4*x*x)+(y*y) has odd number of
 		   solutions, i.e., there exist
@@ -63,14 +62,14 @@ size_t* MathUtil::generatePrimesAtkins(size_t limit)
 	return primes;
 }
 /* Identify the first archived prime greater than the input argument size
-@pre size cannot be greater than 9973 and primes2.txt must exist in
-root directory unmodified
-@return prime that is greater than or equal to 2 times argument size */
+using the primes2.txt in the root directory
+@param size is the 
+@return first prime greater than the input argument size */
 size_t MathUtil::findPrime(size_t size)
 {
 	std::ifstream infile;
-	const size_t SIZE = 1229;
-
+	const size_t SIZE = 1862;
+	List < std::string>* pPrimes;
 	size_t primes[SIZE];
 	infile.open("primes2.txt", std::ios::in);
 	std::string data;
@@ -78,15 +77,26 @@ size_t MathUtil::findPrime(size_t size)
 	{
 		for (size_t i = 0; i < SIZE; i++)
 		{
-			if (getline(infile, data, ','))
-				primes[i] = std::stoi(data);
+			if (getline(infile, data, '\n'))
+			{
+				pPrimes = StringUtil::split(data, ",");
+				primes[i] = std::stoi(pPrimes->getEntry(0));
+				pPrimes->clear();
+				delete pPrimes;
+			}
 			//std::cout << primes[i] << std::endl;	// DEBUG
 		}
 	}
 	infile.close();
-
-	if (size > primes[SIZE - 1])
-		throw CustomException("Unsigned Integer Greater than Largest Archived Prime");
+	/*size_t low, mid, high;
+	low = 0;
+	mid = SIZE / 2;
+	high = SIZE - 1;
+	bool done = false;
+	while (!done)
+	{
+		if ()
+	}*/
 	for (size_t i = 0; i < SIZE; i++)
 	{
 		if (primes[i] >=  size)

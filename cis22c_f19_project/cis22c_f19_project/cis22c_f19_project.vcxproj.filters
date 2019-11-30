@@ -4,9 +4,6 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{d39a174b-c67a-40be-8520-7b658663cf96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FileIO">
-      <UniqueIdentifier>{97572909-86b3-47cf-8169-a99982d8acdc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Util">
       <UniqueIdentifier>{f954909d-0f97-400d-9b95-60ffea3415b1}</UniqueIdentifier>
     </Filter>
@@ -25,5 +22,113 @@
     <Filter Include="Collection\Stack &amp; Queue">
       <UniqueIdentifier>{7fd77488-3c70-4c8d-940c-9dedbce87c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util\FileIO">
+      <UniqueIdentifier>{97572909-86b3-47cf-8169-a99982d8acdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\Hash">
+      <UniqueIdentifier>{cfeb4e6f-de33-407a-9219-f4d9d887526f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\Math">
+      <UniqueIdentifier>{6e4da471-3d23-481c-b1ba-b82671d975c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\String">
+      <UniqueIdentifier>{26a68ba7-84d5-4a1c-96e8-6e877b04ba15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection\Dictionary">
+      <UniqueIdentifier>{ea9a1aba-37ba-44f8-bcf3-d4d21e2bfdd8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="head_node.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="link_node.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="linked_list.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="queue.h">
+      <Filter>Collection\Stack &amp; Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="queue_interface.h">
+      <Filter>Collection\Stack &amp; Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_node.h">
+      <Filter>Collection\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_search_tree.h">
+      <Filter>Collection\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_tree.h">
+      <Filter>Collection\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_tree_interface.h">
+      <Filter>Collection\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="ListInterface.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="FileIO.h">
+      <Filter>Util\FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="FIleIOh.h">
+      <Filter>Util\FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtil.h">
+      <Filter>Util\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="HashUtil.h">
+      <Filter>Util\Hash</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TableDatabase.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="StringUtil.h">
+      <Filter>Util\String</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>Collection\Dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableNode.h">
+      <Filter>Collection\Dictionary</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MathUtil.cpp">
+      <Filter>Util\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="HashUtil.cpp">
+      <Filter>Util\Hash</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TableDatabase.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtil.cpp">
+      <Filter>Util\String</Filter>
+    </ClCompile>
+    <ClCompile Include="person.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="primes2.txt">
+      <Filter>Collection\Dictionary</Filter>
+    </Text>
+    <Text Include="reference primes">
+      <Filter>Collection\Dictionary</Filter>
+    </Text>
   </ItemGroup>
 </Project>
