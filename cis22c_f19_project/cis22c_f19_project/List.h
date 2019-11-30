@@ -8,8 +8,16 @@ template <typename T>
 class List {
 	LinkedList<T>* __list;
 public:
+	//----------------------------------------------------
+	// Constructor and Destructor Section
+	//----------------------------------------------------
+
 	List() { __list = new LinkedList<T>(); }
 	virtual ~List() { __list->~LinkedList(); }
+	//----------------------------------------------------
+	// Getters Section
+	//----------------------------------------------------
+
 	//List(const List<T>& copy) { __list = LinkedList(copy); }
 	/** Sees whether this list is empty.
 	@return True if the list is empty; otherwise returns false. */
@@ -17,6 +25,11 @@ public:
 	/** Gets the current number of entries in this list.
 	@return The integer number of entries currently in the list. */
 	int getLength() const { return __list->size(); }
+
+	//----------------------------------------------------
+	// Mutators Section
+	//----------------------------------------------------
+
 	bool sortedInsert(const T* newEntry) { return __list->sorted_insert(newEntry); }
 	/** Inserts an entry into this list at a given position.
 	@pre None.
@@ -55,6 +68,7 @@ public:
 	@param position The list position of the entry to replace.
 	@param newEntry The replacement entry. */
 	void setEntry(int position, const T & newEntry) { __list->set_item(position, newEntry); }
+
 	//--------------------------------
 	// Operator Overload Section
 	//------------------------------
