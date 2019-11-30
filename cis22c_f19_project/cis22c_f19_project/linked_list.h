@@ -68,6 +68,10 @@ public:
 	@param position The list position of the entry to replace.
 	@param newEntry The replacement entry. */
 	void set_item(int index, T t_item);
+	// return true if the list contains the specified element
+	bool contains(const T& t_obj) const;
+	/* output stored items to console */
+	void display() const;
 protected:
 	/* Helper function for traversing through the list
 	@return*/
@@ -262,4 +266,34 @@ LinkNode<T>* LinkedList<T>::navigate(int index) const{
 	}
 	return nav;
 }
+
+template <typename T>
+bool LinkedList<T>::contains(const T& t_item) const {
+	LinkNode<T>* pCurr = this->m_list.get_first();
+	while (pCurr != nullptr) {
+		if (pCurr->get_item() == t_item)
+			return true;
+		pCurr->get_next();
+	}
+	return false;
+}	// end contains
+
+template <typename T>
+void LinkedList<T>::display() const {
+	LinkNode<T>* pCurrent;
+	pCurrent = this->m_list.get_first();	// get the first link node
+	/*LinkNode<T>* test;
+	test = this->m_head->get_last();
+	std::cout << test->get_item() << std::endl;
+	std::cout << test->get_next()->get_item() << std::endl;*/
+	if (!pCurrent)	// check the head node
+		return;
+
+	// iterate through list
+	while (pCurrent != nullptr) {
+		std::cout << pCurrent->get_item() << " ";
+		pCurrent = pCurrent->get_next();	// increment
+	}
+	std::cout << "\n";
+}	// end display
 #endif // LINKED_LIST_H

@@ -25,5 +25,48 @@
     <Filter Include="Collection\Stack &amp; Queue">
       <UniqueIdentifier>{7fd77488-3c70-4c8d-940c-9dedbce87c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model\Movie">
+      <UniqueIdentifier>{73638ee1-9c9b-4997-bbdc-e9663643848a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Movie.h">
+      <Filter>Model\Movie</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="head_node.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="link_node.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="linked_list.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomException.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="NotFoundException.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="PrecondViolatedExcep.h">
+      <Filter>Collection\List</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomException.cpp">
+      <Filter>Collection\List</Filter>
+    </ClCompile>
+    <ClCompile Include="NotFoundException.cpp">
+      <Filter>Collection\List</Filter>
+    </ClCompile>
+    <ClCompile Include="PrecondViolatedExcep.cpp">
+      <Filter>Collection\List</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

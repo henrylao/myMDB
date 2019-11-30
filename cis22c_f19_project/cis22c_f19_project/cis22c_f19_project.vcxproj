@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{EA4772B9-239B-410E-A904-23DA78D2D69E}</ProjectGuid>
     <RootNamespace>cis22cf19project</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -115,6 +115,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CustomException.h" />
+    <ClInclude Include="head_node.h" />
+    <ClInclude Include="linked_list.h" />
+    <ClInclude Include="link_node.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="Movie.h" />
+    <ClInclude Include="NotFoundException.h" />
+    <ClInclude Include="PrecondViolatedExcep.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CustomException.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NotFoundException.cpp" />
+    <ClCompile Include="PrecondViolatedExcep.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

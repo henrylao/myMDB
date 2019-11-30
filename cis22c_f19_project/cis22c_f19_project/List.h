@@ -2,7 +2,7 @@
 #define _LIST
 #include "linked_list.h"
 #include "CustomException.h"
-#include "ListInterface.h"
+//#include "ListInterface.h"
 #include <iostream>
 template <typename T>
 class List {
@@ -54,6 +54,9 @@ public:
 	@param position The list position of the entry to replace.
 	@param newEntry The replacement entry. */
 	void setEntry(int position, const T & newEntry) { __list->set_item(position, newEntry); }
+	// return true if the list contains the specified element
+	bool contains(const T& t_obj) const { return __list->contains(t_obj); }
+	int size() { return __list->size(); }
 	//--------------------------------
 	// Operator Overload Section
 	//------------------------------
