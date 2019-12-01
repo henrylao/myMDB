@@ -1,80 +1,162 @@
-//#include "Movie.h"
-//
-//Movie::Movie()
-//{
-//	__actorIDs = new List<std::string>();
-//	__year = -1;
-//	__rating = -1;
-//	__genre = "";
-//	__title = "";
-//	__movieID = "";
-//}
-//
-//Movie::Movie(std::string title, std::string genre, int year, double rating)
-//{
-//	__title = title;
-//	__genre = genre;
-//	__year = year;
-//	__rating = rating;
-//	__actorIDs = new List<std::string>();
-//}
-//
-//bool Movie::addActor(const Actor & actor)
-//{
-//	if (actor.getID() == "")
-//		return false;
-//	else
-//	{
-//		__actorIDs->sortedInsert(actor.getID());
-//		return true;
-//	}
-//	return false;
-//}
-//
-//bool Movie::addActor(const std::string& actorID)
-//{
-//	if (actorID.length() == 0)
-//		return false;
-//	else
-//	{
-//		__actorIDs->sortedInsert(actorID);
-//		return true;
-//	}
-//	return false;
-//}
-//
-//bool Movie::removeActor(std::string)
-//{
-//	return false;
-//}
-//
-//bool Movie::operator==(const Movie & rightHandSide) const
-//{
-//	switch(__compareConfig)
-//		case 1:
-//		case 2:
-//		case 3:
-//
-//	return false;
-//}
-//
-//bool Movie::operator<(const Movie & rightHandSide) const
-//{
-//	return false;
-//}
-//
-//bool Movie::operator>(const Movie & rightHandSide) const
-//{
-//	return false;
-//}
-//
-//void Movie::setComparisonConfig(int config)
-//{
-//	if (!(config > 0 && config < 4))
-//	{
-//		throw CustomException("Invalid Comparison Operator Configuration");
-//	}
-//	else
-//		__compareConfig = config;
-//
-//}
+#include "Movie.h"
+
+Movie::Movie()
+{
+	__yearReleased = "";
+	__rating = -1;
+	__genres = new List<std::string>();
+	__title = "";
+	__movieID = "";
+	__compareConfig = 1;
+}
+
+Movie::Movie(std::string tconstID, std::string title, std::string year, std::string runTime, const List<std::string>& genres)
+{
+	__movieID = tconstID;
+	__title = title;
+	__genres = new List<std::string>(genres);
+	__yearReleased = year;
+	__runtimeMinutes = runTime;
+	__rating = -1;
+	__compareConfig = 1;
+
+}
+
+	
+
+bool Movie::operator==(const Movie & rightHandSide) const
+{
+	switch (__compareConfig)
+	{
+	case 1:
+		return (__movieID == rightHandSide.__movieID ? true : false);
+		break;
+	case 2:
+		return (__rating == rightHandSide.__rating ? true : false);
+		break;
+
+	case 3:
+		return (__yearReleased == rightHandSide.__yearReleased ? true : false);
+		break;
+
+	case 4:
+		return (__title == rightHandSide.__title ? true : false);
+		break;
+	case 5: 
+		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
+	}
+		
+	return false;
+}
+
+bool Movie::operator<(const Movie & rightHandSide) const
+{
+	switch (__compareConfig)
+	{
+	case 1:
+		return (__movieID == rightHandSide.__movieID ? true : false);
+		break;
+	case 2:
+		return (__rating == rightHandSide.__rating ? true : false);
+		break;
+
+	case 3:
+		return (__yearReleased == rightHandSide.__yearReleased ? true : false);
+		break;
+
+	case 4:
+		return (__title == rightHandSide.__title ? true : false);
+		break;
+	case 5:
+		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
+	}
+
+	return false;
+}
+
+bool Movie::operator<=(const Movie & movie) const
+{
+	switch (__compareConfig)
+	{
+	case 1:
+		return (__movieID <= rightHandSide.__movieID ? true : false);
+		break;
+	case 2:
+		return (__rating <= rightHandSide.__rating ? true : false);
+		break;
+
+	case 3:
+		return (__yearReleased <= rightHandSide.__yearReleased ? true : false);
+		break;
+
+	case 4:
+		return (__title == rightHandSide.__title ? true : false);
+		break;
+	case 5:
+		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
+	}
+
+	return false;
+}
+
+bool Movie::operator>(const Movie & rightHandSide) const
+{
+	switch (__compareConfig)
+	{
+	case 1:
+		return (__movieID == rightHandSide.__movieID ? true : false);
+		break;
+	case 2:
+		return (__rating == rightHandSide.__rating ? true : false);
+		break;
+
+	case 3:
+		return (__yearReleased == rightHandSide.__yearReleased ? true : false);
+		break;
+
+	case 4:
+		return (__title == rightHandSide.__title ? true : false);
+		break;
+	case 5:
+		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
+	}
+
+	return false;
+}
+
+bool Movie::operator>=(const Movie & movie) const
+{
+	switch (__compareConfig)
+	{
+	case 1:
+		return (__movieID == rightHandSide.__movieID ? true : false);
+		break;
+	case 2:
+		return (__rating == rightHandSide.__rating ? true : false);
+		break;
+
+	case 3:
+		return (__yearReleased == rightHandSide.__yearReleased ? true : false);
+		break;
+
+	case 4:
+		return (__title == rightHandSide.__title ? true : false);
+		break;
+	case 5:
+		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
+	}
+
+	return false;
+}
+
+std::ostream & operator<<(std::ostream & out, const Movie & movie)
+{
+	out << "Title: " << movie.__title << std::endl;
+	out << "Movie ID: " << movie.__movieID << std::endl;
+	out << "Rating: " << movie.__rating << std::endl;
+	out << "Year Released: " << movie.__yearReleased << std::endl;
+	out << "Runtime: " << movie.__runtimeMinutes << " minutes" << std::endl;
+	out << "Genre(s): " << (*movie.__genres) << std::endl;
+	return out;
+	// TODO: insert return statement here
+}
