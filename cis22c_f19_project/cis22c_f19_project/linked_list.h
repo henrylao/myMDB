@@ -22,6 +22,7 @@ public:
 	//----------------------------------------------------
 
 	LinkedList();
+	LinkedList(const LinkedList<T>& copy);
 	virtual				~LinkedList();
 	
 	//----------------------------------------------------
@@ -105,9 +106,21 @@ template <class T>
 LinkedList<T>::LinkedList() {
 }
 
+template<class T>
+LinkedList<T>::LinkedList(const LinkedList<T>& copy)
+{ 
+	int SIZE = copy.size();
+	this->clear();
+	for (int i = 0; i < SIZE; i++)
+	{
+		this->insert_back(copy.get_item(i));
+	}
+}
+
 template <class T>
 LinkedList<T>::~LinkedList() {
 	clear();
+	delete __nav;
 }
 
 // returns true if the linked list is empty
