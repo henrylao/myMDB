@@ -10,6 +10,7 @@ List<Person>* FileIO::buildPersonListFromFile(std::string path)
 	if (!infile.good())
 		return nullptr;
 	std::string data;
+
 	// build PersonDatabase
 	while (infile.good())
 	{
@@ -110,4 +111,39 @@ void FileIO::writeTableToFile(std::string path,
 		outfile << table[keys.getEntry(i)].getName() << std::endl << keys.getEntry(i) << std::endl;
 	}
 	outfile.close();
+}
+
+List<Movie>* FileIO::buildSortedMovieList(std::string path)
+{
+	// attempt open file
+	std::ifstream infile;
+	std::string data;
+	infile.open(path, std::ios::in);
+
+	// handle bad file path case
+	if (!infile.good())
+		return nullptr;
+
+	// begin populating
+	Movie newMovie;
+	List<Movie>* movies = new List<Movie>();
+	List<std::string>* dataList;
+	List<std::string>* genres;
+	while (infile.good())
+	{
+		getline(infile, data);	// read entire line
+		data = StringUtil::strip(data);
+		dataList = StringUtil::split(data, "|");
+		//cout << *dataList << endl;	// DEBUG
+		//std::cout << data << std::endl;
+		genres = StringUtil::split(dataList->getEntry(dataList->getLength() - 1), "|");
+		//cout << *genres << endl;	// DEBUG
+		newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], *genres);
+		//cout << newMovie << endl;	// DEBUG 
+		data = "";
+		delete dataList;
+		delete genres;
+		movies->sortedInsert(newMovie);
+	}
+	return movies;
 }
