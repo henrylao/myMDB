@@ -106,6 +106,8 @@ public:
 	// -------------------------------------
 	// Operator Overload Section
 	// -------------------------------------
+	/* Allow access to values stored in the table via a string-key 
+	@return a */
 	T operator[](std::string key) const;	
 	T& operator[](std::string key);	
 	template<typename U>
@@ -167,14 +169,6 @@ HashTable<T>::~HashTable() {
 template<typename T>
 void HashTable<T>::__resize()
 {
-	if (__hitLimit)
-		return;
-
-	if (__capacity * 2 > MathUtil::MAX_PRIME)
-	{
-		__hitLimit = true;
-		return;
-	}
 	// reset unordered key list t
 	__keys->clear();
 	__resizeCount++;
@@ -239,35 +233,7 @@ int HashTable<T>::__find(std::string key) const
 template<typename T>
 size_t HashTable<T>::__findNextPrime(size_t quantityToAdd)
 {
-	std::ifstream infile;
-	if (quantityToAdd < MathUtil::MAX_PRIME)
-	{
-		return MathUtil::findPrime(quantityToAdd);
-	}
-	else
-	{
-		throw CustomException("Quantity Out of Bounds of Stored Prime Numbers");
-		//// generate a sorted array of primes with a slightly larger bound than needed 
-		//size_t* pPrimes;
-		//unsigned long newTableSize = 0;
-		//// generate primes with a slightly 
-		//pPrimes = MathUtil::generatePrimesAtkins(quantityToAdd*1.5);
-		//// start at  point and look for the next prime greater than the input arg 
-		////std::cout << pPrimes[MathUtil::ATKINS_ARRAY_SIZE / 2] << std::endl;	// DEBUG
-		//for (size_t i = (MathUtil::ATKINS_ARRAY_SIZE / 2); i < MathUtil::ATKINS_ARRAY_SIZE; i++)
-		//{
-		//	//std::cout << i << std::endl;	// DEBUG
-		//	if (pPrimes[i] > quantityToAdd)
-		//	{
-		//		newTableSize = pPrimes[i];
-		//		std::cout << newTableSize << std::endl;
-		//		break;
-		//	}
-		//}
-		//delete[] pPrimes;
-		//std::cout << newTableSize << std::endl;
-		//return newTableSize;
-	}
+	return MathUtil::nextPrime(quantityToAdd);
 }
 // -------------------------------------
 // Mutator Section

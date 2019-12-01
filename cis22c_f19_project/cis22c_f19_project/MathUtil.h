@@ -45,5 +45,7 @@ namespace MathUtil
 	@return true if n is prime else false if n is composite */
 	bool				millerTest(int d, int n);
 
+	bool isPrime(std::size_t x);
+	size_t nextPrime(size_t x);
 }
 #endif // ! _MATH_UTIL_H
