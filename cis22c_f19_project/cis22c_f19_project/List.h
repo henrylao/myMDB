@@ -1,9 +1,11 @@
 #ifndef _LIST
 #define _LIST
+
 #include "linked_list.h"
 #include "CustomException.h"
 #include "ListInterface.h"
 #include <iostream>
+
 template <typename T>
 class List {
 	LinkedList<T>* __list;
@@ -30,7 +32,7 @@ public:
 	// Mutators Section
 	//----------------------------------------------------
 
-	bool sortedInsert(const T* newEntry) { return __list->sorted_insert(newEntry); }
+	bool sortedInsert(const T& newEntry) { return __list->sorted_insert(newEntry); }
 	/** Inserts an entry into this list at a given position.
 	@pre None.
 	@post If 1 <= position <= getLength() + 1 and the insertion is
