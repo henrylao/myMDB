@@ -24,7 +24,7 @@ public:
 		m_name = t_name;
 		m_day = t_day;
 		m_year = t_year;
-		m_month = t_month; 
+		m_month = t_month;
 		config = t_config;
 	}
 
@@ -58,10 +58,10 @@ public:
 	void setName(std::string t_name) {
 		m_name = t_name;
 	}
-	void setMonth(std::string t_month){
+	void setMonth(std::string t_month) {
 		m_month = t_month;
 	}
-	void setDay(std::string t_day){
+	void setDay(std::string t_day) {
 		m_day = t_day;
 	}
 	void setYear(std::string t_year) {

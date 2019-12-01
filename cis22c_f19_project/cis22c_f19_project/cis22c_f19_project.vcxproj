@@ -115,12 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="binary_node.h" />
     <ClInclude Include="binary_search_tree.h" />
     <ClInclude Include="binary_tree.h" />
     <ClInclude Include="binary_tree_interface.h" />
     <ClInclude Include="FileIO.h" />
-    <ClInclude Include="FIleIOh.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="HashTableNode.h" />
@@ -131,6 +131,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="ListInterface.h" />
     <ClInclude Include="MathUtil.h" />
+    <ClInclude Include="Movie.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="queue_interface.h" />
@@ -138,9 +139,13 @@
     <ClInclude Include="TableDatabase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HashUtil.cpp" />
     <ClCompile Include="MathUtil.cpp" />
+    <ClCompile Include="Movie.cpp" />
     <ClCompile Include="person.cpp" />
     <ClCompile Include="StringUtil.cpp" />
     <ClCompile Include="TableDatabase.cpp" />
