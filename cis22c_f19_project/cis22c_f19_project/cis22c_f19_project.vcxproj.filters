@@ -54,6 +54,15 @@
     <ClInclude Include="PrecondViolatedExcep.h">
       <Filter>Collection\List</Filter>
     </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_dialog.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -67,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="PrecondViolatedExcep.cpp">
       <Filter>Collection\List</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

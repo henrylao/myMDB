@@ -3,11 +3,6 @@
 #ifndef MENU_DIALOG_H
 #define MENU_DIALOG_H
 
-const std::string menu_expression[] = {
-	"Postfix",
-	"Prefix"
-};
-
 const std::string menu_try_again[] = {
 	"Try again",
 	"Exit to main menu"
@@ -30,12 +25,11 @@ const std::string menu_continue_program[] = {
 
 const std::string divider = "--------------------------------------";
 
-const std::string menu_bst_operations[] = {
-	"Add a new person",
-	"Remove a person",
-	"Edit a person",
-	"Search for a person",
-	"Display the database",
+const std::string menu_operations[] = {
+	"Search for a movie",
+	"Add a new movie",
+	"Remove a movie",
+	"Edit a movie",
 	"Exit program"
 };
 
@@ -46,8 +40,11 @@ const std::string menu_remove[] = {
 };
 
 const std::string menu_search[] = {
-	"Search for a person by name",
-	"Search for a person by birthdate",
+	"Search for a movie by title",
+	"Search for a movie by release year",
+	"Search for a movie by ratings",
+	"Search for a movie by genre",
+	"Search for a movie by cast",
 	"Return to main menu"
 };
 
@@ -65,18 +62,19 @@ const std::string menu_continue_remove[] = {
 	"Return to main menu"
 };
 
-const std::string menu_display[] = {
-	"Display by descending birth dates",
-	"Display by alphabetical name order",
-	"Display using breadth first for the sorted names",
-	"Display using breadth first for the sorted dates",
-	"Return to main menu"
-};
+//const std::string menu_display[] = {
+//	"Display movies by title",
+//	"Display movies by release year",
+//	"Display movies by ratings",
+//	"Display movies by genre",
+//	"Display movies by cast",
+//	"Return to main menu"
+//};
 
-const std::string menu_continue_display[] = {
-	"Continue viewing the database",
-	"Return to main menu"
-};
+//const std::string menu_continue_display[] = {
+//	"Continue viewing the database",
+//	"Return to main menu"
+//};
 
  
 #endif

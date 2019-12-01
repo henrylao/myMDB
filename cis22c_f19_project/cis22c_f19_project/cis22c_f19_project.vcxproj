@@ -116,16 +116,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CustomException.h" />
+    <ClInclude Include="GUI.h" />
     <ClInclude Include="head_node.h" />
     <ClInclude Include="linked_list.h" />
     <ClInclude Include="link_node.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="menu_dialog.h" />
     <ClInclude Include="Movie.h" />
     <ClInclude Include="NotFoundException.h" />
     <ClInclude Include="PrecondViolatedExcep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CustomException.cpp" />
+    <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NotFoundException.cpp" />
     <ClCompile Include="PrecondViolatedExcep.cpp" />
