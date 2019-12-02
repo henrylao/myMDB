@@ -22,7 +22,10 @@ Movie::Movie(std::string tconstID, std::string title, std::string year, std::str
 
 }
 
-	
+void Movie::clear()
+{
+	delete __genres;
+}
 
 bool Movie::operator==(const Movie & rightHandSide) const
 {
@@ -74,7 +77,7 @@ bool Movie::operator<(const Movie & rightHandSide) const
 	return false;
 }
 
-bool Movie::operator<=(const Movie & movie) const
+bool Movie::operator<=(const Movie & rightHandSide) const
 {
 	switch (__compareConfig)
 	{
@@ -124,26 +127,26 @@ bool Movie::operator>(const Movie & rightHandSide) const
 	return false;
 }
 
-bool Movie::operator>=(const Movie & movie) const
+bool Movie::operator>=(const Movie & rightHandSide) const
 {
 	switch (__compareConfig)
 	{
 	case 1:
-		return (__movieID == rightHandSide.__movieID ? true : false);
+		return (__movieID >= rightHandSide.__movieID ? true : false);
 		break;
 	case 2:
-		return (__rating == rightHandSide.__rating ? true : false);
+		return (__rating >= rightHandSide.__rating ? true : false);
 		break;
 
 	case 3:
-		return (__yearReleased == rightHandSide.__yearReleased ? true : false);
+		return (__yearReleased >= rightHandSide.__yearReleased ? true : false);
 		break;
 
 	case 4:
-		return (__title == rightHandSide.__title ? true : false);
+		return (__title >= rightHandSide.__title ? true : false);
 		break;
 	case 5:
-		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
+		return (__runtimeMinutes >= rightHandSide.__runtimeMinutes ? true : false);
 	}
 
 	return false;

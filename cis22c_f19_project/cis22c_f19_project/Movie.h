@@ -3,7 +3,6 @@
 #define _MOVIE_H
 
 #include <string>
-#include "Actor.h"
 #include "List.h"
 
 
@@ -24,7 +23,6 @@ private:
 	int						__compareConfig;
 
 public:
-	static const char				MOVIE_DELIM = '|';
 	// default comparison is by movie id
 	Movie();
 	Movie(std::string tconstID, std::string title, 
@@ -39,7 +37,7 @@ public:
 	void setCompareByRuntime() { __compareConfig = 5;  }
 
 	List<std::string> getGenres() const { return *__genres; }
-	std::string getTitle() const;
+	std::string getTitle() const { return __title;  }
 	std::string getID() const;
 	//const List<Actor*>* getActors() const;
 	
