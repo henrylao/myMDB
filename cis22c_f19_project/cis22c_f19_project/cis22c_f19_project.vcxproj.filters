@@ -37,6 +37,9 @@
     <Filter Include="Collection\Dictionary">
       <UniqueIdentifier>{ea9a1aba-37ba-44f8-bcf3-d4d21e2bfdd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Exception">
+      <UniqueIdentifier>{129e41f7-88f9-4042-96cc-de1efc424ced}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="head_node.h">
@@ -81,9 +84,6 @@
     <ClInclude Include="GUI.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="TableDatabase.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="StringUtil.h">
       <Filter>Util\String</Filter>
     </ClInclude>
@@ -114,6 +114,21 @@
     <ClInclude Include="stack_interface.h">
       <Filter>Collection\Stack &amp; Queue</Filter>
     </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="NotIMDB_Database.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="NotFoundException.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="PrecondViolatedExcep.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">
@@ -124,9 +139,6 @@
     </ClCompile>
     <ClCompile Include="GUI.cpp">
       <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="TableDatabase.cpp">
-      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="StringUtil.cpp">
       <Filter>Util\String</Filter>
@@ -144,6 +156,18 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="person.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="NotIMDB_Database.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="NotFoundException.cpp">
+      <Filter>Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="PrecondViolatedExcep.cpp">
+      <Filter>Exception</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="primes2.txt">
