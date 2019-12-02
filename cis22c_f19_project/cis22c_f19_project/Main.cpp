@@ -48,5 +48,7 @@ int main() {
 			}
 		}
 	}
+	std::cout << "Thank you for using NotNetfix!" << std::endl;
+	system("pause");
 	return 0;
 }
