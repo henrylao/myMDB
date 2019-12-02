@@ -134,12 +134,16 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="menu_dialog.h" />
     <ClInclude Include="Movie.h" />
+    <ClInclude Include="NotFoundException.h" />
+    <ClInclude Include="Person.h" />
+    <ClInclude Include="PrecondViolatedExcep.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="queue_interface.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="stack_interface.h" />
     <ClInclude Include="StringUtil.h" />
-    <ClInclude Include="TableDatabase.h" />
+    <ClInclude Include="NotIMDB_Database.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -150,8 +154,11 @@
     <ClCompile Include="MathUtil.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Movie.cpp" />
+    <ClCompile Include="NotFoundException.cpp" />
+    <ClCompile Include="person.cpp" />
+    <ClCompile Include="PrecondViolatedExcep.cpp" />
     <ClCompile Include="StringUtil.cpp" />
-    <ClCompile Include="TableDatabase.cpp" />
+    <ClCompile Include="NotIMDB_Database.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="reference primes" />

@@ -13,14 +13,14 @@ public:
 	//----------------------------------------------------
 	// Constructor and Destructor Section
 	//----------------------------------------------------
+	/* Copy constructor */
 	List(const List<T>& copy) { __list = new LinkedList<T>(*(copy.__list)); }
 	List() { __list = new LinkedList<T>(); }
 	virtual ~List() { __list->~LinkedList(); }
+
 	//----------------------------------------------------
 	// Getters Section
 	//----------------------------------------------------
-
-	//List(const List<T>& copy) { __list = LinkedList(copy); }
 	/** Sees whether this list is empty.
 	@return True if the list is empty; otherwise returns false. */
 	bool isEmpty() const { return __list->is_empty(); }
@@ -31,7 +31,6 @@ public:
 	//----------------------------------------------------
 	// Mutators Section
 	//----------------------------------------------------
-
 	bool sortedInsert(const T& newEntry) { return __list->sorted_insert(newEntry); }
 	/** Inserts an entry into this list at a given position.
 	@pre None.
@@ -74,7 +73,6 @@ public:
 	//--------------------------------
 	// Operator Overload Section
 	//------------------------------
-	//T& operator[](const int& idx);
 	T operator[](const int& idx) const;
 	template <class U>
 	friend std::ostream& operator<< (std::ostream &out,  const List<U>& list);
