@@ -17,7 +17,7 @@ private:
 	List<std::string>*		__movieIDs;
 	List<Movie*>*			__movies;	// populate after adding to hashtable?
 	/*toggle between various comparisons:
-	1 by actorID
+	1 by actorID (DEFAULT CTOR VALUE) 
 	2 by name
 	3 by birthYear */
 	int						__compareConfig;
