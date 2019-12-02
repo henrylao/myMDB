@@ -6,9 +6,9 @@
 #include "menu_dialog.h"
 
 
-void UI_search(/*const database& database*/) {
+void GUI::UI_search(/*const database& database*/) {
 	std::string in;
-	int choice = menu_prompt("How do you want to search movies by?", menu_search, 6);
+	int choice = GUI::menu_prompt("How do you want to search movies by?", menu_search, 6);
 	switch (choice)
 	{
 		case 1: {
@@ -85,7 +85,7 @@ void UI_search(/*const database& database*/) {
 	}
 }
 
-void UI_add(/*const database& database*/) 
+void GUI::UI_add(/*const database& database*/)
 {
 	std::string tmp;
 	std::string in_title;
@@ -173,8 +173,22 @@ void UI_add(/*const database& database*/)
 	std::cout << "Added successfully!" << std::endl;
 }
 
-void UI_remove(/*const database& database*/) {
+void GUI::UI_remove(/*const database& database*/) {
 	while(1)
+return true;
+}
+void GUI::promptLoadFile(TableDatabase& db)
+{
+	int try_again;
+	bool done_file_load = false;
+	string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
+	string infile_prompt = "Enter the file path for an input file\nExample: C:\\data\\input.txt\nHit enter to use the default input.txt file in this program's directory\n";
+	string user_in = "";
+	string defaultPath = "InputData.txt";
+	ifstream infile;
+
+	// prompt file path loop
+	while (!done_file_load)
 	{
 		std::string input;
 		bool found = false;
@@ -182,7 +196,7 @@ void UI_remove(/*const database& database*/) {
 		std::cout << "Please insert the title of the movie you want to remove: " << std::endl;
 		getline(std::cin, input);
 
-		//TODO: 
+		//TODO:
 		//Search the obj
 		//If found, set boolean found = true
 
@@ -221,7 +235,7 @@ void UI_remove(/*const database& database*/) {
 	}
 }
 
-void UI_edit(/*const database& database*/) 
+void GUI::UI_edit(/*const database& database*/)
 {
 	while (1)
 	{
@@ -231,7 +245,7 @@ void UI_edit(/*const database& database*/)
 		std::cout << "Please insert the title of the movie you want to edit: " << std::endl;
 		getline(std::cin, input);
 
-		//TODO: 
+		//TODO:
 		//Search the obj
 		//If found, set boolean found = true
 
@@ -246,7 +260,7 @@ void UI_edit(/*const database& database*/)
 		}
 		std::cout << "This is the movie you want to edit:" << std::endl;
 		// TODO: Display the obj
-		
+
 		std::string tmp;
 		std::string in_title;
 		int in_year;
@@ -353,27 +367,60 @@ void UI_edit(/*const database& database*/)
 	}
 }
 
-void UI_search_by_title(std::string in_title/*,const database& database*/)
+void GUI::UI_run_application()
+{
+	std::cout << "Welcome to NotNetfix!" << std::endl;
+
+	bool end = true;
+	while (end) {
+		int choice = menu_prompt("What would you like to do?", menu_operations, 5);
+		switch (choice) {
+		case 1: {
+			UI_search(/*const database& database*/);
+			break;
+		}
+		case 2: {
+			UI_add(/*const database& database*/);
+			break;
+		}
+		case 3: {
+			UI_remove(/*const database& database*/);
+			break;
+		}
+		case 4: {
+			UI_edit();
+			break;
+		}
+		case 5: {
+			end = false;
+			break;
+		}
+		}
+	}
+	return 0;
+}
+
+void GUI::UI_search_by_title(std::string in_title/*,const database& database*/)
 {
 	//TODO: Search by title
 }
 
-void UI_search_by_year(int in_year/*,const database& database*/)
+void GUI::UI_search_by_year(int in_year/*,const database& database*/)
 {
 	//TODO: Search by year
 }
 
-void UI_search_by_ratings(double in_ratings/*,const database& database*/)
+void GUI::UI_search_by_ratings(double in_ratings/*,const database& database*/)
 {
 	//TODO: Search by ratings
 }
 
-void UI_search_by_genre(std::string in_genre/*,const database& database*/)
+void GUI::UI_search_by_genre(std::string in_genre/*,const database& database*/)
 {
 	//TODO: Search by genre
 }
 
-void UI_search_by_cast(std::string in_genre/*,const database& database*/)
+void GUI::UI_search_by_cast(std::string in_genre/*,const database& database*/)
 {
 	//TODO: Search by cast
 }

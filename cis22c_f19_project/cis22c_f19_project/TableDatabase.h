@@ -5,13 +5,16 @@
 #include "person.h"
 #include "HashTable.h"
 #include "List.h"
+#include "binary_search_tree.h"
 
 class TableDatabase
 {
+private:
+	HashTable<Person>					__tableDB;
+	BinarySearchTree<std::string>		__
 public:
 	bool found(std::string key) const;
 	bool found(const Person& person) const;
-
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
@@ -21,13 +24,9 @@ public:
 	// Create Interface Section
 	// ------------------------------------------
 	void buildDatabase(std::string path);
-	bool addPerson(const Person& entry);
-	bool addPerson(std::string name, std::string date);
 	// ------------------------------------------
 	// Delete Interface Section
 	// ------------------------------------------
-	bool deletePerson(std::string key);
-	bool deletePerson(const Person& toDelete);
 	// ------------------------------------------
 	// Update Interface Section
 	// ------------------------------------------
@@ -36,13 +35,9 @@ public:
 	// ------------------------------------------
 	// Read Interface Section
 	// ------------------------------------------
-	void displayPerson(std::string date) const;
-	void displayDatabase() const;
 	void displayPerson(const Person& target) const;
 	void displayStats() const;
 
-private:
-	HashTable<Person>		__tableDB;
 };
 
 #endif // ! TABLE_DB_H

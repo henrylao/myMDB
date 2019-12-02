@@ -13,7 +13,7 @@ public:
 	//----------------------------------------------------
 	// Constructor and Destructor Section
 	//----------------------------------------------------
-
+	List(const List<T>& copy) { __list = new LinkedList<T>(*(copy.__list)); }
 	List() { __list = new LinkedList<T>(); }
 	virtual ~List() { __list->~LinkedList(); }
 	//----------------------------------------------------

@@ -75,12 +75,6 @@
     <ClInclude Include="ListInterface.h">
       <Filter>Collection\List</Filter>
     </ClInclude>
-    <ClInclude Include="FileIO.h">
-      <Filter>Util\FileIO</Filter>
-    </ClInclude>
-    <ClInclude Include="FIleIOh.h">
-      <Filter>Util\FileIO</Filter>
-    </ClInclude>
     <ClInclude Include="MathUtil.h">
       <Filter>Util\Math</Filter>
     </ClInclude>
@@ -96,20 +90,35 @@
     <ClInclude Include="StringUtil.h">
       <Filter>Util\String</Filter>
     </ClInclude>
-    <ClInclude Include="Person.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="HashTable.h">
       <Filter>Collection\Dictionary</Filter>
     </ClInclude>
     <ClInclude Include="HashTableNode.h">
       <Filter>Collection\Dictionary</Filter>
     </ClInclude>
+    <ClInclude Include="FileIO.h">
+      <Filter>Util\FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Movie.h">
+      <Filter>Model</Filter>
+    </ClInclude>
     <ClInclude Include="menu.h">
-      <Filter>Util\Menu</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="menu_dialog.h">
-      <Filter>Util\Menu</Filter>
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="stack.h">
+      <Filter>Collection\Stack &amp; Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="stack_interface.h">
+      <Filter>Collection\Stack &amp; Queue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,13 +137,22 @@
     <ClCompile Include="StringUtil.cpp">
       <Filter>Util\String</Filter>
     </ClCompile>
+    <ClCompile Include="FileIO.cpp">
+      <Filter>Util\FileIO</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="person.cpp">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="menu.cpp">
-      <Filter>Util\Menu</Filter>
+    <ClCompile Include="Movie.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Actor.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="primes2.txt">
