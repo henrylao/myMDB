@@ -23,9 +23,6 @@ Actor::Actor(std::string tconstID, std::string name, std::string birthYear, std:
 	__movies = new List<Movie*>();
 }
 
-Actor::~Actor()
-{
-}
 
 std::string Actor::getID() const
 {
