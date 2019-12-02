@@ -72,7 +72,6 @@ void GUI::promptLoadFile(TableDatabase& db)
 	string user_in = "";
 	string defaultPath = "InputData.txt";
 	ifstream infile;
-	int choice;
 
 	// prompt file path loop
 	while (!done_file_load)
