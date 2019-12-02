@@ -1,13 +1,19 @@
-#ifndef _GUI_H
-#define _GUI_H
+#pragma once
 
-// Search help funciton
-void UI_search();
-// Add help funciton
-void UI_add();
-// Remove help funciton
-void UI_remove();
-// Edit help funciton
-void UI_edit();
+#include <iostream>
+#include <string>
+#include "Movie.h"
+#include "List.h"
+#include "menu.h"
+#include "menu_dialog.h"
 
-#endif
+class GUI
+{
+private:
+    GUI();
+public:
+    static void UI_search();
+    static void UI_add();
+    static void UI_remove();
+    static void UI_edit();
+};

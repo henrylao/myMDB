@@ -1,22 +1,21 @@
-#include <iostream>
 #include "GUI.h"
-#include "Movie.h"
-#include "List.h"
-#include "menu.h"
-#include "menu_dialog.h"
 
-void UI_search(/*const database& database*/) {
-
+void GUI::UI_search()
+{
+    menu_prompt(divider, menu_search, 6);
 }
 
-void UI_add(/*const database& database*/) {
-
+void GUI::UI_add()
+{
+    
 }
 
-void UI_remove(/*const database& database*/) {
-
+void GUI::UI_remove()
+{
+    
 }
 
-void UI_edit(/*const database& database*/) {
-
+void GUI::UI_edit()
+{
+    
 }

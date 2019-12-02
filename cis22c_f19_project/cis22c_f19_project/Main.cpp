@@ -7,7 +7,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
 	//string str1 = "ThanksGiving";
 	//List<string> g1;
 	//g1.append("Horror");
@@ -21,35 +22,34 @@ int main() {
 	////cout << m << endl;
 
 	bool end = true;
-	while (end) {
-		end = true;
 
-		std::cout << "Welcome to NotNetfix!" << std::endl;
-
+	do
+	{
+		std::cout << "Welcome to NotNetflix!" << std::endl;
 		int choice = menu_prompt("What would you like to do?", menu_operations, 5);
-		switch (choice) {
-		case 1: {
-			UI_search();
+		switch (choice)
+		{
+		case 1:
+			GUI::UI_search();
 			break;
-		}
-		case 2: {
-			UI_add();
+
+		case 2:
+			GUI::UI_add();
 			break;
-		}
-		case 3: {
-			UI_remove();
+
+		case 3:
+			GUI::UI_remove();
 			break;
-		}
-		case 4: {
-			UI_edit();
+		
+		case 4:
+			GUI::UI_edit();
 			break;
-		}
-		case 5: {
+
+		default:
 			end = false;
 			break;
 		}
-		}
-		if (!end) break;
-	}
+	} while (end);
+
 	return 0;
 }
