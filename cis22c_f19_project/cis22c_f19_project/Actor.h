@@ -27,7 +27,18 @@ public:
 	Actor(std::string tconstID, std::string name, std::string birthyear, std::string deathYear,
 		std::string roles, const List<std::string>& movieIDs);
 	~Actor() { clear;  }
-	void clear() { delete __movieIDs;  }
+	void clear() { 
+		delete __movieIDs;  
+		int SIZE = __movies->getLength();
+		for (int i = 0; i < SIZE; i++)
+		{
+			// set the pointers in an actor to null 
+			// movie deletion is handled when the database is closed
+			// actors & movie relation is uni-directional 
+			__movies->setEntry(i, nullptr);	
+		}
+		delete __movies;	// destroy list structure
+	}
 	// add movie 
 	//bool addMovie(const Movie& movie);
 	//bool removeMovie(const Movie& movie);
