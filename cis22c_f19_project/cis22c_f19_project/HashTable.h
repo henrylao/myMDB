@@ -13,6 +13,7 @@ class HashTable
 {
 	
 private:
+	size_t						PRIME;
 	List<std::string>*			__keys;
 	HashTableNode<T>**			__table;
 	size_t						__collisionCount;
@@ -128,6 +129,7 @@ HashTable<T>::HashTable()
 	__capacity = 3;
 	__table = new HashTableNode<T>*[__capacity];
 	__occupancy = 0;
+	PRIME = this->__findNextPrime(0.5 * __capacity);
 	for (size_t i = 0; i < __capacity; i++)
 		__table[i] = nullptr;
 }
@@ -143,7 +145,7 @@ HashTable<T>::HashTable(size_t quantityToAdd)
 		__capacity = quantityToAdd;
 	else
 		__capacity = __findNextPrime(quantityToAdd);
-
+	PRIME = this->__findNextPrime(0.5 * __capacity);
 	__table = new HashTableNode<T>*[__capacity];
 	__occupancy = 0;
 	for (size_t i = 0; i < __capacity; i++)
@@ -184,6 +186,8 @@ void HashTable<T>::__resize()
 	// reset occupancy and collision counter
 	__occupancy = 0;
 	__collisionCount = 0;
+	PRIME = this->__findNextPrime(0.5 * __capacity);
+
 	// add via rehashing the old entry keys and values to the expanded table
 	for (size_t i = 0; i < oldCapacity; i++)
 		if (pOldTable[i] != nullptr)
@@ -214,20 +218,47 @@ int HashTable<T>::__find(std::string key) const
 	int pos = -1;
 
 	// init hashID
-	hashID = HashUtil::hashBirthday(key);
+	//hashID = HashUtil::hashBirthday(key);
+	hashID = HashUtil::hash_UNIX_ELF(key);
+
 	//std::cout << __table[hashID]->getKey() << std::endl;	// DEBUG
 	for (size_t i = 0; i < __capacity; i++)
 	{
 		// quadratically generate the hashID
 		//hashID = (hashID + __C1 * i + __C2 * i * i) % __capacity;
 		//hashID = (hashID + i * i) % __capacity;
-		hashID = (hashID + i + i * i) % __capacity;
+		//hashID = (hashID + 0.5 * i + 0.25 * i * i) % __capacity;
+		hashID = (hashID + size_t(0.5 * i) + size_t(0.25 * i * i)) % __capacity;
 
 		if (__table[hashID] != nullptr && __table[hashID]->getKey() == key)
 		{
 			return hashID;
 		}
 	}
+
+	//hashID = HashUtil::hash_UNIX_ELF(key) % __capacity;	// hash 1
+	//size_t hashID2 = PRIME - (hashID % PRIME);	// hash 2
+	//// unfound from initial hash
+	//if (__table[hashID] == nullptr)
+	//{
+	//	size_t i = 1;
+	//	// loop and generate double hashed and verify key
+	//	while (true)
+	//	{
+	//		size_t doubleHashID = (hashID + i * hashID2) % __capacity; // new hash from hash1 and hash2
+	//		if (__table[hashID] != nullptr && __table[hashID]->getKey() == key)
+	//		{
+	//			return doubleHashID;
+	//		}
+	//		i++;
+	//	}
+	//}
+	//// found from init hash
+	//else
+	//{
+	//	return hashID;
+
+	//}
 	return pos;
 }
 template<typename T>
@@ -249,12 +280,15 @@ bool HashTable<T>::add(std::string key, const T& value)
 	if ((double)__occupancy / (double)__capacity > .5)
 		this->__resize();
 
-	// quadratically generate the hashID 
-	hashID = HashUtil::hashBirthday(key);	
+	 //quadratically generate the hashID 
+	//hashID = HashUtil::hashBirthday(key);	
+	hashID = HashUtil::hash_UNIX_ELF(key);	// slow af
 	for (size_t i = 0; i < __capacity; i++)
 	{
 		//hashID = (hashID + __C1 * i + __C2 * i * i) % __capacity;	 
-		hashID = (hashID + i + i * i) % __capacity;
+		//hashID = (hashID + i + i * i) % __capacity;
+		hashID = (hashID + size_t( 0.5 * i) + size_t(0.25 * i * i)) % __capacity;
+
 		if (__table[hashID] == nullptr)
 		{
 			// collision case
@@ -283,6 +317,36 @@ bool HashTable<T>::add(std::string key, const T& value)
 			}
 		}
 	}
+
+	///* Double hash */
+	//hashID = HashUtil::hash_UNIX_ELF(key) % __capacity;	// hash 1
+	//if (__table[hashID] != nullptr)
+	//{
+	//	size_t hashID2 = PRIME - (hashID % PRIME);	// hash 2
+	//	size_t i = 1;
+	//	while (true)
+	//	{
+	//		size_t doubleHashID = (hashID + i * hashID2) % __capacity; // new hash from hash1 and hash2
+	//		if (__table[doubleHashID] == nullptr)
+	//		{
+	//			__collisionCount++;
+	//			__occupancy++;
+	//			__keys->insert(__keys->getLength(), key);
+	//			__table[doubleHashID] = new HashTableNode<T>(key, hashID, value, true);
+	//			return true;
+	//		}
+	//		i++;
+	//	}
+	//}
+	//else
+	//{
+	//	__occupancy++;
+	//	__keys->insert(__keys->getLength(), key);
+	//	__table[hashID] = new HashTableNode<T>(key, hashID, value, true);
+	//	return true;
+
+	//}
+	
 	return false;
 }
 
