@@ -4,6 +4,7 @@
 #include <iostream>
 #include "GUI.h"
 //#include "Movie.h"
+#include "TableDatabase.h"
 #include "List.h"
 #include "menu.h"
 #include "menu_dialog.h"
@@ -23,6 +24,7 @@ namespace GUI
 	void UI_add(/*const database& database*/);
 	// Remove help funciton
 	void UI_remove(/*const database& database*/);
+	void promptLoadFile(TableDatabase & db);
 	// Edit help funciton
 	void UI_edit(/*const database& database*/);
 	void UI_run_application();
