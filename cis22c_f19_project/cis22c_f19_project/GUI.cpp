@@ -367,6 +367,39 @@ void GUI::UI_edit(/*const database& database*/)
 	}
 }
 
+void GUI::UI_run_application()
+{
+	std::cout << "Welcome to NotNetfix!" << std::endl;
+
+	bool end = true;
+	while (end) {
+		int choice = menu_prompt("What would you like to do?", menu_operations, 5);
+		switch (choice) {
+		case 1: {
+			UI_search(/*const database& database*/);
+			break;
+		}
+		case 2: {
+			UI_add(/*const database& database*/);
+			break;
+		}
+		case 3: {
+			UI_remove(/*const database& database*/);
+			break;
+		}
+		case 4: {
+			UI_edit();
+			break;
+		}
+		case 5: {
+			end = false;
+			break;
+		}
+		}
+	}
+	return 0;
+}
+
 void GUI::UI_search_by_title(std::string in_title/*,const database& database*/)
 {
 	//TODO: Search by title

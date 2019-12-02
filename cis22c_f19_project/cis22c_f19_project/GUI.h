@@ -25,6 +25,6 @@ namespace GUI
 	void UI_remove(/*const database& database*/);
 	// Edit help funciton
 	void UI_edit(/*const database& database*/);
-
+	void UI_run_application();
 }
 #endif
