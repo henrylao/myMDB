@@ -5,6 +5,7 @@
 #include "person.h"
 #include "HashTable.h"
 #include "List.h"
+#include "Stack.h"
 
 class TableDatabase
 {
@@ -41,8 +42,11 @@ public:
 	void displayPerson(const Person& target) const;
 	void displayStats() const;
 
+	void undoDelete();
+
 private:
 	HashTable<Person>		__tableDB;
+	Stack<Person> personStack;
 };
 
 #endif // ! TABLE_DB_H

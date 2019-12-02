@@ -45,6 +45,9 @@ bool TableDatabase::deletePerson(std::string key)
 {
 	if (found(key))
 	{
+		Person toDelete = __tableDB.get(key);
+		personStack.push(toDelete);
+
 		__tableDB.remove(key);
 		return true;
 	}
@@ -58,6 +61,8 @@ bool TableDatabase::deletePerson(const Person & toDelete)
 		std::string key = toDelete.getBirthday();
 
 		__tableDB.remove(key);
+
+		personStack.push(toDelete);
 		return true;
 	}
 	return false;
@@ -133,4 +138,21 @@ void TableDatabase::displayStats() const
 	std::cout << "Max Capacity: " << __tableDB.capacity() << std::endl;
 	std::cout << "Load factor: " << __tableDB.loadFactor() << std::endl;
 	std::cout << "Collisions: " << __tableDB.collisions() << std::endl;
+}
+
+void TableDatabase::undoDelete()
+{
+	if (personStack.is_empty())
+	{
+		std::cout << "No deleted items found" << std::endl;
+	}
+	else
+	{
+		// assuming that birthday is used as key
+		Person toAdd = personStack.peek();
+		std::string key = toAdd.getBirthday();
+		__tableDB.add(key, toAdd);
+		personStack.pop();
+	}
+	
 }
