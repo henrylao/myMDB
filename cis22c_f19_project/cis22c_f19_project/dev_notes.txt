@@ -1,0 +1,27 @@
+current implementation for reading and building a list of "sorted" movie objects by tconst raises some
+uncertainty for the size of the data set not sure
+if the list becomes unsorted during file reading and object creation considering
+the data is sorted by "tconst" values using python pandas
+
+current benchmarks for ONLY movie creation equates to about ~60 -70 seconds for objects to be created
+perhaps because the code is not fully optimized and furthermore is not and will not be multithreaded
+therefore tasks will only run on the single main thread
+
+consumes ~.6/.65 gb to completely load the dataset
+
+
+~1gb consumed in ram for loading of actors
+load time == ~1 min 30/40 sec.
+
+58 + 50.5 + 10
+
+output number of collisions during the hashing
+the numbers generated during the hash for the key
+the time of the operation for completion
+
+questions to be answered:
+1) is the modulus operation inefficient in the current algorithm
+2) is the current inefficiency/slowness the result of uni-directional quad-probing?
+3) can psuedo-rand be a better alternative?
+4) can another map layer of key maps be better?
+5) is the unix_elf hashing inefficient?

@@ -33,6 +33,8 @@ List<std::string>* StringUtil::split(const std::string & str, const std::string 
 			break;
 		tokens->append(str.substr(start, idx - start));
 		start = idx + delim.size();
+		if (start == idx)
+			break;
 	}
 	tokens->append(str.substr(start));
 
