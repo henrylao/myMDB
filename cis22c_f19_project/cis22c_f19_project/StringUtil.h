@@ -12,6 +12,7 @@ namespace StringUtil
 	std::string				lowercase(const std::string& str);
 	std::string				lstrip(const std::string& str);
 	std::string				rstrip(const std::string& str);
+	bool					contains(std::string mainStr, std::string substrToVerify);
 	/* Replace all the substrings found (to_search) in the data str
 	returning a modified string without mutating original input string
 	@param data is the string format
@@ -21,9 +22,7 @@ namespace StringUtil
 	@pre none
 	@post none
 	@return a string is formatted and reflects the changes from the input args */
-	std::string				replace(const std::string& data, 
-									const std::string& to_search, 
-									const std::string& replace_str);
+	std::string				replace(const std::string& data, const std::string& to_search, const std::string& replace_str);
 	/* Returns true if the string contains any characters of the alphabet 
 	@param data is the string to search
 	@pre none

@@ -61,6 +61,14 @@ std::string StringUtil::lowercase(const std::string& str) {
 	return formatted;
 }
 
+bool StringUtil::contains(std::string mainStr, std::string substrToVerify)
+{
+	if (mainStr.find(substrToVerify) != std::string::npos) {
+		return true;
+	}
+	return false;
+}
+
 std::string StringUtil::replace(const std::string& data,
 	const std::string& to_search,
 	const std::string& replace_str)
