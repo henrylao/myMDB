@@ -63,7 +63,7 @@ bool GUI::isValidYear(string year) {
 	}
 	return true;
 }
-void GUI::UI_search(const TableDatabase& db) {
+void GUI::UI_search(const NotIMDB_Database& db) {
 	std::string in;
 	int choice = GUI::menu_prompt("How do you want to search movies by?", menu_search, 6);
 	switch (choice)
@@ -143,7 +143,7 @@ void GUI::UI_search(const TableDatabase& db) {
 	}
 }
 
-void GUI::UI_add(TableDatabase & db)
+void GUI::UI_add(NotIMDB_Database & db)
 {
 	std::string tmp;
 	std::string in_title;
@@ -233,11 +233,11 @@ void GUI::UI_add(TableDatabase & db)
 	std::cout << "Added successfully!" << std::endl;
 }
 
-void GUI::UI_remove(TableDatabase& db) {
-	while(1)
-return true;
+void GUI::UI_remove(NotIMDB_Database& db) {
 }
-void GUI::promptLoadFile(TableDatabase& db)
+
+
+void GUI::promptLoadFile(NotIMDB_Database& db)
 {
 	int try_again;
 	bool done_file_load = false;
@@ -295,7 +295,7 @@ void GUI::promptLoadFile(TableDatabase& db)
 	}
 }
 
-void GUI::UI_edit(TableDatabase& db)
+void GUI::UI_edit(NotIMDB_Database& db)
 {
 	while (1)
 	{
