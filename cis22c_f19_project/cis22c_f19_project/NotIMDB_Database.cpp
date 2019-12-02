@@ -95,7 +95,7 @@ NotIMDB_Database::~NotIMDB_Database()
 {
 }
 
-void NotIMDB_Database::buildDatabase(std::string actorFilePath, std::string movieFilePath)
+bool NotIMDB_Database::loadFromFile(std::string actorFilePath, std::string movieFilePath)
 {
 	List<Actor>* actors;
 	List<Movie>* movies;
@@ -105,5 +105,5 @@ void NotIMDB_Database::buildDatabase(std::string actorFilePath, std::string movi
 	t1.join();
 	t2.join();
 
-
+	return true;
 }
