@@ -111,6 +111,12 @@
     <ClInclude Include="menu_dialog.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="stack.h">
+      <Filter>Collection\Stack &amp; Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="stack_interface.h">
+      <Filter>Collection\Stack &amp; Queue</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">

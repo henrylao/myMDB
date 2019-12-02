@@ -137,6 +137,8 @@
     <ClInclude Include="Person.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="queue_interface.h" />
+    <ClInclude Include="stack.h" />
+    <ClInclude Include="stack_interface.h" />
     <ClInclude Include="StringUtil.h" />
     <ClInclude Include="TableDatabase.h" />
   </ItemGroup>
