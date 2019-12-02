@@ -1,7 +1,7 @@
-#include <string>
-
 #ifndef MENU_DIALOG_H
 #define MENU_DIALOG_H
+
+#include <string>
 namespace GUI {
 
 	const std::string menu_expression[] = {
@@ -78,8 +78,5 @@ namespace GUI {
 		"Continue viewing the database",
 		"Return to main menu"
 	};
-
-
-#endif
-
 }
+#endif

@@ -42,6 +42,8 @@ namespace FileIO
 	/* Reads from a .tsv file following the format:
 	nconst | primaryName | birthYear | deathYear | primaryProfession | knownForTitles */
 	List<Actor>* buildActorList(std::string path);
-	
+	/* Function used for multhreading */
+	void loadActorsIntoList(std::string path, List<Actor>* actors);
+	void loadMoviesIntoList(std::string path, List<Movie>* movie);
 }
 #endif // !_UTIL_FILEIO_H

@@ -19,7 +19,5 @@ namespace GUI {
 		const std::string choices[], // Array of choices to provide to the user.
 		int choices_length // Number of items in the choices array.
 	);
-
+};
 #endif
-
-}

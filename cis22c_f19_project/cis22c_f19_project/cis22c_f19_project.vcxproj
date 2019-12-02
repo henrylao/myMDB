@@ -134,7 +134,6 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="menu_dialog.h" />
     <ClInclude Include="Movie.h" />
-    <ClInclude Include="Person.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="queue_interface.h" />
     <ClInclude Include="stack.h" />
@@ -144,7 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HashUtil.cpp" />
@@ -152,7 +150,6 @@
     <ClCompile Include="MathUtil.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Movie.cpp" />
-    <ClCompile Include="person.cpp" />
     <ClCompile Include="StringUtil.cpp" />
     <ClCompile Include="TableDatabase.cpp" />
   </ItemGroup>
