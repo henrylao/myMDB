@@ -131,6 +131,8 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="ListInterface.h" />
     <ClInclude Include="MathUtil.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="menu_dialog.h" />
     <ClInclude Include="Movie.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="queue.h" />
@@ -145,6 +147,7 @@
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HashUtil.cpp" />
     <ClCompile Include="MathUtil.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="Movie.cpp" />
     <ClCompile Include="person.cpp" />
     <ClCompile Include="StringUtil.cpp" />
