@@ -1,20 +1,31 @@
 #ifndef  TABLE_DB_H
 #define TABLE_DB_H
 
+#include <thread>
 #include "FileIO.h"
 #include "person.h"
 #include "HashTable.h"
 #include "List.h"
 #include "binary_search_tree.h"
+#include "Movie.h"
+#include "Actor.h"
 
 class TableDatabase
 {
 private:
-	HashTable<Person>					__tableDB;
-	BinarySearchTree<std::string>		__
+	HashTable<Movie*>					__movieDB;
+	HashTable<Actor>					__actorDB;
+	BinarySearchTree<std::string>		__movieByGenre;
+		
+
+	/* Internal functions for managing table populating*/
+	void								__loadMovies(List<Movie>* movies);
+	/* requires that the movies have been loaded to further map a movie to an actor via
+	the list of Movie* stored in an actor value */
+	void								__loadActors(List<Actor>* actors);
 public:
 	bool found(std::string key) const;
-	bool found(const Person& person) const;
+	bool foundMovie(std::string key) const;
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
@@ -23,7 +34,7 @@ public:
 	// ------------------------------------------
 	// Create Interface Section
 	// ------------------------------------------
-	void buildDatabase(std::string path);
+	void buildDatabase(std::string actorFilePath, std::string movieFilePa);
 	// ------------------------------------------
 	// Delete Interface Section
 	// ------------------------------------------
@@ -35,7 +46,6 @@ public:
 	// ------------------------------------------
 	// Read Interface Section
 	// ------------------------------------------
-	void displayPerson(const Person& target) const;
 	void displayStats() const;
 
 };
