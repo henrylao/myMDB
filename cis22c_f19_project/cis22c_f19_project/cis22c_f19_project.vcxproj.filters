@@ -37,9 +37,6 @@
     <Filter Include="Collection\Dictionary">
       <UniqueIdentifier>{ea9a1aba-37ba-44f8-bcf3-d4d21e2bfdd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Util\Menu">
-      <UniqueIdentifier>{8acad1c2-cfea-473b-a3b5-39d03099fb53}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="head_node.h">
@@ -99,9 +96,6 @@
     <ClInclude Include="FileIO.h">
       <Filter>Util\FileIO</Filter>
     </ClInclude>
-    <ClInclude Include="Person.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -140,10 +134,6 @@
     <ClCompile Include="FileIO.cpp">
       <Filter>Util\FileIO</Filter>
     </ClCompile>
-    <ClCompile Include="Driver.cpp" />
-    <ClCompile Include="person.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="Movie.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -153,6 +143,7 @@
     <ClCompile Include="menu.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="primes2.txt">
