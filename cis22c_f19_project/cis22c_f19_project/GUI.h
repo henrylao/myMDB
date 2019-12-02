@@ -3,18 +3,18 @@
 
 #include <iostream>
 #include "GUI.h"
-#include "Movie.h"
+//#include "Movie.h"
 #include "List.h"
 #include "menu.h"
 #include "menu_dialog.h"
 
 // Search help funciton
-bool UI_search(/*const database& database*/);
-void UI_search_by_title(/*const database& database*/);
-void UI_search_by_year(/*const database& database*/);
-void UI_search_by_ratings(/*const database& database*/);
-void UI_search_by_genre(/*const database& database*/);
-void UI_search_by_cast(/*const database& database*/);
+void UI_search(/*const database& database*/);
+void UI_search_by_title(std::string in_title/*,const database& database*/);
+void UI_search_by_year(int in_year/*,const database& database*/);
+void UI_search_by_ratings(double in_ratings/*,const database& database*/);
+void UI_search_by_genre(std::string in_genre/*,const database& database*/);
+void UI_search_by_cast(std::string in_genre/*,const database& database*/);
 // Add help funciton
 void UI_add(/*const database& database*/);
 // Remove help funciton

@@ -32,13 +32,13 @@ TableDatabase::~TableDatabase()
 
 void TableDatabase::buildDatabase(std::string path)
 {
-	// use FileIO pkg to build list of unknown quantity of people objs
-	List<Person>* people = FileIO::buildPersonListFromFile(path);
-	// populate into database
-	for (int i = 0; i < people->getLength(); i++)
-	{
-		__tableDB.add(people->getEntry(i).getBirthday(), people->getEntry(i));
-	}
+	//// use FileIO pkg to build list of unknown quantity of people objs
+	//List<Person>* people = FileIO::buildPersonListFromFile(path);
+	//// populate into database
+	//for (int i = 0; i < people->getLength(); i++)
+	//{
+	//	__tableDB.add(people->getEntry(i).getBirthday(), people->getEntry(i));
+	//}
 }
 
 bool TableDatabase::deletePerson(std::string key)

@@ -37,6 +37,9 @@
     <Filter Include="Collection\Dictionary">
       <UniqueIdentifier>{ea9a1aba-37ba-44f8-bcf3-d4d21e2bfdd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util\Menu">
+      <UniqueIdentifier>{8acad1c2-cfea-473b-a3b5-39d03099fb53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="head_node.h">
@@ -102,6 +105,12 @@
     <ClInclude Include="HashTableNode.h">
       <Filter>Collection\Dictionary</Filter>
     </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Util\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_dialog.h">
+      <Filter>Util\Menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">
@@ -122,6 +131,10 @@
     <ClCompile Include="person.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>Util\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="primes2.txt">

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "GUI.h"
-#include "Movie.h"
+//#include "Movie.h"
 #include "List.h"
 #include "menu.h"
 #include "menu_dialog.h"
@@ -20,36 +20,33 @@ int main() {
 	////cout << m.getGenre() << endl;
 	////cout << m << endl;
 
+	std::cout << "Welcome to NotNetfix!" << std::endl;
+
 	bool end = true;
 	while (end) {
-		end = true;
-
-		std::cout << "Welcome to NotNetfix!" << std::endl;
-
 		int choice = menu_prompt("What would you like to do?", menu_operations, 5);
 		switch (choice) {
-		case 1: {
-			UI_search(/*const database& database*/);
-			break;
+			case 1: {
+				UI_search(/*const database& database*/);
+				break;
+			}
+			case 2: {
+				UI_add(/*const database& database*/);
+				break;
+			}
+			case 3: {
+				UI_remove(/*const database& database*/);
+				break;
+			}
+			case 4: {
+				UI_edit();
+				break;
+			}
+			case 5: {
+				end = false;
+				break;
+			}
 		}
-		case 2: {
-			UI_add(/*const database& database*/);
-			break;
-		}
-		case 3: {
-			UI_remove(/*const database& database*/);
-			break;
-		}
-		case 4: {
-			UI_edit();
-			break;
-		}
-		case 5: {
-			end = false;
-			break;
-		}
-		}
-		if (!end) break;
 	}
 	return 0;
 }
