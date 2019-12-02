@@ -8,18 +8,23 @@
 #include "menu.h"
 #include "menu_dialog.h"
 
-// Search help funciton
-void UI_search(/*const database& database*/);
-void UI_search_by_title(std::string in_title/*,const database& database*/);
-void UI_search_by_year(int in_year/*,const database& database*/);
-void UI_search_by_ratings(double in_ratings/*,const database& database*/);
-void UI_search_by_genre(std::string in_genre/*,const database& database*/);
-void UI_search_by_cast(std::string in_genre/*,const database& database*/);
-// Add help funciton
-void UI_add(/*const database& database*/);
-// Remove help funciton
-void UI_remove(/*const database& database*/);
-// Edit help funciton
-void UI_edit(/*const database& database*/);
+using namespace GUI;
 
+namespace GUI
+{
+	// Search help funciton
+	void UI_search(/*const database& database*/);
+	void UI_search_by_title(std::string in_title/*,const database& database*/);
+	void UI_search_by_year(int in_year/*,const database& database*/);
+	void UI_search_by_ratings(double in_ratings/*,const database& database*/);
+	void UI_search_by_genre(std::string in_genre/*,const database& database*/);
+	void UI_search_by_cast(std::string in_genre/*,const database& database*/);
+	// Add help funciton
+	void UI_add(/*const database& database*/);
+	// Remove help funciton
+	void UI_remove(/*const database& database*/);
+	// Edit help funciton
+	void UI_edit(/*const database& database*/);
+
+}
 #endif

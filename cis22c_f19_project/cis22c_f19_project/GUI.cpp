@@ -6,9 +6,9 @@
 #include "menu_dialog.h"
 
 
-void UI_search(/*const database& database*/) {
+void GUI::UI_search(/*const database& database*/) {
 	std::string in;
-	int choice = menu_prompt("How do you want to search movies by?", menu_search, 6);
+	int choice = GUI::menu_prompt("How do you want to search movies by?", menu_search, 6);
 	switch (choice)
 	{
 		case 1: {
@@ -85,7 +85,7 @@ void UI_search(/*const database& database*/) {
 	}
 }
 
-void UI_add(/*const database& database*/)
+void GUI::UI_add(/*const database& database*/)
 {
 	std::string tmp;
 	std::string in_title;
@@ -173,7 +173,7 @@ void UI_add(/*const database& database*/)
 	std::cout << "Added successfully!" << std::endl;
 }
 
-void UI_remove(/*const database& database*/) {
+void GUI::UI_remove(/*const database& database*/) {
 	while(1)
 return true;
 }
@@ -235,7 +235,7 @@ void GUI::promptLoadFile(TableDatabase& db)
 	}
 }
 
-void UI_edit(/*const database& database*/)
+void GUI::UI_edit(/*const database& database*/)
 {
 	while (1)
 	{
@@ -367,27 +367,27 @@ void UI_edit(/*const database& database*/)
 	}
 }
 
-void UI_search_by_title(std::string in_title/*,const database& database*/)
+void GUI::UI_search_by_title(std::string in_title/*,const database& database*/)
 {
 	//TODO: Search by title
 }
 
-void UI_search_by_year(int in_year/*,const database& database*/)
+void GUI::UI_search_by_year(int in_year/*,const database& database*/)
 {
 	//TODO: Search by year
 }
 
-void UI_search_by_ratings(double in_ratings/*,const database& database*/)
+void GUI::UI_search_by_ratings(double in_ratings/*,const database& database*/)
 {
 	//TODO: Search by ratings
 }
 
-void UI_search_by_genre(std::string in_genre/*,const database& database*/)
+void GUI::UI_search_by_genre(std::string in_genre/*,const database& database*/)
 {
 	//TODO: Search by genre
 }
 
-void UI_search_by_cast(std::string in_genre/*,const database& database*/)
+void GUI::UI_search_by_cast(std::string in_genre/*,const database& database*/)
 {
 	//TODO: Search by cast
 }
