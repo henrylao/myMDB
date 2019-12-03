@@ -1,7 +1,6 @@
 #ifndef _UTIL_FILEIO_H
 #define _UTIL_FILEIO_H
 #include "List.h"
-#include "person.h"
 #include <fstream>
 #include "StringUtil.h"
 #include "HashTable.h"
