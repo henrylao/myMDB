@@ -10,6 +10,17 @@ Movie::Movie()
 	__compareConfig = 1;
 }
 
+Movie::Movie(const Movie & copy)
+{
+	__movieID = copy.__movieID;
+	__title = copy.__title;
+	__genres = copy.__genres;
+	__yearReleased = copy.__yearReleased;
+	__runtimeMinutes = copy.__runtimeMinutes;
+	__rating = copy.__rating;
+	__compareConfig = copy.__compareConfig;
+}
+
 Movie::Movie(std::string tconstID, std::string title, std::string year, std::string runTime, std::string genres)
 {
 	__movieID = tconstID;

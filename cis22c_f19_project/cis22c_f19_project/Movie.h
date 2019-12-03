@@ -28,6 +28,7 @@ public:
 	//----------------------------------------------------
 	// default comparison is by movie id
 	Movie();
+	Movie(const Movie& copy);
 	Movie(std::string tconstID, std::string title, 
 		std::string year, std::string runTime, 
 		std::string genres);
