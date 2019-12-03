@@ -80,15 +80,17 @@ void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribut
 	List<std::string>* keywords;
 	std::string keyword, keywords_preprocess, firstCharOfKeyword;
 	// create copy of the movie
-	Movie newMovie(movieToEdit);
+	Movie edittedMovie(movieToEdit);
 	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(movieToEdit.getTitle() + " " + movieToEdit.getYearReleased()));
 	keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
 	if (op < 1)
 		throw CustomException("Error: Invalid Update Operation Value");
 	if (op == 1)
 	{
-		newMovie.setTitle(edittedAttribute);
+		// 
+		edittedMovie.setTitle(edittedAttribute);
 		keywords = StringUtil::split(keywords_preprocess, "|");
+		// remove all matched keyword and movie pairs from the search engine
 		for (int j = 0; j < keywords->getLength(); j++)
 		{
 			keyword = keywords->getEntry(j);
@@ -104,11 +106,12 @@ void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribut
 				// create a new bst such that the first character of the keyword denotes 
 				// a key to a tree in the table of bst 
 				__searchEngineBST.add(std::string(1, keywords->getEntry(j)[0]),
-					BinarySearchTree<std::string, Movie>(keywords->getEntry(j), newMovie));
+					BinarySearchTree<std::string, Movie>(keywords->getEntry(j), edittedMovie));
 
 			}
 
 		}
+
 	}
 }
 
