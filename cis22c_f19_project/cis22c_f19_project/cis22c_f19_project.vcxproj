@@ -136,7 +136,6 @@
     <ClInclude Include="menu_dialog.h" />
     <ClInclude Include="Movie.h" />
     <ClInclude Include="NotFoundException.h" />
-    <ClInclude Include="Person.h" />
     <ClInclude Include="PrecondViolatedExcep.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="queue_interface.h" />
@@ -156,7 +155,6 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Movie.cpp" />
     <ClCompile Include="NotFoundException.cpp" />
-    <ClCompile Include="person.cpp" />
     <ClCompile Include="PrecondViolatedExcep.cpp" />
     <ClCompile Include="StringUtil.cpp" />
     <ClCompile Include="NotIMDB_Database.cpp" />

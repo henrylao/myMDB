@@ -114,9 +114,6 @@
     <ClInclude Include="stack_interface.h">
       <Filter>Collection\Stack &amp; Queue</Filter>
     </ClInclude>
-    <ClInclude Include="Person.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="User.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -157,9 +154,6 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="person.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="NotIMDB_Database.cpp">
       <Filter>Model</Filter>
     </ClCompile>
