@@ -3,6 +3,7 @@
 void GUI::UI_search()
 {
     menu_prompt(divider, menu_search, 6);
+    
 }
 
 void GUI::UI_add()
