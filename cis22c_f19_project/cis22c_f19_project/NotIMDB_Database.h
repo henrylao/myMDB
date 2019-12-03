@@ -8,11 +8,9 @@
 #include "binary_search_tree.h"
 #include "Movie.h"
 #include "Actor.h"
-#include "stack.h"
 
 class NotIMDB_Database
 {
-	
 private:
 	// movie titles & actor names are keys for accessing the table
 	HashTable<Movie>					__movieDB;
@@ -23,11 +21,13 @@ private:
 	void								__loadMovies(List<Movie>* movies);
 	/* requires that the movies have been loaded to further map a movie to an actor via
 	the list of Movie* stored in an actor value */
+	void								__loadActors(List<Actor>* actors);
+	void								__buildMovieNamesBST_byID(std::string path);
+	void								__buildMovieNamesBST_byGenre(std::string path);
+	void								__buildMovieNamesBST_byYear(std::string path);
 	void								__clear();
 public:
-	int									__binarySearch_byMovieName(List<std::string>* moviesSortedByID,
-													int l, int r, std::string targetString) const;
-	
+
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
@@ -52,7 +52,7 @@ public:
 	// ------------------------------------------
 	// Update Section
 	// ------------------------------------------
-	// find movie by oldName, hold a copy of the movie delete movie of old name, update copy to newName, finally 
+	// find movie by oldName, hold a copy of the movie delete movie of old name, update copy to newName, finally
 	// add back into table
 	bool				updateMovieName(std::string oldMovieName, std::string newMovieName);
 	bool				updateMovieYear(std::string key, std::string newYearReleased);
@@ -61,12 +61,13 @@ public:
 	// op 0 appends to the genre string, op 1 sets the genre to newGenreName
 	bool				updateMovieGenre(std::string key, std::string newGenreName, int op);
 	bool 				updateMovieRating(std::string key, std::string newKey);
-	
+
 	// ------------------------------------------
 	// Search Section
 	// ------------------------------------------
 	bool				foundMovie(std::string key);
 	/* verify using actorDB */
+	bool  				foundActor(std::string actorName) const;
 
 	// ------------------------------------------
 	// Read Section

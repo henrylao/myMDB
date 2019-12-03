@@ -25,21 +25,3 @@ questions to be answered:
 3) can psuedo-rand be a better alternative?
 4) can another map layer of key maps be better?
 5) is the unix_elf hashing inefficient?
-
-
-benchmarks:
-- FileIO::buildMovieTitles_sortedByID
-	lines in file = ~377,930
-	duration: ~11.1/11.5 seconds
-
-
-
-loading data into the database wrapper classs
-1) Run ff. concurr:
---> create list of movies sorted by their title value // presorted from data set
---> create a list of actors 
---> create list of sorted movieIDs // sorted via data set 
-2) Add movies into table such that titles are keys
-3) Map the list of movie pointers to table data?
-4) 
-

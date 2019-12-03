@@ -109,7 +109,7 @@ void NotIMDB_Database::saveToFile(string path)
 		outfile << out;
 	}
 	outfile.close();
-	
+
 }
 
 bool NotIMDB_Database::deleteMovie(std::string key)

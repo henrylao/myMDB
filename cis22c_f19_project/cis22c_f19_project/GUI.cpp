@@ -65,7 +65,7 @@ bool GUI::isValidYear(string year) {
 }
 void GUI::UI_search(const NotIMDB_Database& db) {
 	std::string in;
-	int choice = menu_prompt("How do you want to search movies by?", menu_search, 6);
+	int choice = GUI::menu_prompt("How do you want to search movies by?", menu_search, 6);
 	switch (choice)
 	{
 		case 1: {
@@ -234,6 +234,51 @@ void GUI::UI_add(NotIMDB_Database & db)
 }
 
 void GUI::UI_remove(NotIMDB_Database& db) {
+	while (1)
+	{
+		std::string input;
+		bool found = false;
+
+		std::cout << "Please insert the title of the movie you want to remove: " << std::endl;
+		getline(std::cin, input);
+
+		//TODO: 
+		//Search the obj
+		//If found, set boolean found = true
+
+		if (!found)
+		{
+			std::cout << "The movie you want to remove does not exist!" << std::endl;
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
+			if (tryAgain == 1)
+				continue;
+			else
+				return;
+		}
+		std::cout << "This is the movie you want to remove:" << std::endl;
+		// TODO: Display the obj
+
+		int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
+		if (confirm == 1)
+		{
+			//TODO: Remove obj from database
+
+			std::cout << "Deleted successfully!" << std::endl;
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_continue_remove, 2);
+			if (tryAgain == 1)
+				continue;
+			else
+				return;
+		}
+		else
+		{
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
+			if (tryAgain == 1)
+				continue;
+			else
+				return;
+		}
+	}
 }
 
 
@@ -312,7 +357,7 @@ void GUI::UI_edit(NotIMDB_Database& db)
 		if (!found)
 		{
 			std::cout << "The movie you want to remove does not exist!" << std::endl;
-			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
+			int tryAgain = GUI::menu_prompt("Would you like to insert again?", menu_yes_no, 2);
 			if (tryAgain == 1)
 				continue;
 			else
@@ -404,7 +449,7 @@ void GUI::UI_edit(NotIMDB_Database& db)
 		std::cout << "This is the movie you want change to: " << std::endl;
 		//TODO: Display obj
 
-		int confirm = menu_prompt("Are you sure you want to edit this movie?", GUI::menu_yes_no, 2);
+		int confirm = GUI::menu_prompt("Are you sure you want to edit this movie?", GUI::menu_yes_no, 2);
 		if (confirm == 1)
 		{
 			//TODO: Remove obj from database
@@ -418,7 +463,7 @@ void GUI::UI_edit(NotIMDB_Database& db)
 		}
 		else
 		{
-			int tryAgain = menu_prompt("Would you like to edit again?", GUI::menu_yes_no, 2);
+			int tryAgain = GUI::menu_prompt("Would you like to edit again?", GUI::menu_yes_no, 2);
 			if (tryAgain == 1)
 				continue;
 			else

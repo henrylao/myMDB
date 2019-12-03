@@ -4,37 +4,51 @@
 #include "List.h"
 #include "menu.h"
 #include "menu_dialog.h"
-#include <chrono>
-#include "NotIMDB_Database.h"
+
 using namespace std;
 
 int main() {
-	string path = "data//full//movie_titles_sorted_by_id_full.tsv";
-	List<std::string>* movieTitles = new List<std::string>();
-	// benchmarking 
-	auto start = std::chrono::high_resolution_clock::now();
-	FileIO::buildMovieTitles_sortedByID(path, movieTitles);
-	auto finish = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> elapsed = finish - start;
-	std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+	//string str1 = "ThanksGiving";
+	//List<string> g1;
+	//g1.append("Horror");
+	//g1.append("Comedey");
+	//List<string> c1;
+	//g1.append("Jon Doe");
+	//g1.append("Herry Styles");
+	//cout << c1;
+	//Movie m(str1, 2019, 8.0, &g1, &c1);
+	////cout << m.getGenre() << endl;
+	////cout << m << endl;
 
-	int SIZE = movieTitles->getLength();
-	/*for (int i = 0; i < SIZE; i++)
-	{
-		cout << movieTitles->getEntry(i) << endl;
-	}*/
-	NotIMDB_Database var;
-	int index;
+	std::cout << "Welcome to NotNetfix!" << std::endl;
 
-	start = std::chrono::high_resolution_clock::now();
-	index = var.__binarySearch_byMovieName(movieTitles, 0, SIZE, "tt0001116");
-	finish = std::chrono::high_resolution_clock::now();
-
-	elapsed = finish - start;
-	std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-
-	cout << index << endl;
-	cout << SIZE << endl;
+	bool end = true;
+	while (end) {
+		int choice = menu_prompt("What would you like to do?", menu_operations, 5);
+		switch (choice) {
+			case 1: {
+				UI_search(/*const database& database*/);
+				break;
+			}
+			case 2: {
+				UI_add(/*const database& database*/);
+				break;
+			}
+			case 3: {
+				UI_remove(/*const database& database*/);
+				break;
+			}
+			case 4: {
+				UI_edit();
+				break;
+			}
+			case 5: {
+				end = false;
+				break;
+			}
+		}
+	}
+	std::cout << "Thank you for using NotNetfix!" << std::endl;
+	system("pause");
 	return 0;
-
 }

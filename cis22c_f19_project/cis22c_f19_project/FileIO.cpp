@@ -15,7 +15,7 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 	Movie newMovie;
 	List<Movie>* movies = new List<Movie>();
 	List<std::string>* dataList;
-	std::string genres;
+	List<std::string>* genres;
 	while (infile.good())
 	{
 		getline(infile, data);	// read entire line
@@ -25,15 +25,15 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 			dataList = StringUtil::split(data, "|");
 			//cout << *dataList << endl;	// DEBUG
 			//std::cout << data << std::endl;
-			genres = StringUtil::strip(dataList->getEntry(dataList->getLength() - 1));
+			genres = StringUtil::split(dataList->getEntry(dataList->getLength() - 1), "|");
 			//cout << *genres << endl;	// DEBUG
-			newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], genres);
-			//cout << newMovie << endl;	// DEBUG 
+			newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], *genres);
+			//cout << newMovie << endl;	// DEBUG
 			data = "";
 			delete dataList;
 			movies->append(newMovie);
 		}
-		
+
 	}
 	return movies;
 }
@@ -63,7 +63,7 @@ List<Actor>* FileIO::buildActorList(std::string path)
 			// populate the new actor
 			newActor = Actor((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3],
 				(*dataList)[4], *movieIDs);
-			//cout << newMovie << endl;	// DEBUG 
+			//cout << newMovie << endl;	// DEBUG
 			data = "";
 			// memory clean up
 			delete dataList;
@@ -76,28 +76,12 @@ List<Actor>* FileIO::buildActorList(std::string path)
 	return actors;
 }
 
-void FileIO::buildMovieTitles_sortedByID(std::string path, List<std::string>* movieTitles)
+void FileIO::loadActorsIntoList(std::string path, List<Actor>* actors)
 {
-	std::ifstream infile;
-	infile.open(path, std::ios::in);
-	if (!infile.good())
-	{
-		return;
-	}
+	actors = buildActorList(path);
+}
 
-	std::string data;
-	while (infile.good())
-	{
-		if (getline(infile, data, '\n'))
-		{
-			data = StringUtil::strip(data);
-			if (data.length() != 0)
-			{
-				movieTitles->append(data);
-			}
-			// reset after appending or a whitespace has been read
-			data = "";
-		}
-	}
-	return;
+void FileIO::loadMoviesIntoList(std::string path, List<Movie>* movies)
+{
+	movies = buildMovieList(path);
 }

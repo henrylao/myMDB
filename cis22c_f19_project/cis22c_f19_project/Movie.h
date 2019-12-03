@@ -10,7 +10,7 @@ class Movie {
 private:
 	std::string				__yearReleased;	// startYear in data set
 	std::string				__rating;
-	std::string				__genres;
+	List<std::string>*		__genres;
 	std::string				__title;
 	std::string				__movieID;
 	std::string				__runtimeMinutes;
@@ -31,7 +31,7 @@ public:
 	Movie(const Movie& copy);
 	Movie(std::string tconstID, std::string title, 
 		std::string year, std::string runTime, 
-		std::string genres);
+		const List<std::string>& genres);
 	//----------------------------------------------------
 	// Mutators Section
 	//----------------------------------------------------
@@ -46,7 +46,7 @@ public:
 	// Getters Section
 	//----------------------------------------------------
 	void						readFullInfo() const { std::cout << *this << std::endl; }
-	std::string					getGenres() const { return __genres; }
+	List<std::string>			getGenres() const { return *__genres; }
 	std::string					getTitle() const { return __title;  }
 	std::string					getID() const { return __movieID; }
 	std::string					getRating() const { return __rating; }

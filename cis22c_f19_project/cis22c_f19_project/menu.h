@@ -1,12 +1,12 @@
+#include <string>
+#include <iostream>
+//#include <fstream>
+#include <cstdlib>
+#include <stdlib.h>
 
 #ifndef MENU_H
 #define MENU_H
 
-#include <string>
-#include <iostream>
-#include <cstdlib>
-#include <fstream>
-#include <stdlib.h>
 namespace GUI {
 
 	/* Outputs a prompt and ordered list (starting from 1) and requests input from
@@ -19,5 +19,5 @@ namespace GUI {
 		const std::string choices[], // Array of choices to provide to the user.
 		int choices_length // Number of items in the choices array.
 	);
-}
+};
 #endif

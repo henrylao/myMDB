@@ -4,7 +4,7 @@ Movie::Movie()
 {
 	__yearReleased = "";
 	__rating = -1;
-	__genres = "";
+	__genres = new List<std::string>();
 	__title = "";
 	__movieID = "";
 	__compareConfig = 1;
@@ -55,10 +55,10 @@ bool Movie::operator==(const Movie & rightHandSide) const
 	case 4:
 		return (__title == rightHandSide.__title ? true : false);
 		break;
-	case 5: 
+	case 5:
 		return (__runtimeMinutes == rightHandSide.__runtimeMinutes ? true : false);
 	}
-		
+
 	return false;
 }
 
@@ -169,7 +169,7 @@ std::ostream & operator<<(std::ostream & out, const Movie & movie)
 	out << "Rating: " << movie.__rating << std::endl;
 	out << "Year Released: " << movie.__yearReleased << std::endl;
 	out << "Runtime: " << movie.__runtimeMinutes << " minutes" << std::endl;
-	out << "Genre(s): " << (movie.__genres) << std::endl;
+	out << "Genre(s): " << (*movie.__genres) << std::endl;
 	return out;
 	// TODO: insert return statement here
 }

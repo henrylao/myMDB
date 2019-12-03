@@ -23,35 +23,29 @@ private:
 	int						__compareConfig;
 
 public:
-	//----------------------------------------------------
-	// Constructor and Destructor Section
-	//----------------------------------------------------
 	Actor();
 	Actor(std::string tconstID, std::string name, std::string birthyear, std::string deathYear,
 		std::string roles, const List<std::string>& movieIDs);
-	~Actor() { clear(); }
-
-	//----------------------------------------------------
-	// Mutators Section
-	//----------------------------------------------------
-	void clear();
+	~Actor() { clear;  }
+	void clear() { 
+		delete __movieIDs;  
+		int SIZE = __movies->getLength();
+		for (int i = 0; i < SIZE; i++)
+		{
+			// set the pointers in an actor to null 
+			// movie deletion is handled when the database is closed
+			// actors & movie relation is uni-directional 
+			__movies->setEntry(i, nullptr);	
+		}
+		delete __movies;	// destroy list structure
+	}
 	// add movie 
 	//bool addMovie(const Movie& movie);
 	//bool removeMovie(const Movie& movie);
-
-	//----------------------------------------------------
-	// Getters Section
-	//----------------------------------------------------
-	std::string					getID() const { return __actorID; }
-	std::string					getName() const { return __name; }
-	List<std::string>			getMovieIDs() const { return *__movieIDs; }
-	std::string					getBirthYear() const { return __birthYear; }
-	std::string					getDeathYear() const { return __deathYear; }
-	std::string					getRoles() const { return __roles; }
-
-	//--------------------------------
-	// Operator Overload Section
-	//------------------------------
+	std::string getID() const;
+	std::string getName() const { return __name; }
+		
+	
 	void readFullInfo() const;
 	friend std::ostream& operator<<(std::ostream& out, const Actor& actor);
 	bool operator==(const Actor& actor) const;

@@ -300,7 +300,7 @@ bool HashTable<T>::add(std::string key, const T& value)
 				// map table node to generated hashID and add to unsorted list
 				__table[hashID] = new HashTableNode<T>(key, hashID, value, true);
 				//__pairs->append(__table[hashID]);
-				__keys->append(key);	// or use sorted add to maintain keysort
+				__keys->append(key);
 				__occupancy++;
 				//__keys.insert(__keys.getLength(), key);
 				//__values.insert(__values.getLength(), value);
