@@ -1,9 +1,9 @@
 #ifndef _BINARY_SEARCH_TREE
 #define _BINARY_SEARCH_TREE
 #include <sstream>
-#include "binary_node_kvpair.h"
-#include "binary_tree_kvpair.h"
-#include "binary_tree_interface_kvpair.h"
+#include "binary_node.h"
+#include "binary_tree.h"
+#include "binary_tree_interface.h"
 
 template <typename K, typename V>
 class BinarySearchTree : protected BinaryNodeTree<K, V>

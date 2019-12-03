@@ -1,8 +1,8 @@
 #ifndef _BINARY_TREE
 #define _BINARY_TREE
 
-#include "binary_node_kvpair.h"
-#include "binary_tree_interface_kvpair.h"
+#include "binary_node.h"
+#include "binary_tree_interface.h"
 #include "NotFoundException.h"
 #include "PrecondViolatedExcep.h"
 #include "queue.h"
