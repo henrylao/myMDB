@@ -46,6 +46,35 @@ bool NotIMDB_Database::readMovie(std::string key) const
 	return false;
 }
 
+void NotIMDB_Database::unitTest()
+{
+	std::string divider = "--------------------------------";
+	std::string path = "data\\full\\title_basics_cleaned_final_trimmed.tsv";
+	NotIMDB_Database db;
+	db.loadFromFile(path);
+	db.readMovie("Miss Jerry");
+	db.saveToFile();
+
+	std::cout << divider << std::endl;
+	std::cout << "Pre-delete:" << std::endl;
+	db.displayMovieTableStats();
+	std::cout << divider << std::endl;
+
+	std::cout << "Post-delete:" << std::endl;
+	db.deleteMovie("Miss Jerry");
+	db.displayMovieTableStats();
+	std::cout << divider << std::endl;
+
+	db.showMostRecentDelete();
+	db.undoMostRecentDelete();
+	std::cout << divider << std::endl;
+	db.readMovie("Miss Jerry");
+	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
+	List<Movie>* movies = FileIO::buildMovieList(path);
+	db.createMovie(movies->getEntry(5));
+	db.displayMovieTableStats();
+}
+
 
 NotIMDB_Database::~NotIMDB_Database()
 {

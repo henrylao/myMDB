@@ -31,8 +31,7 @@ public:
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
-	NotIMDB_Database()  {
-	}
+	NotIMDB_Database()  {}
 	virtual ~NotIMDB_Database();
 	// ------------------------------------------
 	// Create/FileIO Section
@@ -75,6 +74,7 @@ public:
 	void				displayMovieTableStats() const;
 	bool				readMovie(std::string key) const;
 
+	void				unitTest();
 };
 
 #endif // ! TABLE_DB_H
