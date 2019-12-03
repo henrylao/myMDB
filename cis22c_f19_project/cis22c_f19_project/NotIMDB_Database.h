@@ -7,6 +7,7 @@
 #include "binary_search_tree.h"
 #include "Movie.h"
 #include "stack.h"
+#include "CustomException.h"
 
 class NotIMDB_Database
 {

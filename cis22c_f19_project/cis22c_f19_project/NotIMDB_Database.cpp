@@ -146,32 +146,113 @@ void NotIMDB_Database::showMostRecentDelete() const
 	std::cout << __deletedMovies.peek() << std::endl;
 }
 
+// TODO: refactor to avoid code reuse?
 bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string newMovieName)
 {
+	try {
+		Movie oldMovie = __movieDB.get(oldMovieName);
+		Movie newMovie(oldMovie.getID(), newMovieName,
+			oldMovie.getYearReleased(), oldMovie.getRuntime(), oldMovie.getGenres());
+		__movieDB.remove(oldMovieName);
+		__movieDB.add(newMovieName, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
 	return false;
 }
 
+// key is the movie's title
 bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearReleased)
 {
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(), newYearReleased,
+			oldMovie.getRuntime(), oldMovie.getGenres());
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
 	return false;
 }
 
 bool NotIMDB_Database::updateMovieID(std::string key, std::string newID)
 {
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(newID, oldMovie.getTitle(), oldMovie.getYearReleased(),
+			oldMovie.getRuntime(), oldMovie.getGenres());
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
 	return false;
 }
 
 bool NotIMDB_Database::updateMovieRuntime(std::string key, std::string newRuntime)
 {
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(),
+			oldMovie.getYearReleased(), newRuntime, oldMovie.getGenres());
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
 	return false;
 }
 
+// TODO: what is format of genres?
 bool NotIMDB_Database::updateMovieGenre(std::string key, std::string newGenreName, int op)
 {
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		std::string genres;
+		if (op)
+			genres = newGenreName;
+		else
+			genres = oldMovie.getGenres().append(newGenreName);
+
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(),
+			oldMovie.getYearReleased(), oldMovie.getRuntime(), genres);
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
 	return false;
 }
 
 bool NotIMDB_Database::updateMovieRating(std::string key, std::string newKey)
 {
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(), oldMovie.getYearReleased(),
+			oldMovie.getRuntime(), oldMovie.getGenres(), newKey);
+		__movieDB.remove(key);
+		__movieDB.add(newKey, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
 	return false;
 }
