@@ -4,17 +4,17 @@ Movie::Movie()
 {
 	__yearReleased = "";
 	__rating = -1;
-	__genres = new List<std::string>();
+	__genres = "";
 	__title = "";
 	__movieID = "";
 	__compareConfig = 1;
 }
 
-Movie::Movie(std::string tconstID, std::string title, std::string year, std::string runTime, const List<std::string>& genres)
+Movie::Movie(std::string tconstID, std::string title, std::string year, std::string runTime, std::string genres)
 {
 	__movieID = tconstID;
 	__title = title;
-	__genres = new List<std::string>(genres);
+	__genres = "";
 	__yearReleased = year;
 	__runtimeMinutes = runTime;
 	__rating = -1;
@@ -159,7 +159,7 @@ std::ostream & operator<<(std::ostream & out, const Movie & movie)
 	out << "Rating: " << movie.__rating << std::endl;
 	out << "Year Released: " << movie.__yearReleased << std::endl;
 	out << "Runtime: " << movie.__runtimeMinutes << " minutes" << std::endl;
-	out << "Genre(s): " << (*movie.__genres) << std::endl;
+	out << "Genre(s): " << (movie.__genres) << std::endl;
 	return out;
 	// TODO: insert return statement here
 }
