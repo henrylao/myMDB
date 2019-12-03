@@ -108,13 +108,13 @@
     <ClInclude Include="PrecondViolatedExcep.h">
       <Filter>Exception</Filter>
     </ClInclude>
-    <ClInclude Include="binary_node_kvpair.h">
+    <ClInclude Include="BST_node_pair.h">
       <Filter>Collection\Trees</Filter>
     </ClInclude>
-    <ClInclude Include="binary_tree_kvpair.h">
+    <ClInclude Include="BNT_pair.h">
       <Filter>Collection\Trees</Filter>
     </ClInclude>
-    <ClInclude Include="BST_KVpair.h">
+    <ClInclude Include="BST_pair.h">
       <Filter>Collection\Trees</Filter>
     </ClInclude>
     <ClInclude Include="CustomException.h">

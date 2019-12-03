@@ -69,7 +69,7 @@ public:
 	@param position The list position of the entry to replace.
 	@param newEntry The replacement entry. */
 	void setEntry(int position, const T & newEntry) { __list->set_item(position, newEntry); }
-
+	bool removeByValue(const T& entryToRemove);
 	//--------------------------------
 	// Operator Overload Section
 	//------------------------------
@@ -96,6 +96,20 @@ std::ostream& operator<< (std::ostream &out,  const List<T>& list)
 	out << list.getEntry(SIZE - 1);
 	out << " ]";
 	return out;
+}
+template<typename T>
+bool List<T>::removeByValue(const T & entryToRemove)
+{
+	int SIZE = __list->size();
+	for (int i = 0; i < SIZE; i++)
+	{
+		if (__list->get_item(i) == entryToRemove)
+		{
+			__list->remove(i);
+			return true;
+		}
+	}
+	return false;
 }
 template <typename T>
 T List<T>::operator[] (const int& index) const

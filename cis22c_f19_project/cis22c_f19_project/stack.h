@@ -12,9 +12,11 @@ public:
     Stack();
     virtual ~Stack();
     bool push(const T &newItem);
-	size_t size() const { return List<T>::getLength(); } 
+	size_t size() const { return List<T>::getLength(); }
     bool pop();
     T peek() const;
+	template <class U>
+	friend std::ostream& operator<< (std::ostream &out, const Stack<U>& stack);
 };
 
 template <class T>
@@ -42,5 +44,24 @@ template <class T>
 T Stack<T>::peek() const
 {
     return List<T>::getEntry(0);
+}
+template <typename T>
+std::ostream& operator<< (std::ostream &out, const Stack<T>& stack)
+{
+	out << "[ ";
+	int SIZE = stack.getLength();
+	T item = stack.getEntry(0);
+	if (SIZE == 1) {
+		out << item << " ]\n";
+		return out;
+	}
+	for (int i = 0; i < SIZE - 1; i++) {
+		item = stack.getEntry(i);
+		out << item;
+		out << ", ";
+	}
+	out << stack.getEntry(SIZE - 1);
+	out << " ]";
+	return out;
 }
 #endif // !_STACK_H

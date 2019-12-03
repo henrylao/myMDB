@@ -1,8 +1,7 @@
 #ifndef _BINARY_TREE
 #define _BINARY_TREE
 
-#include "binary_node_kvpair.h"
-#include "binary_tree_interface_kvpair.h"
+#include "BST_node_pair.h"
 #include "NotFoundException.h"
 #include "PrecondViolatedExcep.h"
 #include "queue.h"
@@ -37,7 +36,7 @@ protected:
 	// Recursively searches for target value in the tree by using a
 	// preorder traversal.
 	BinaryNode<K, V>* findNode(BinaryNode<K, V>* pNode,
-		const K& targetKey, const V& targetVal,
+		const K& targetKey,
 		bool& t_success) const;
 	// Copies the tree rooted at pNode and returns a pointer to
 	// the copy.
@@ -59,8 +58,8 @@ public:
 	// Constructor and Destructor Section.
 	//------------------------------------------------------------
 	BinaryNodeTree();
-	BinaryNodeTree(const K& t_root_key, const V& t_root_val);
-	BinaryNodeTree(const K& t_root_key, const V& t_root_val,
+	BinaryNodeTree(const K& t_root_key);
+	BinaryNodeTree(const K& t_root_key,
 		const BinaryNodeTree<K, V>* lefpNode,
 		const BinaryNodeTree<K, V>* righpNode);
 	// Copy constructor
@@ -120,7 +119,7 @@ bool BinaryNodeTree<K, V>::remove(const K& targetKey, const V& targetVal)
 }
 template <class K, class V>
 BinaryNode<K, V>* BinaryNodeTree<K, V>::findNode(BinaryNode<K, V>* pNode,
-	const K& targetKey, const V& targetVal,
+	const K& targetKey,
 	bool& t_success) const
 {
 	if (pNode == nullptr)
@@ -129,8 +128,7 @@ BinaryNode<K, V>* BinaryNodeTree<K, V>::findNode(BinaryNode<K, V>* pNode,
 		return pNode;
 	}
 	else {
-		if (pNode->getKey() == targetKey
-			&& pNode->getVal() == targetVal)
+		if (pNode->getKey() == targetKey )
 		{
 			t_success = true;
 			return pNode;
@@ -138,13 +136,13 @@ BinaryNode<K, V>* BinaryNodeTree<K, V>::findNode(BinaryNode<K, V>* pNode,
 		else
 		{
 			// found on left child node of parent
-			BinaryNode<K, V>* lefpNode = this->findNode(pNode->getLeftChildPtr(), targetKey, targetVal, t_success);
+			BinaryNode<K, V>* lefpNode = this->findNode(pNode->getLeftChildPtr(), targetKey, t_success);
 			if (lefpNode != nullptr)
 			{
 				return lefpNode;
 			}
 			// found on right child node of parent
-			BinaryNode<K, V>* righpNode = this->findNode(pNode->getRightChildPtr(), targetKey, targetVal, t_success);
+			BinaryNode<K, V>* righpNode = this->findNode(pNode->getRightChildPtr(), targetKey, t_success);
 			if (righpNode != nullptr)
 			{
 				return righpNode;
@@ -214,11 +212,11 @@ BinaryNodeTree<K, V>::BinaryNodeTree() : __root(nullptr)
 {
 } // end default constructor
 template <class K, class V>
-BinaryNodeTree<K, V>::BinaryNodeTree(const K& t_root_key, const V& t_root_val) {
+BinaryNodeTree<K, V>::BinaryNodeTree(const K& t_root_key) {
 	__root = new BinaryNode<K, V>(t_root_key, nullptr, nullptr);
 } // end constructor
 template <class K, class V>
-BinaryNodeTree<K, V>::BinaryNodeTree(const K& t_root_key, const V& t_root_val,
+BinaryNodeTree<K, V>::BinaryNodeTree(const K& t_root_key,
 	const BinaryNodeTree<K, V>* lefpNode,
 	const BinaryNodeTree<K, V>* righpNode)
 {
@@ -233,7 +231,7 @@ BinaryNode<K, V>* BinaryNodeTree<K, V>::copyTree(const BinaryNode<K, V>* t_old_r
 	if (t_old_root_ptr != nullptr)
 	{
 		// Copy node
-		new_node_ptr = new BinaryNode<K, V>(t_old_root_ptr->getKey(), t_old_root_ptr->getVal());
+		new_node_ptr = new BinaryNode<K, V>(t_old_root_ptr->getKey(), t_old_root_ptr->getValues());
 		new_node_ptr->setLeftChildPtr(copyTree(t_old_root_ptr->getLeftChildPtr()));
 		new_node_ptr->setRightChildPtr(copyTree(t_old_root_ptr->getRightChildPtr()));
 	} // end if
