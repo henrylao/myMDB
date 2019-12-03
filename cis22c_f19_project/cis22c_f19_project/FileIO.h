@@ -5,7 +5,6 @@
 #include "StringUtil.h"
 #include "HashTable.h"
 #include "Movie.h"
-#include "Actor.h"
 
 namespace FileIO
 {
@@ -17,9 +16,6 @@ namespace FileIO
 	List<Movie>* buildMovieList(std::string path);
 	/* Reads from a .tsv file following the format:
 	nconst | primaryName | birthYear | deathYear | primaryProfession | knownForTitles */
-	List<Actor>* buildActorList(std::string path);
-	/* Function used for multhreading */
-	void loadActorsIntoList(std::string path, List<Actor>* actors);
 	void loadMoviesIntoList(std::string path, List<Movie>* movie);
 }
 #endif // !_UTIL_FILEIO_H

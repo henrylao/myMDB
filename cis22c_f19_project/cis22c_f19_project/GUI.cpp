@@ -308,7 +308,7 @@ void GUI::promptLoadFile(NotIMDB_Database& db)
 		if (!found)
 		{
 			std::cout << "The movie you want to remove does not exist!" << std::endl;
-			int tryAgain = menu_prompt("Would you like to insert again?", GUI::menu_yes_no, 2);
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
 			if (tryAgain == 1)
 				continue;
 			else
@@ -317,13 +317,13 @@ void GUI::promptLoadFile(NotIMDB_Database& db)
 		std::cout << "This is the movie you want to remove:" << std::endl;
 		// TODO: Display the obj
 
-		int confirm = menu_prompt("Are you sure you want to remove this movie?", GUI::menu_yes_no, 2);
+		int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
 		if (confirm == 1)
 		{
 			//TODO: Remove obj from database
 
 			std::cout << "Deleted successfully!" << std::endl;
-			int tryAgain = menu_prompt("Would you like to insert again?", GUI::menu_continue_remove, 2);
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_continue_remove, 2);
 			if (tryAgain == 1)
 				continue;
 			else
@@ -331,7 +331,7 @@ void GUI::promptLoadFile(NotIMDB_Database& db)
 		}
 		else
 		{
-			int tryAgain = menu_prompt("Would you like to insert again?", GUI::menu_yes_no, 2);
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
 			if (tryAgain == 1)
 				continue;
 			else
@@ -449,13 +449,13 @@ void GUI::UI_edit(NotIMDB_Database& db)
 		std::cout << "This is the movie you want change to: " << std::endl;
 		//TODO: Display obj
 
-		int confirm = GUI::menu_prompt("Are you sure you want to edit this movie?", GUI::menu_yes_no, 2);
+		int confirm = GUI::menu_prompt("Are you sure you want to edit this movie?", menu_yes_no, 2);
 		if (confirm == 1)
 		{
 			//TODO: Remove obj from database
 
 			std::cout << "Edited successfully!" << std::endl;
-			int tryAgain = GUI::menu_prompt("Would you like to edit again?", GUI::menu_continue_remove, 2);
+			int tryAgain = GUI::menu_prompt("Would you like to edit again?", menu_continue_remove, 2);
 			if (tryAgain == 1)
 				continue;
 			else
@@ -463,7 +463,7 @@ void GUI::UI_edit(NotIMDB_Database& db)
 		}
 		else
 		{
-			int tryAgain = GUI::menu_prompt("Would you like to edit again?", GUI::menu_yes_no, 2);
+			int tryAgain = GUI::menu_prompt("Would you like to edit again?", menu_yes_no, 2);
 			if (tryAgain == 1)
 				continue;
 			else

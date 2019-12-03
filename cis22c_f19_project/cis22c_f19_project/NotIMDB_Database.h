@@ -7,7 +7,7 @@
 #include "List.h"
 #include "binary_search_tree.h"
 #include "Movie.h"
-#include "Actor.h"
+#include "stack.h"
 
 class NotIMDB_Database
 {
@@ -21,11 +21,6 @@ private:
 	void								__loadMovies(List<Movie>* movies);
 	/* requires that the movies have been loaded to further map a movie to an actor via
 	the list of Movie* stored in an actor value */
-	void								__loadActors(List<Actor>* actors);
-	void								__buildMovieNamesBST_byID(std::string path);
-	void								__buildMovieNamesBST_byGenre(std::string path);
-	void								__buildMovieNamesBST_byYear(std::string path);
-	void								__clear();
 public:
 
 	// ------------------------------------------

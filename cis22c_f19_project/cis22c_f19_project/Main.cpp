@@ -24,22 +24,22 @@ int main() {
 
 	bool end = true;
 	while (end) {
-		int choice = menu_prompt("What would you like to do?", menu_operations, 5);
+		int choice = GUI::menu_prompt("What would you like to do?", menu_operations, 5);
 		switch (choice) {
 			case 1: {
-				UI_search(/*const database& database*/);
+				//GUI::UI_search(/*const database& database*/);
 				break;
 			}
 			case 2: {
-				UI_add(/*const database& database*/);
+				//GUI::UI_add(/*const database& database*/);
 				break;
 			}
 			case 3: {
-				UI_remove(/*const database& database*/);
+				//GUI::UI_remove(/*const database& database*/);
 				break;
 			}
 			case 4: {
-				UI_edit();
+				//GUI::UI_edit();
 				break;
 			}
 			case 5: {

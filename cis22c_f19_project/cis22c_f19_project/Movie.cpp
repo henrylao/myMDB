@@ -4,7 +4,7 @@ Movie::Movie()
 {
 	__yearReleased = "";
 	__rating = -1;
-	__genres = new List<std::string>();
+	__genres = "";
 	__title = "";
 	__movieID = "";
 	__compareConfig = 1;
@@ -169,7 +169,7 @@ std::ostream & operator<<(std::ostream & out, const Movie & movie)
 	out << "Rating: " << movie.__rating << std::endl;
 	out << "Year Released: " << movie.__yearReleased << std::endl;
 	out << "Runtime: " << movie.__runtimeMinutes << " minutes" << std::endl;
-	out << "Genre(s): " << (*movie.__genres) << std::endl;
+	out << "Genre(s): " << (movie.__genres) << std::endl;
 	return out;
 	// TODO: insert return statement here
 }
