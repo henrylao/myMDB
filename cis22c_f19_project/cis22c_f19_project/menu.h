@@ -1,11 +1,11 @@
+
+#ifndef MENU_H
+#define MENU_H
 #include <string>
 #include <iostream>
 //#include <fstream>
 #include <cstdlib>
 #include <stdlib.h>
-
-#ifndef MENU_H
-#define MENU_H
 
 namespace GUI {
 

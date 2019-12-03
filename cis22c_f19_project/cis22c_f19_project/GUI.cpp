@@ -65,7 +65,7 @@ bool GUI::isValidYear(string year) {
 }
 void GUI::UI_search(const NotIMDB_Database& db) {
 	std::string in;
-	int choice = GUI::menu_prompt("How do you want to search movies by?", menu_search, 6);
+	int choice = GUI::menu_prompt("How do you want to search movies by?", GUI::menu_search, 6);
 	switch (choice)
 	{
 		case 1: {
