@@ -49,6 +49,8 @@ public:
 	std::string					getTitle() const { return __title;  }
 	std::string					getID() const { return __movieID; }
 	std::string					getRating() const { return __rating; }
+	std::string					getYearReleased() const { return __yearReleased; }
+	std::string					getRuntime() const { return __runtimeMinutes; }
 
 	//--------------------------------
 	// Operator Overload Section

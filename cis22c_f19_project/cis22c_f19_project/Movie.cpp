@@ -14,7 +14,7 @@ Movie::Movie(std::string tconstID, std::string title, std::string year, std::str
 {
 	__movieID = tconstID;
 	__title = title;
-	__genres = "";
+	__genres = genres;
 	__yearReleased = year;
 	__runtimeMinutes = runTime;
 	__rating = -1;
@@ -24,7 +24,6 @@ Movie::Movie(std::string tconstID, std::string title, std::string year, std::str
 
 void Movie::clear()
 {
-	delete __genres;
 }
 
 bool Movie::operator==(const Movie & rightHandSide) const
