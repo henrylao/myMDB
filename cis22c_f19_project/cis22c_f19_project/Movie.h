@@ -35,6 +35,12 @@ public:
 	//----------------------------------------------------
 	// Mutators Section
 	//----------------------------------------------------
+	void		setTitle(const std::string& newTitle) { __title = newTitle; }
+	void		setYearReleased(const std::string& newYear) { __yearReleased = newYear; }
+	void		setGenre(const std::string& newGenre) { __genres = newGenre; }
+	void		setID(const std::string& newID) { __movieID = newID; }
+	void		setRuntime(const std::string& newTime) { __runtimeMinutes = newTime; }
+	void		setRating(const std::string& newRating) { __rating = newRating; }
 	void		clear();
 	void		setCompareByID() { __compareConfig = 1; }
 	void		setCompareByRating() { __compareConfig = 2; }
