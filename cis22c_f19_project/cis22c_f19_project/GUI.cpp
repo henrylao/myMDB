@@ -234,6 +234,51 @@ void GUI::UI_add(NotIMDB_Database & db)
 }
 
 void GUI::UI_remove(NotIMDB_Database& db) {
+	while (1)
+	{
+		std::string input;
+		bool found = false;
+
+		std::cout << "Please insert the title of the movie you want to remove: " << std::endl;
+		getline(std::cin, input);
+
+		//TODO: 
+		//Search the obj
+		//If found, set boolean found = true
+
+		if (!found)
+		{
+			std::cout << "The movie you want to remove does not exist!" << std::endl;
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
+			if (tryAgain == 1)
+				continue;
+			else
+				return;
+		}
+		std::cout << "This is the movie you want to remove:" << std::endl;
+		// TODO: Display the obj
+
+		int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
+		if (confirm == 1)
+		{
+			//TODO: Remove obj from database
+
+			std::cout << "Deleted successfully!" << std::endl;
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_continue_remove, 2);
+			if (tryAgain == 1)
+				continue;
+			else
+				return;
+		}
+		else
+		{
+			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
+			if (tryAgain == 1)
+				continue;
+			else
+				return;
+		}
+	}
 }
 
 
