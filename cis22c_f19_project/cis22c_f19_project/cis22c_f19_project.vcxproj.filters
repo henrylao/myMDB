@@ -40,6 +40,12 @@
     <Filter Include="Exception">
       <UniqueIdentifier>{129e41f7-88f9-4042-96cc-de1efc424ced}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collection\Trees\One Arg">
+      <UniqueIdentifier>{fc05f558-5d3d-4b5f-9750-245325705dc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection\Trees\Pair Arg">
+      <UniqueIdentifier>{721432e5-1069-4110-93eb-62f288547c89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="head_node.h">
@@ -59,18 +65,6 @@
     </ClInclude>
     <ClInclude Include="queue_interface.h">
       <Filter>Collection\Stack &amp; Queue</Filter>
-    </ClInclude>
-    <ClInclude Include="binary_node.h">
-      <Filter>Collection\Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="binary_search_tree.h">
-      <Filter>Collection\Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="binary_tree.h">
-      <Filter>Collection\Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="binary_tree_interface.h">
-      <Filter>Collection\Trees</Filter>
     </ClInclude>
     <ClInclude Include="ListInterface.h">
       <Filter>Collection\List</Filter>
@@ -122,6 +116,18 @@
     </ClInclude>
     <ClInclude Include="PrecondViolatedExcep.h">
       <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_node_kvpair.h">
+      <Filter>Collection\Trees\Pair Arg</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_tree_interface_kvpair.h">
+      <Filter>Collection\Trees\Pair Arg</Filter>
+    </ClInclude>
+    <ClInclude Include="BST_KVpair.h">
+      <Filter>Collection\Trees\Pair Arg</Filter>
+    </ClInclude>
+    <ClInclude Include="binary_tree_kvpair.h">
+      <Filter>Collection\Trees\Pair Arg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

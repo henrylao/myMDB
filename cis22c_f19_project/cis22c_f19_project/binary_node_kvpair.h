@@ -4,10 +4,10 @@
 template <typename K, typename V>
 class BinaryNode {
 private:
-	K m_key;
-	V m_val;
-	BinaryNode* m_left_child;
-	BinaryNode* m_right_child;
+	K					__key;
+	V					__val;
+	BinaryNode*			__leftChild;
+	BinaryNode*			__rightChild;
 public:
 	//-----------------------------
 	// CONSTRUCTORS 
@@ -70,84 +70,84 @@ public:
 	BinaryNode<K, V>& operator<(const BinaryNode<K, V>& t_rhs);
 };
 template <typename K, typename V>
-BinaryNode<K, V>::BinaryNode() : m_left_child(nullptr), m_right_child(nullptr)
+BinaryNode<K, V>::BinaryNode() : __leftChild(nullptr), __rightChild(nullptr)
 {} // end default constructor
 
 template <typename K, typename V>
 BinaryNode<K, V>::BinaryNode(const K& t_key, const V& t_val) :
-	m_key(t_key), m_val(t_val), m_left_child(nullptr), m_right_child(nullptr)
+	__key(t_key), __val(t_val), __leftChild(nullptr), __rightChild(nullptr)
 {} // end constructor
 
 template <typename K, typename V>
 BinaryNode<K, V>::BinaryNode(const K& t_key, const V& t_val, BinaryNode<K, V>* t_left_child, BinaryNode<K, V>* t_right_child) :
-	m_key(t_key), m_val(t_val), m_left_child(t_left_child), m_right_child(t_right_child)
+	__key(t_key), __val(t_val), __leftChild(t_left_child), __rightChild(t_right_child)
 {}	// end constructor
 
 template <typename K, typename V>
 void BinaryNode<K, V>::setKey(const K& t_new_key) {
-	this->m_key = t_new_key;
+	this->__key = t_new_key;
 }	// end setKey
 
 template<typename K, typename V>
-inline void BinaryNode<K, V>::setVal(const V & t_new_val)
+void BinaryNode<K, V>::setVal(const V & t_new_val)
 {
-	this->m_val = t_new_val;
+	this->__val = t_new_val;
 }
 
 template <typename K, typename V>
 void BinaryNode<K, V>::setLeftChildPtr(BinaryNode<K, V>* t_left_child) {
-	this->m_left_child = t_left_child;
+	this->__leftChild = t_left_child;
 }	// end set
 template <typename K, typename V>
 void BinaryNode<K, V>::setRightChildPtr(BinaryNode<K, V>* t_right_child) {
-	this->m_right_child = t_right_child;
+	this->__rightChild = t_right_child;
 }	// end set_next
 
 template<typename K, typename V>
-inline BinaryNode<K, V> & BinaryNode<K, V>::operator==(const BinaryNode<K, V> & t_rhs)
+BinaryNode<K, V> & BinaryNode<K, V>::operator==(const BinaryNode<K, V> & t_rhs)
 {
-	if (this->m_key == t_rhs.m_key && this->m_val == t_rhs.m_val) return true;
+	if (this->__key == t_rhs.__key && this->__val == t_rhs.__val) return true;
 	else false;
 }
 
 template<typename K, typename V>
-inline BinaryNode<K, V> & BinaryNode<K, V>::operator>(const BinaryNode<K, V> & t_rhs)
+BinaryNode<K, V> & BinaryNode<K, V>::operator>(const BinaryNode<K, V> & t_rhs)
 {
-	if (this->m_key > t_rhs.m_key && this->m_val > t_rhs.m_val) return true;
+	if (this->__key > t_rhs.__key && this->__val > t_rhs.__val) return true;
 	else false;
 }
 
 template<typename K, typename V>
-inline BinaryNode<K, V> & BinaryNode<K, V>::operator<(const BinaryNode<K, V> & t_rhs)
+BinaryNode<K, V> & BinaryNode<K, V>::operator<(const BinaryNode<K, V> & t_rhs)
 {
-	if (this->m_key < t_rhs.m_key && this->m_val < t_rhs.m_val) return true;
+	if (this->__key < t_rhs.__key && this->__val < t_rhs.__val) return true;
 	else false;
 }
 
 template <typename K, typename V>
 K BinaryNode<K, V>::getKey() const {
-	return this->m_key;
+	return this->__key;
 }	// end getKey
 
 template<typename K, typename V>
 V BinaryNode<K, V>::getVal() const
 {
-	return this->m_val;
+	return this->__val;
 }
 
 template <typename K, typename V>
 BinaryNode<K, V>* BinaryNode<K, V>::getLeftChildPtr() const {
-	return (this->m_left_child);
+	return (this->__leftChild);
 }	// end get_next
 
 template <typename K, typename V>
 bool BinaryNode<K, V>::isLeaf() const {
-	return (m_left_child == nullptr && m_right_child == nullptr? true: false);
+	return (__leftChild == nullptr && __rightChild == nullptr? true: false);
 }	// a node is a leaf 
 
 template <typename K, typename V>
 BinaryNode<K, V>* BinaryNode<K, V>::getRightChildPtr() const {
-	return (this->m_right_child);
+	return (this->__rightChild);
 }	// end get_next
 
 #endif 

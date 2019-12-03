@@ -8,10 +8,72 @@ void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 	for (int i = 0; i < MSIZE; i++)
 	{
 		newMovie = movies->getEntry(i);
-		__movieDB.add(newMovie.getTitle(), newMovie);
+		// preprocess the key
+		std::string key = newMovie.getTitle() + " " + newMovie.getYearReleased();
+		key = StringUtil::lowercase(StringUtil::strip(key));	// remove whitespace and turn into lowercase
+		key = StringUtil::replace(key, " ", "_");
+		// add to the table
+		__movieDB.add(key, newMovie);
 	}
-	delete movies;
+	//delete movies;
 
+}
+
+/* create the map of bsts such that the first character of each tokenized word
+signifies a key in the dictionary */
+void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
+{
+	int SIZE = movies->getLength();
+	Movie newMovie;
+	List<std::string>* keywords;
+	std::string keyword, keywords_preprocess;
+	BinarySearchTree<std::string, Movie> found;
+
+	std::string firstCharOfKeyword;
+
+	for (int i = 0; i < SIZE; i++) {
+		newMovie = movies->getEntry(i);
+		/*  homogenize characters in the string */
+		// strip then turn into lowercase
+		keywords_preprocess = StringUtil::lowercase(StringUtil::strip(newMovie.getTitle() + " " + newMovie.getYearReleased())); 
+		keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
+		// create a list of keywords from movie title and year
+		keywords = StringUtil::split(keywords_preprocess, "_");	
+		// create trees and populate accordingly such that 
+		// the first letter of a keyword from the keyword list signifies a key in the
+		// table of BSTS
+		for (int j = 0; j < keywords->getLength(); j++)
+		{
+			keyword = keywords->getEntry(j);
+			firstCharOfKeyword = std::string(1, keyword[0]);
+			try {
+				// check in the dictionary
+				found = __movieBST[firstCharOfKeyword];
+				__movieBST[firstCharOfKeyword].add(keyword, newMovie);
+			}
+			// first character of a keyword was not found to denote a key in the table
+			catch (const CustomException& e)
+			{
+				// create a new bst such that the first character of the keyword denotes 
+				// a key to a tree in the table of bst 
+				__movieBST.add(std::string(1, keywords->getEntry(j)[0]), 
+					BinarySearchTree<std::string, Movie>(keywords->getEntry(j), newMovie));
+
+			}
+
+		}
+		// memory clean
+		delete keywords;
+	}
+
+}
+
+void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribute, Movie &)
+{
+}
+
+void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribute)
+{
 }
 
 bool NotIMDB_Database::foundMovie(std::string key)
@@ -28,6 +90,12 @@ bool NotIMDB_Database::foundMovie(std::string key)
 	return false;
 
 }
+bool NotIMDB_Database::search(std::string keyword) const
+{
+}
+
+
+
 void NotIMDB_Database::displayMovieTableStats() const
 {
 	__movieDB.showStats();
@@ -49,11 +117,10 @@ bool NotIMDB_Database::readMovie(std::string key) const
 void NotIMDB_Database::unitTest()
 {
 	std::string divider = "--------------------------------";
-	std::string path = "data\\full\\title_basics_cleaned_final_trimmed.tsv";
 	NotIMDB_Database db;
-	db.loadFromFile(path);
+	db.loadFromFile();
 	db.readMovie("Miss Jerry");
-	db.saveToFile();
+	db.saveToFile("output.tsv");
 
 	std::cout << divider << std::endl;
 	std::cout << "Pre-delete:" << std::endl;
@@ -69,7 +136,7 @@ void NotIMDB_Database::unitTest()
 	db.undoMostRecentDelete();
 	std::cout << divider << std::endl;
 	db.readMovie("Miss Jerry");
-	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
+	std::string path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
 	List<Movie>* movies = FileIO::buildMovieList(path);
 	db.createMovie(movies->getEntry(5));
 	db.displayMovieTableStats();
@@ -87,6 +154,17 @@ bool NotIMDB_Database::loadFromFile(std::string path)
 	//std::thread t1( FileIO::loadActorsIntoList, actorFilePath, actors);
 	movies = FileIO::buildMovieList(path);
 	__loadMovies(movies);
+	__buildMovieBST(movies);
+	List<std::string> keys = __movieBST.keys();
+	int SIZE = keys.getLength();
+
+	/* DEBUG Keyword Search Engine*/
+	for (int i = 0; i < SIZE; i++)
+	{
+		std::cout << "BST in table at keyword char: " << keys.getEntry(i) << std::endl;
+		std::cout << "Depth-first: " << std::endl;
+		__movieBST[keys.getEntry(i)].printBreadthFirst();
+	}
 	// call internal loading functions
 
 	return true;

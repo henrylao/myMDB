@@ -35,6 +35,8 @@ protected:
 	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& t_target) const;
 	// call on root or parent tree to find the leftmost node
 	BinaryNode<K, V>* getLeftmostNode(BinaryNode<K, V>* t_root);
+	void printBreadthFirstRecursively(BinaryNode<K,V>* t_node_ptr);
+	void printSingleLevelRecursively(BinaryNode<K,V>* t_node_ptr, int level);
 	// fileIO helper functions
 	std::ostream& serializeInorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr);
 	std::ostream& serializePostorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr);
@@ -45,7 +47,7 @@ public:
 	// Constructor and Destructor Section.
 	//------------------------------------------------------------
 	BinarySearchTree() : m_root(nullptr), m_out_traverse(0) {}
-	BinarySearchTree(const K& t_root_key, const V& t_root_val) : m_root(t_root_key, t_root_val) {}
+	BinarySearchTree(const K& t_root_key, const V& t_root_val) { m_root = new BinaryNode<K,V>(t_root_key, t_root_val); }
 	// Copy constructor
 	BinarySearchTree(const BinarySearchTree<K, V>& t_tree) : BinaryNodeTree<K, V>(t_tree) {}
 	virtual ~BinarySearchTree();
@@ -59,7 +61,7 @@ public:
 	void setRootKey(const K& t_new_key) { this->m_root->setKey(t_new_key); }
 	void setRootVal(const K& t_new_val) { this->m_root->setVal(t_new_val); }
 	//const throw (PrecondViolatedExcep);
-	bool add(const K& t_new_item);
+	bool add(const K& t_new_item, const V& newValues);
 	bool remove(const K& t_item);
 	void clear() { BinaryNodeTree<K, V>::destroyTree(this->m_root); }
 	K getKey(const K& t_item) const throw (NotFoundException);
@@ -98,7 +100,35 @@ public:
 	std::ostream& serializePostorderTraverse(std::ostream& t_out) { return this->serializePostorder(t_out, this->m_root); }
 	std::ostream& serializePreorderTraverse(std::ostream& t_out) { return this->serializePreorder(t_out, this->m_root); }
 	std::ostream& serializeBreadthFirstTraverse(std::ostream& t_out) { return this->serializeBreadthFirst(t_out, this->m_root); }
+	void printBreadthFirst() { this->printBreadthFirstRecursively(this->m_root); }
+
 }; // end BinarySearchTree
+
+
+template <typename K, typename V>
+void BinarySearchTree<K,V>::printBreadthFirstRecursively(BinaryNode<K,V>* t_node_ptr)
+{
+	int height = this->getHeight();
+	for (int i = 1; i <= height; i++)
+	{
+		std::cout << "Level " << i << " \t ";
+		this->printSingleLevelRecursively(t_node_ptr, i);
+		std::cout << std::endl;
+	}
+}
+template <typename K, typename V>
+void BinarySearchTree<K,V>::printSingleLevelRecursively(BinaryNode<K,V>* t_node_ptr, int level)
+{
+	if (t_node_ptr == nullptr)
+		return;
+	if (level == 1)
+		std::cout << "Keyword: " << t_node_ptr->getKey() << "\nMovie: " << t_node_ptr->getVal();
+	else if (level > 1)
+	{
+		this->printSingleLevelRecursively(t_node_ptr->getLeftChildPtr(), level - 1);
+		this->printSingleLevelRecursively(t_node_ptr->getRightChildPtr(), level - 1);
+	}
+}
 template <typename K, typename V>
 std::ostream& BinarySearchTree<K, V>::serializeBreadthFirst(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr)
 {
@@ -329,9 +359,9 @@ bool BinarySearchTree<K, V>::contains(const K& t_target) const
 	return (node_found_ptr != nullptr ? true : false);
 }
 template <class K, class V>
-bool BinarySearchTree<K, V>::add(const K& t_new_item)
+bool BinarySearchTree<K, V>::add(const K& t_new_item, const V& newValue)
 {
-	BinaryNode<K, V>* new_node = new BinaryNode<K, V>(t_new_item);
+	BinaryNode<K, V>* new_node = new BinaryNode<K, V>(t_new_item, newValue);
 	this->m_root = this->insertInorder(this->m_root, new_node);
 	return true;
 }	// end add

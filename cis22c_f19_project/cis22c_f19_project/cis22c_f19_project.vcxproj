@@ -115,10 +115,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="binary_node.h" />
-    <ClInclude Include="binary_search_tree.h" />
-    <ClInclude Include="binary_tree.h" />
-    <ClInclude Include="binary_tree_interface.h" />
+    <ClInclude Include="binary_node_kvpair.h" />
+    <ClInclude Include="BST_KVpair.h" />
+    <ClInclude Include="binary_tree_kvpair.h" />
+    <ClInclude Include="binary_tree_interface_kvpair.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HashTable.h" />
