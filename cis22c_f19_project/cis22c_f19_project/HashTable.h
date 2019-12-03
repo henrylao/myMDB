@@ -304,7 +304,7 @@ bool HashTable<T>::add(std::string key, const T& value)
 				__occupancy++;
 				//__keys.insert(__keys.getLength(), key);
 				//__values.insert(__values.getLength(), value);
-				__log << value << "\t\t\t" << i << " hashes" << std::endl;
+				//__log << value << "\t\t\t" << i << " hashes" << std::endl;
 				return true;
 			}
 			// no collision case
@@ -313,7 +313,7 @@ bool HashTable<T>::add(std::string key, const T& value)
 				__table[hashID] = new HashTableNode<T>(key, hashID, value, false);
 				__keys->append(key);
 				__occupancy++;
-				__log << value << "\t\t\t" << i << " hashes" << std::endl;
+				//__log << value << "\t\t\t" << i << " hashes" << std::endl;
 
 				return true;
 			}
