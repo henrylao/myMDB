@@ -7,9 +7,9 @@
 #include "List.h"
 #include "Movie.h"
 #include "stack.h"
-#include "BST_KVpair.h"
+#include "BST_pair.h"
 #include "CustomException.h"
-
+#include "NotFoundException.h"
 
 class NotIMDB_Database
 {
@@ -31,6 +31,7 @@ private:
 	update the search engine bst when edits are made to movies via removal 
 	op == 1 : editted title 
 	op == 2 : editted year  */
+	std::string			__processSearchEntry(const std::string& searchEntry);
 	void				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
 public:
 
