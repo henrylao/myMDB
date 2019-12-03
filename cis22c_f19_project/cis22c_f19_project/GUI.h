@@ -2,7 +2,6 @@
 #define _GUI_H
 
 #include <iostream>
-#include "GUI.h"
 #include "NotIMDB_Database.h"
 #include "Movie.h"
 #include "List.h"
