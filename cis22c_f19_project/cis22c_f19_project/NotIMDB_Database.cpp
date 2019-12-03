@@ -9,6 +9,7 @@ void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 	for (int i = 0; i < MSIZE; i++)
 	{
 		newMovie = movies->getEntry(i);
+
 		// preprocess the key
 		std::string key = newMovie.getTitle() + " " + newMovie.getYearReleased();
 		key = StringUtil::lowercase(StringUtil::strip(key));	// remove whitespace and turn into lowercase
@@ -65,7 +66,9 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 		}
 		// memory clean
 		delete keywords;
+
 	}
+	delete movies;
 
 }
 
@@ -168,11 +171,11 @@ bool NotIMDB_Database::foundMovie(std::string key)
 
 }
 
-
 void NotIMDB_Database::displayMovieTableStats() const
 {
 	__movieDB.showStats();
 }
+
 bool NotIMDB_Database::readMovie(std::string key) const
 {
 	std::string processedKey = StringUtil::lowercase(StringUtil::strip(key));
@@ -209,7 +212,9 @@ void NotIMDB_Database::displaySearchEngineState() const
 void NotIMDB_Database::unitTest()
 {
 	std::string divider = "--------------------------------";
+	std::string path = "data\\full\\title_basics_cleaned_final_trimmed.tsv";
 	NotIMDB_Database db;
+
 	db.loadFromFile();
 	db.readMovie("Miss Jerry 1894");
 	db.saveToFile("output.tsv");
@@ -230,7 +235,7 @@ void NotIMDB_Database::unitTest()
 	db.undoMostRecentDelete();
 	std::cout << divider << std::endl;
 	db.readMovie("Miss Jerry");
-	std::string path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
+	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
 	List<Movie>* movies = FileIO::buildMovieList(path);
 	db.createMovie(movies->getEntry(5));
 	db.displayMovieTableStats();
@@ -239,10 +244,7 @@ void NotIMDB_Database::unitTest()
 	system("pause");
 }
 
-
-NotIMDB_Database::~NotIMDB_Database()
-{
-}
+NotIMDB_Database::~NotIMDB_Database() {}
 
 bool NotIMDB_Database::loadFromFile(std::string path)
 {
@@ -261,34 +263,35 @@ void NotIMDB_Database::saveToFile(string path)
 	std::ofstream outfile;
 	outfile.open(path, std::ios::out);
 
-	std::string out;
-	size_t MSIZE = __movieDB.size();
+	std::string out = "";
+	int MSIZE = (int)__movieDB.size();
 	Movie temp;
-	for (size_t i = 0; i < MSIZE; i++)
+	for (int i = 0; i < MSIZE; i++)
 	{
 		temp = (__movieDB[__movieDB.keys().getEntry(i)]);
-		out = temp.getID() + " | " + temp.getTitle() + " | " +
-			temp.getYearReleased() + " | " + temp.getRuntime()
-			+ " | " + temp.getGenres() + "\n";
+		out = temp.getID() + " | "
+			+ temp.getTitle() + " | "
+			+ temp.getYearReleased() + " | "
+			+ temp.getRuntime() + " | "
+			+ temp.getGenres() + "\n";
 		outfile << out;
 	}
 	outfile.close();
-
 }
 
 bool NotIMDB_Database::deleteMovie(std::string key)
 {
-	try{
+	try {
+		// push onto the stack
 		Movie temp;
 		temp = __movieDB[key];
 		__deletedMovies.push(temp);
-
 	}
 	catch (const CustomException& e)
 	{
 		return false;
 	}
-	// push onto the stack
+
 	__movieDB.remove(key);	// movie removed from table
 	return true;
 }
@@ -319,4 +322,115 @@ bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string new
 	Movie edittedMovie = __updateSearchEngineBST(newMovieName, __movieDB[oldMovieName], 1);
 	__movieDB[newMovieName] = edittedMovie;
 	return true;
+}
+
+// TODO: refactor to avoid code reuse?
+bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string newMovieName)
+{
+	try {
+		Movie oldMovie = __movieDB.get(oldMovieName);
+		Movie newMovie(oldMovie.getID(), newMovieName,
+			oldMovie.getYearReleased(), oldMovie.getRuntime(), oldMovie.getGenres());
+		__movieDB.remove(oldMovieName);
+		__movieDB.add(newMovieName, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
+	return false;
+}
+
+// key is the movie's title
+bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearReleased)
+{
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(), newYearReleased,
+			oldMovie.getRuntime(), oldMovie.getGenres());
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
+	return false;
+}
+
+bool NotIMDB_Database::updateMovieID(std::string key, std::string newID)
+{
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(newID, oldMovie.getTitle(), oldMovie.getYearReleased(),
+			oldMovie.getRuntime(), oldMovie.getGenres());
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
+	return false;
+}
+
+bool NotIMDB_Database::updateMovieRuntime(std::string key, std::string newRuntime)
+{
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(),
+			oldMovie.getYearReleased(), newRuntime, oldMovie.getGenres());
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
+	return false;
+}
+
+// TODO: what is format of genres?
+bool NotIMDB_Database::updateMovieGenre(std::string key, std::string newGenreName, int op)
+{
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		std::string genres;
+		if (op)
+			genres = newGenreName;
+		else
+			genres = oldMovie.getGenres().append(newGenreName);
+
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(),
+			oldMovie.getYearReleased(), oldMovie.getRuntime(), genres);
+		__movieDB.remove(key);
+		__movieDB.add(key, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
+	return false;
+}
+
+bool NotIMDB_Database::updateMovieRating(std::string key, std::string newKey)
+{
+	try {
+		Movie oldMovie = __movieDB.get(key);
+		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(), oldMovie.getYearReleased(),
+			oldMovie.getRuntime(), oldMovie.getGenres(), newKey);
+		__movieDB.remove(key);
+		__movieDB.add(newKey, newMovie);
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << "Error: movie could not be updated" << std::endl;
+	}
+	return false;
 }
