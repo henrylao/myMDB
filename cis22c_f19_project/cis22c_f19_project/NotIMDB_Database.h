@@ -16,6 +16,7 @@ private:
 	// movie titles & actor names are keys for accessing the table
 	HashTable<Movie>					__movieDB;
 	Stack<Movie>						__deletedMovies;
+	HashTable<BinarySearchTree<std::string, Movie>>		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
 	// ------------------------------------------

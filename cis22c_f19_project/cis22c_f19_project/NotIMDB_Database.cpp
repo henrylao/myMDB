@@ -274,7 +274,7 @@ void NotIMDB_Database::unitTest()
 	std::string path = "data\\full\\title_basics_cleaned_final_trimmed.tsv";
 	NotIMDB_Database db;
 
-	db.loadFromFile();
+	db.loadFromFile(path);
 	db.readMovie("Miss Jerry");
 	db.saveToFile("output.tsv");
 
@@ -385,8 +385,7 @@ bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string new
 	return true;
 }
 
-// TODO: refactor to avoid code reuse?
-bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string newMovieName)
+/*bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string newMovieName)
 {
 	try {
 		Movie oldMovie = __movieDB.get(oldMovieName);
@@ -401,7 +400,7 @@ bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string new
 		std::cout << "Error: movie could not be updated" << std::endl;
 	}
 	return false;
-}
+}*/
 
 // key is the movie's title
 bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearReleased)
