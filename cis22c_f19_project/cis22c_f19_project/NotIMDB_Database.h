@@ -8,6 +8,8 @@
 #include "Movie.h"
 #include "stack.h"
 #include "BST_KVpair.h"
+#include "CustomException.h"
+
 
 class NotIMDB_Database
 {
@@ -24,9 +26,12 @@ private:
 	void				__loadMovies(List<Movie>* movies);
 	/* tokenizes movie attributes ie movie name */
 	void				__buildMovieBST(List<Movie>* movies);
-	/* to be called during updates to the table of movies 
-	update the search engine bst when edits are made to movies via removal */
-	void				__updateSearchEngineBST(const std::string edittedAttribute, Movie& );
+	/* to be called during updates to a specific movie where either the year or
+	the name of the movie is changed 
+	update the search engine bst when edits are made to movies via removal 
+	op == 1 : editted title 
+	op == 2 : editted year  */
+	void				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
 public:
 
 	// ------------------------------------------

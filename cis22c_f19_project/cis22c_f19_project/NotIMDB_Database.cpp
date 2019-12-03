@@ -1,4 +1,5 @@
 #include "NotIMDB_Database.h"
+#include "GUI.h"
 
 void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 {
@@ -48,15 +49,15 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 			firstCharOfKeyword = std::string(1, keyword[0]);
 			try {
 				// check in the dictionary
-				found = __movieBST[firstCharOfKeyword];
-				__movieBST[firstCharOfKeyword].add(keyword, newMovie);
+				found = __searchEngineBST[firstCharOfKeyword];
+				__searchEngineBST[firstCharOfKeyword].add(keyword, newMovie);
 			}
 			// first character of a keyword was not found to denote a key in the table
 			catch (const CustomException& e)
 			{
 				// create a new bst such that the first character of the keyword denotes 
 				// a key to a tree in the table of bst 
-				__movieBST.add(std::string(1, keywords->getEntry(j)[0]), 
+				__searchEngineBST.add(std::string(1, keywords->getEntry(j)[0]), 
 					BinarySearchTree<std::string, Movie>(keywords->getEntry(j), newMovie));
 
 			}
@@ -68,12 +69,47 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 
 }
 
-void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribute, Movie &)
+/* to be called during updates to a specific movie where either the year or
+	the name of the movie is changed
+	update the search engine bst when edits are made to movies via removal
+	op == 1 : editted title
+	op == 2 : editted year  */
+void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op)
 {
-}
+	BinarySearchTree<std::string, Movie> found;
+	List<std::string>* keywords;
+	std::string keyword, keywords_preprocess, firstCharOfKeyword;
+	// create copy of the movie
+	Movie newMovie(movieToEdit);
+	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(movieToEdit.getTitle() + " " + movieToEdit.getYearReleased()));
+	keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
+	if (op < 1)
+		throw CustomException("Error: Invalid Update Operation Value");
+	if (op == 1)
+	{
+		newMovie.setTitle(edittedAttribute);
+		keywords = StringUtil::split(keywords_preprocess, "|");
+		for (int j = 0; j < keywords->getLength(); j++)
+		{
+			keyword = keywords->getEntry(j);
+			firstCharOfKeyword = std::string(1, keyword[0]);
+			try {
+				// check in the dictionary
+				found = __searchEngineBST[firstCharOfKeyword];
+				__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
+			}
+			// first character of a keyword was not found to denote a key in the table
+			catch (const CustomException& e)
+			{
+				// create a new bst such that the first character of the keyword denotes 
+				// a key to a tree in the table of bst 
+				__searchEngineBST.add(std::string(1, keywords->getEntry(j)[0]),
+					BinarySearchTree<std::string, Movie>(keywords->getEntry(j), newMovie));
 
-void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribute)
-{
+			}
+
+		}
+	}
 }
 
 bool NotIMDB_Database::foundMovie(std::string key)
@@ -90,10 +126,6 @@ bool NotIMDB_Database::foundMovie(std::string key)
 	return false;
 
 }
-bool NotIMDB_Database::search(std::string keyword) const
-{
-}
-
 
 
 void NotIMDB_Database::displayMovieTableStats() const
@@ -155,18 +187,19 @@ bool NotIMDB_Database::loadFromFile(std::string path)
 	movies = FileIO::buildMovieList(path);
 	__loadMovies(movies);
 	__buildMovieBST(movies);
-	List<std::string> keys = __movieBST.keys();
+	List<std::string> keys = __searchEngineBST.keys();
 	int SIZE = keys.getLength();
 
 	/* DEBUG Keyword Search Engine*/
 	for (int i = 0; i < SIZE; i++)
 	{
+		std::cout << GUI::divider << std::endl;
 		std::cout << "BST in table at keyword char: " << keys.getEntry(i) << std::endl;
 		std::cout << "Depth-first: " << std::endl;
-		__movieBST[keys.getEntry(i)].printBreadthFirst();
+		__searchEngineBST[keys.getEntry(i)].printBreadthFirst();
 	}
 	// call internal loading functions
-
+	std::cout << __searchEngineBST.size() << std::endl;	// DEBUG
 	return true;
 }
 
