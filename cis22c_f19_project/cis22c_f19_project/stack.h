@@ -29,18 +29,18 @@ Stack<T>::~Stack()
 template <class T>
 bool Stack<T>::push(const T &newItem)
 {
-    return List<T>::insert(1, newItem);
+    return List<T>::insert(0, newItem);
 }
 
 template <class T>
 bool Stack<T>::pop()
 {
-    return List<T>::remove(1);
+    return List<T>::remove(0);
 }
 
 template <class T>
 T Stack<T>::peek() const
 {
-    return List<T>::getEntry(1);
+    return List<T>::getEntry(0);
 }
 #endif // !_STACK_H
