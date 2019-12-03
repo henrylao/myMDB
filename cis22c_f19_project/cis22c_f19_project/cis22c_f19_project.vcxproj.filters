@@ -129,6 +129,7 @@
     <ClInclude Include="PrecondViolatedExcep.h">
       <Filter>Exception</Filter>
     </ClInclude>
+    <ClInclude Include="Main.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">

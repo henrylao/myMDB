@@ -15,8 +15,8 @@ class NotIMDB_Database
 	
 private:
 	// movie titles & actor names are keys for accessing the table
-	HashTable<Movie*>					__movieDB;
-	Stack<Movie*>*						__deletedMovies;
+	HashTable<Movie>					__movieDB;
+	Stack<Movie>						__deletedMovies;
 	// ------------------------------------------
 	// Internal Helper Method Section
 	// ------------------------------------------
@@ -32,7 +32,6 @@ public:
 	// Constructor & Destructor Section
 	// ------------------------------------------
 	NotIMDB_Database()  {
-		__deletedMovies = new Stack<Movie*>();
 	}
 	virtual ~NotIMDB_Database();
 	// ------------------------------------------
@@ -41,12 +40,16 @@ public:
 	bool  				loadFromFile(std::string path);
 	// save to a default path or a custom path/name
 	void  				saveToFile(string path = "data//output.tsv");
+	bool				createMovie(const Movie& newMovie) { return __movieDB.add(newMovie.getTitle(), newMovie); }
 
 	// ------------------------------------------
 	// Delete Section
 	// ------------------------------------------
 	// add the deleted movie to the stack
 	bool				deleteMovie(std::string key);
+	// undoes the most recent delete using a stack
+	bool				undoMostRecentDelete();
+	void				showMostRecentDelete() const;
 	// ------------------------------------------
 	// Update Section
 	// ------------------------------------------
@@ -59,22 +62,17 @@ public:
 	// op 0 appends to the genre string, op 1 sets the genre to newGenreName
 	bool				updateMovieGenre(std::string key, std::string newGenreName, int op);
 	bool 				updateMovieRating(std::string key, std::string newKey);
-
 	
 	// ------------------------------------------
 	// Search Section
 	// ------------------------------------------
-	/* Verify movie and actor existence */
-	/* can either verify via BST or movieDB */
-	bool  				foundMovie(std::string movieName) const;
-	bool				searchByGenre(std::string genre, std::string movieName) const;
-	bool				foundMovie(int genreIndex);
+	bool				foundMovie(std::string key);
 	/* verify using actorDB */
 
 	// ------------------------------------------
 	// Read Section
 	// ------------------------------------------
-	void  				displayMovieTableStats() const;
+	void				displayMovieTableStats() const;
 	bool				readMovie(std::string key) const;
 
 };
