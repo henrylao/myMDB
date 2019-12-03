@@ -1,67 +1,80 @@
 #include "NotIMDB_Database.h"
 
+void NotIMDB_Database::__clear()
+{
+	for (int i = 0; i < 29; i++)
+	{
+		delete __movieNamesBST_byGenre[i];
+	}
+}
+
+int NotIMDB_Database::__binarySearch_byMovieName(List<std::string>* list, int l, int r, std::string targetString) const
+{
+	while (l <= r) {
+		int m = l + (r - l) / 2;
+
+		// Check if x is present at mid 
+		if (StringUtil::contains(list->getEntry(m), targetString))
+			return m;
+
+		// If x greater, ignore left half 
+		if (list->getEntry(m) < targetString)
+			l = m + 1;
+
+		// If x is smaller, ignore right half 
+		else
+			r = m - 1;
+	}
+
+	// if we reach here, then element was 
+	// not present 
+	return -1;
+}
+
+
+int NotIMDB_Database::__binarySearchList(List<std::string>* list, int l, int r, std::string targetString) const
+{
+	while (l <= r) {
+		BinarySearchTree<std::string>*		__movieNamesBST_byGenre[29];
+		int m = l + (r - l) / 2;
+
+		// Check if x is present at mid 
+		if (list->getEntry(m)== targetString)
+			return m;
+
+		// If x greater, ignore left half 
+		if (list->getEntry(m) < targetString)
+			l = m + 1;
+
+		// If x is smaller, ignore right half 
+		else
+			r = m - 1;
+	}
+
+	// if we reach here, then element was 
+	// not present 
+	return -1;
+}
+
 void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 {
 	Movie newMovie;
-	int MSIZE = movies->getLength();
+	int MSIZE, GSIZE;
+	MSIZE = movies->getLength();
 	for (int i = 0; i < MSIZE; i++)
 	{
 		newMovie = movies->getEntry(i);
 		__movieDB.add(newMovie.getTitle(), new Movie(newMovie));
+		for (int j = 0; j < 29; j++)
+		{
+			if (StringUtil::contains(newMovie.getGenres(), GENRES[j]))
+			{
+				__movieNamesBST_byGenre[j]->add(newMovie.getTitle());
+			}
+		}
 	}
 	// either delete or save internally for later use
 	delete movies;
-
-}
-
-void NotIMDB_Database::__loadActors(List<Actor>* actors)
-{
-
-	int ASIZE = actors->getLength();
-	Actor newActor;
-	/* Create list of movie titles sorted by their movieID */
-	//list containing str of "movieIDs, movieTitle"
-	List<std::string> movieIDs;
-	std::ifstream infile;
-	infile.open("sorted_movie_tags.tsv", std::ios::in);
-	std::string data; 
-	while (infile.good())
-	{
-		// read infile into data
-		std::getline(infile, data);
-		// remove white spaces if any
-		data = StringUtil::strip(data);
-		// append the movieTag with the associated title
-		movieIDs.append(data);
-	}
-
-	/* Populate the list of movie titles contained in actor using the 
-	previously created list, verified via the 
-	movieID-list inside of actor */
-	int ID_SIZE;
-	for (int i = 0; i < ASIZE; i++)
-	{
-		
-		newActor = actors->getEntry(i);
-		List<std::string> movieIDs = newActor.getMovieIDs();
-		ID_SIZE = movieIDs.getLength();
-		for (int i = 0; i < ID_SIZE; i++)
-		{
-			// binarily search for movieIDs in an actor 
-			// in the sorted movieID list from file and add the pointer to
-			// the actor 
-		}
-	}
-
-	/* Add the completed actor objects to the table database */
-	for (int i = 0; i < ASIZE; i++)
-	{
-		newActor = actors->getEntry(i);
-		
-		__actorDB.add(newActor.getName(), newActor);
-	}
-	// either delete or save internally for later use
-	delete actors;
 
 }
 
@@ -93,6 +106,10 @@ bool NotIMDB_Database::foundMovie(std::string key)  const
 
 NotIMDB_Database::~NotIMDB_Database()
 {
+	for (int i =0; i < 29; i++)
+		delete	__movieNamesBST_byGenre[i];
+
+
 }
 
 bool NotIMDB_Database::loadFromFile(std::string actorFilePath, std::string movieFilePath)
@@ -100,10 +117,12 @@ bool NotIMDB_Database::loadFromFile(std::string actorFilePath, std::string movie
 	List<Actor>* actors;
 	List<Movie>* movies;
 
-	std::thread t1( FileIO::loadActorsIntoList, actorFilePath, actors);
+	//std::thread t1( FileIO::loadActorsIntoList, actorFilePath, actors);
 	std::thread t2( FileIO::loadMoviesIntoList, movieFilePath, movies);
-	t1.join();
+	//t1.join();
+
 	t2.join();
+	// call internal loading functions
 
 	return true;
 }

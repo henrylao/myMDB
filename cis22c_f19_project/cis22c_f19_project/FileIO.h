@@ -45,5 +45,8 @@ namespace FileIO
 	/* Function used for multhreading */
 	void loadActorsIntoList(std::string path, List<Actor>* actors);
 	void loadMoviesIntoList(std::string path, List<Movie>* movie);
+	/* Multithread safe function to construct a list of movieTitles from
+	a file containing movieTitles sorted by their IDs */
+	void buildMovieTitles_sortedByID(std::string path, List<std::string>* movieTitles);
 }
 #endif // !_UTIL_FILEIO_H

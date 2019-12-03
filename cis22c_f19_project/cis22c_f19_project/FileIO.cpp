@@ -128,7 +128,7 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 	Movie newMovie;
 	List<Movie>* movies = new List<Movie>();
 	List<std::string>* dataList;
-	List<std::string>* genres;
+	std::string genres;
 	while (infile.good())
 	{
 		getline(infile, data);	// read entire line
@@ -138,13 +138,12 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 			dataList = StringUtil::split(data, "|");
 			//cout << *dataList << endl;	// DEBUG
 			//std::cout << data << std::endl;
-			genres = StringUtil::split(dataList->getEntry(dataList->getLength() - 1), "|");
+			genres = StringUtil::strip(dataList->getEntry(dataList->getLength() - 1));
 			//cout << *genres << endl;	// DEBUG
-			newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], *genres);
+			newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], genres);
 			//cout << newMovie << endl;	// DEBUG 
 			data = "";
 			delete dataList;
-			delete genres;
 			movies->sortedInsert(newMovie);
 		}
 		
@@ -198,4 +197,30 @@ void FileIO::loadActorsIntoList(std::string path, List<Actor>* actors)
 void FileIO::loadMoviesIntoList(std::string path, List<Movie>* movies)
 {
 	movies = buildMovieList(path);
+}
+
+void FileIO::buildMovieTitles_sortedByID(std::string path, List<std::string>* movieTitles)
+{
+	std::ifstream infile;
+	infile.open(path, std::ios::in);
+	if (!infile.good())
+	{
+		return;
+	}
+
+	std::string data;
+	while (infile.good())
+	{
+		if (getline(infile, data, '\n'))
+		{
+			data = StringUtil::strip(data);
+			if (data.length() != 0)
+			{
+				movieTitles->append(data);
+			}
+			// reset after appending or a whitespace has been read
+			data = "";
+		}
+	}
+	return;
 }

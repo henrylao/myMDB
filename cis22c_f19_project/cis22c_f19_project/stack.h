@@ -1,4 +1,4 @@
-#include "singly_linked_list.h"
+#include "linked_list.h"
 #include "stack_interface.h"
 
 #ifndef _STACK_H

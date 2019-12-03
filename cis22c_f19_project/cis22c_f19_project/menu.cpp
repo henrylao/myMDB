@@ -1,8 +1,4 @@
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <stdlib.h>
+
 #include "menu.h"
 
 int GUI::menu_prompt(std::string prompt, const std::string choices[], int choices_length) {

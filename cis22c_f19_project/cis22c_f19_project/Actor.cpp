@@ -23,15 +23,20 @@ Actor::Actor(std::string tconstID, std::string name, std::string birthYear, std:
 	__movies = new List<Movie*>();
 }
 
-
-std::string Actor::getID() const
+void Actor::clear()
 {
-	return std::string();
+	delete __movieIDs;
+	int SIZE = __movies->getLength();
+	for (int i = 0; i < SIZE; i++)
+	{
+		// set the pointers in an actor to null 
+		// movie deletion is handled when the database is closed
+		// actors & movie relation is uni-directional 
+		__movies->setEntry(i, nullptr);
+	}
+	delete __movies;	// destroy list structure
 }
 
-void Actor::readFullInfo() const
-{
-}
 
 bool Actor::operator==(const Actor & rhs) const
 {

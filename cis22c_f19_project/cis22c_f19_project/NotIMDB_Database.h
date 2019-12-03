@@ -2,6 +2,7 @@
 #define TABLE_DB_H
 
 #include <thread>
+
 #include "FileIO.h"
 #include "person.h"
 #include "HashTable.h"
@@ -9,30 +10,49 @@
 #include "binary_search_tree.h"
 #include "Movie.h"
 #include "Actor.h"
+#include "stack.h"
 
+// genres to iterate through when check if movie contains the genre
+static const std::string GENRES[29] = {
+		"action", "adult", "adventure",
+		"animation", "biography", "comedy", "crime", "documentary",
+		"drama", "family", "fantasy", "film-noir", 
+		"game-show", "history", "horror",
+		"music", "musical", "mystery", "news", "reality-tv",
+		"romance", "sci-fi", "short", "sport", 
+		"talk-show", "thriller", "unavailable", 
+		"war", "western"
+};
 class NotIMDB_Database
 {
+	
 private:
 	// movie titles & actor names are keys for accessing the table
 	HashTable<Movie*>					__movieDB;
-	HashTable<Actor>					__actorDB;
-	BinarySearchTree<std::string>		__movieNamesBST_byGenre;
-	BinarySearchTree<std::string>		__movieNamesBST_byYear;
+	//HashTable<Actor>					__actorDB;
+	Stack<Movie*>*						__deletedMovies;
+	
+	/* Array of binary trees storing movie names of various genres */
+	BinarySearchTree<std::string>*		__movieNamesBST_byGenre[29];
 
-	BinarySearchTree<std::string>		__movieNamesBST_byID;
+	BinarySearchTree<std::string>*		__movieNamesBST_byYear;
+	// BST can be created from movieDB, used for storing movieDB keys
+	BinarySearchTree<std::string>		__movieNames;
 	// ------------------------------------------
 	// Internal Helper Method Section
 	// ------------------------------------------
+	/* Utilizes StringUtil::contains to verify id */
+
+	int __binarySearchList(List<std::string>* list, int l, int r, std::string targetString) const;
+
 	/* Internal functions for managing table populating*/
 	void								__loadMovies(List<Movie>* movies);
 	/* requires that the movies have been loaded to further map a movie to an actor via
 	the list of Movie* stored in an actor value */
-	void								__loadActors(List<Actor>* actors);
-	void								__buildMovieNamesBST_byID(std::string path);
-	void								__buildMovieNamesBST_byGenre(std::string path);
-	void								__buildMovieNamesBST_byYear(std::string path);
 	void								__clear();
 public:
+	int									__binarySearch_byMovieName(List<std::string>* moviesSortedByID,
+													int l, int r, std::string targetString) const;
 	
 	// ------------------------------------------
 	// Constructor & Destructor Section
@@ -42,14 +62,15 @@ public:
 	// ------------------------------------------
 	// Create/FileIO Section
 	// ------------------------------------------
-	bool  				loadFromFile(std::string actorFilePath, std::string movieFilePath);
+	bool  				loadFromFile(std::string movieFilePath);
 	// save to a default path or a custom path/name
 	bool  				saveToFile(string t_name = "");
 
 	// ------------------------------------------
 	// Delete Section
 	// ------------------------------------------
-	
+	// add the deleted movie to the stack
+	bool				deleteMovie(std::string key);
 	// ------------------------------------------
 	// Update Section
 	// ------------------------------------------
@@ -63,13 +84,6 @@ public:
 	bool				updateMovieGenre(std::string key, std::string newGenreName, int op);
 	bool 				updateMovieRating(std::string key, std::string newKey);
 
-	bool 				updateActorName(std::string oldActorName, std::string newActorName) :
-	bool  				updateActorBirthYear(std::string key, std::string newBirthYear);
-	bool  				updateActorDeathYear(std::string key, std::string newDeathYear);
-	// 0 to append to old string, 1 to set
-	bool  				updateActorRoles(std::string key, std::string newRoleName, int op);
-	bool  				updateActorID(std::string key, std::string newID);
-
 	
 	// ------------------------------------------
 	// Search Section
@@ -78,12 +92,10 @@ public:
 	/* can either verify via BST or movieDB */
 	bool  				foundMovie(std::string movieName) const;
 	/* verify using actorDB */
-	bool  				foundActor(std::string actorName) const;
 
 	// ------------------------------------------
 	// Read Section
 	// ------------------------------------------
-	void 				 displayActorTableStats() const;
 	void  				displayMovieTableStats() const;
 
 };
