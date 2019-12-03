@@ -11,7 +11,7 @@ void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 		newMovie = movies->getEntry(i);
 
 		// preprocess the key
-		std::string key = newMovie.getTitle() + " " + newMovie.getYearReleased();
+		std::string key = newMovie.getTitle();
 		key = StringUtil::lowercase(StringUtil::strip(key));	// remove whitespace and turn into lowercase
 		key = StringUtil::replace(key, " ", "_");
 		// add to the table
@@ -147,7 +147,63 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		}
 
 	}
+
+	if (op == 2)
+	{
+		// update the movie
+		edittedMovie.setYearReleased(newAttribute);
+		// tokenize the keywords
+		keywords = StringUtil::split(keywords_preprocess, "|");
+		// remove all matched keyword and movie pairs from the search engine
+		for (int j = 0; j < keywords->getLength(); j++)
+		{
+			keyword = keywords->getEntry(j);
+			firstCharOfKeyword = std::string(1, keyword[0]);
+			try {
+				// check for existence in the dictionary
+				found = __searchEngineBST[firstCharOfKeyword];
+				// remove from target bst
+				__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
+			}
+			// first character of a keyword was not found to denote a key in the table
+			catch (const CustomException& e)
+			{
+				// @TODO figure out what happens when the keyword is not found 
+				// technically should not have exceptions because all the keyword, movie
+				// pairs should exist in the table of trees
+			}
+			// memory clean the tokenized keywords of old movie
+			delete keywords;
+
+		}
+		/* Add the keyword, movie pairs for updated movie */
+		// preprocess the keywords of the update movie
+		keywords_preprocess = StringUtil::lowercase(StringUtil::strip(edittedMovie.getTitle() + " " + edittedMovie.getYearReleased()));
+		keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
+		keywords = StringUtil::split(keywords_preprocess, "_");
+		int SIZE = keywords->getLength();
+		for (int i = 0; i < SIZE; i++)
+		{
+			// get the keyword
+			keyword = keywords->getEntry(i);
+			// key to table of bst
+			firstCharOfKeyword = std::string(1, keyword[0]);
+			try {
+				// check in the dictionary for bst
+				found = __searchEngineBST[firstCharOfKeyword];
+				__searchEngineBST[firstCharOfKeyword].add(keyword, edittedMovie);
+			}
+			catch (const CustomException& e)
+			{
+				// create a new bst such that the first character of the keyword denotes 
+			// a key to a tree in the table of bst 
+				__searchEngineBST.add(std::string(1, keywords->getEntry(i)[0]),
+					BinarySearchTree<std::string, Movie>(keywords->getEntry(i), edittedMovie));
+			}
+		}
+	}
 }
+
 
 std::string NotIMDB_Database::__processSearchEntry(const std::string & query)
 {
@@ -181,13 +237,12 @@ bool NotIMDB_Database::readMovie(std::string key) const
 	std::string processedKey = StringUtil::lowercase(StringUtil::strip(key));
 	processedKey = StringUtil::replace(processedKey, " ", "_");
 	try {
-		Movie found = __movieDB.get(processedKey);
-		std::cout << found << std::endl;
+		std::cout << __movieDB[processedKey] << std::endl;
 		return true;
 	}
 	catch (const CustomException& e)
 	{
-		std::cout << "Invalid Name" << std::endl;
+		std::cout << "I couldn't find what you were looking for in the database" << std::endl;
 		return false;
 	}
 	return false;
@@ -197,6 +252,10 @@ void NotIMDB_Database::displaySearchEngineState() const
 {
 	List<std::string> keys = __searchEngineBST.keys();
 	int SIZE = keys.getLength();
+	for (int i = 0; i < SIZE; i++)
+	{
+		std::cout << keys.getEntry(i);
+	}
 	/* DEBUG Keyword Search Engine*/
 	for (int i = 0; i < SIZE; i++)
 	{
@@ -216,7 +275,7 @@ void NotIMDB_Database::unitTest()
 	NotIMDB_Database db;
 
 	db.loadFromFile();
-	db.readMovie("Miss Jerry 1894");
+	db.readMovie("Miss Jerry");
 	db.saveToFile("output.tsv");
 
 	std::cout << divider << std::endl;
@@ -225,8 +284,8 @@ void NotIMDB_Database::unitTest()
 	std::cout << divider << std::endl;
 
 	std::cout << "Post-delete:" << std::endl;
-	db.deleteMovie("Miss Jerry 1894");
-	db.readMovie("Miss Jerry 1894");
+	db.deleteMovie("Miss Jerry");
+	db.readMovie("Miss Jerry");
 
 	db.displayMovieTableStats();
 	std::cout << divider << std::endl;
@@ -239,8 +298,8 @@ void NotIMDB_Database::unitTest()
 	List<Movie>* movies = FileIO::buildMovieList(path);
 	db.createMovie(movies->getEntry(5));
 	db.displayMovieTableStats();
-	db.updateMovieName("Miss Jerry", "Mister Jerry");
-	db.displaySearchEngineState();
+	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
+	//db.displaySearchEngineState();	// BUGGED
 	system("pause");
 }
 
@@ -281,10 +340,11 @@ void NotIMDB_Database::saveToFile(string path)
 
 bool NotIMDB_Database::deleteMovie(std::string key)
 {
-	try {
-		// push onto the stack
+
+	std::string processedKey = __processSearchEntry(key);
+	try{
 		Movie temp;
-		temp = __movieDB[key];
+		temp = __movieDB[processedKey];
 		__deletedMovies.push(temp);
 	}
 	catch (const CustomException& e)
@@ -292,7 +352,8 @@ bool NotIMDB_Database::deleteMovie(std::string key)
 		return false;
 	}
 
-	__movieDB.remove(key);	// movie removed from table
+	// push onto the stack
+	__movieDB.remove(processedKey);	// movie removed from table
 	return true;
 }
 
