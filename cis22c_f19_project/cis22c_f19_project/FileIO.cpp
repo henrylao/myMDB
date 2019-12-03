@@ -76,16 +76,6 @@ List<Actor>* FileIO::buildActorList(std::string path)
 	return actors;
 }
 
-void FileIO::loadActorsIntoList(std::string path, List<Actor>* actors)
-{
-	actors = buildActorList(path);
-}
-
-void FileIO::loadMoviesIntoList(std::string path, List<Movie>* movies)
-{
-	movies = buildMovieList(path);
-}
-
 void FileIO::buildMovieTitles_sortedByID(std::string path, List<std::string>* movieTitles)
 {
 	std::ifstream infile;
