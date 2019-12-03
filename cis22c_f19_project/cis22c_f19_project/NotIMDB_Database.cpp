@@ -87,14 +87,6 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 
 }
 
-std::string NotIMDB_Database::__processSearchEntry(const std::string & searchEntry)
-{
-
-	std::string processedKey = StringUtil::lowercase(StringUtil::strip(searchEntry));
-	processedKey = StringUtil::replace(processedKey, " ", "_");
-	return processedKey;
-}
-
 /* to be called during updates to a specific movie where either the year or
 	the name of the movie is changed
 	update the search engine bst when edits are made to movies via removal
@@ -191,18 +183,37 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 	for (int i = 0; i < SIZE; i++)
 	{
 		keyword = keywords->getEntry(i);
-		// key to table of bst
 		firstCharOfKeyword = std::string(1, keyword[0]);
 		try {
+			// check in the dictionary
 			found = __searchEngineBST[firstCharOfKeyword];
-			__searchEngineBST[firstCharOfKeyword].add(keyword, edittedMovie);
+			std::string keywordFound = found.getKey(keyword);
+			// simply add if keywordFound else the exception caught will signify to add the new keyword
+			__searchEngineBST[firstCharOfKeyword].addValue(keyword, edittedMovie);
+			//found.printBreadthFirst();	// DBEUG
+
 		}
-		catch (...)
+		// first character of a keyword was not found to denote a key in the table
+		catch (const CustomException& e)
 		{
-			// create a new bst such that firstCharOfKeyword is a key to a tree in the table of bst
-			__searchEngineBST.add(std::string(1, keywords->getEntry(i)[0]),
-				BinarySearchTree<std::string, Movie>(keywords->getEntry(i), edittedMovie));
+			// create a new bst such that the first character of the keyword denotes 
+			// a key to a tree in the table of bst 
+			__searchEngineBST.add(firstCharOfKeyword,
+				BinarySearchTree<std::string, Movie>(keywords->getEntry(i)));
+			__searchEngineBST[firstCharOfKeyword].addKey(keyword);
+			__searchEngineBST[firstCharOfKeyword].addValue(keyword, edittedMovie);
+			//found.printBreadthFirst();	// DBEUG
+
 		}
+		catch (const NotFoundException& e)
+		{
+			// create the new node holdsing the keyword
+			found.addKey(keyword);
+			// append to the list of values in the newly created keyword-node
+			found.addValue(keyword, edittedMovie);
+			//found.printBreadthFirst();	// DBEUG
+		}
+		delete keywords;
 	}
 }
 

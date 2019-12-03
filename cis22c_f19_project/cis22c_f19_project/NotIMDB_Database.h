@@ -31,7 +31,7 @@ private:
 	op == 1 : editted title
 	op == 2 : editted year  */
 	std::string			__processSearchEntry(const std::string& searchEntry);
-	void				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
+	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
 public:
 
 	// ------------------------------------------
