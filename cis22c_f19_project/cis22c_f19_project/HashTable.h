@@ -103,6 +103,7 @@ public:
 	double				loadFactor()  const;
 	void				display();
 	void				empty();
+	void				showStats() const;
 
 	// -------------------------------------
 	// Operator Overload Section
@@ -113,6 +114,7 @@ public:
 	T& operator[](std::string key);	
 	template<typename U>
 	friend std::ostream& operator<<(std::ostream& out,  HashTable<U>& table);
+
 
 };
 
@@ -205,8 +207,8 @@ void HashTable<T>::__resize()
 template<typename T>
 void HashTable<T>::__clear()
 {
-	for (size_t i = 0; i < __capacity; i++)
-		delete __table[i];
+	/*for (size_t i = 0; i < __capacity; i++)
+		delete __table[i];*/
 	delete[] __table;
 }
 
@@ -368,6 +370,7 @@ bool HashTable<T>::remove(std::string key)
 			}
 		}
 		delete __table[hashID];
+		__occupancy--;
 		return true;
 	}
 	return false;
@@ -421,6 +424,14 @@ void HashTable<T>::display()
 	{
 		std::cout << "Key: " << __keys->getEntry(i) << " | Value: " << __table[__find(__keys->getEntry(i))]->getValue() << std::endl;
 	}
+	std::cout << "Occupancy: " << __occupancy << std::endl;
+	std::cout << "Capacity: " << __capacity << std::endl;
+	std::cout << "Load Factor: " << std::to_string(loadFactor() * 100) << "%" << std::endl;
+	std::cout << "Number of Collisions: " << __collisionCount << std::endl;
+}
+template<typename T>
+void HashTable<T>::showStats() const
+{
 	std::cout << "Occupancy: " << __occupancy << std::endl;
 	std::cout << "Capacity: " << __capacity << std::endl;
 	std::cout << "Load Factor: " << std::to_string(loadFactor() * 100) << "%" << std::endl;
