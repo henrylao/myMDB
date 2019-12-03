@@ -124,7 +124,7 @@ public:
 template<typename T>
 HashTable<T>::HashTable()
 {
-	__log.open("log.txt", std::ios::out);	// DEBUG
+	//__log.open("log.txt", std::ios::out);	// DEBUG
 
 	__keys = new List<std::string>();
 	__resizeCount = 0;
@@ -140,7 +140,7 @@ template<typename T>
 HashTable<T>::HashTable(size_t quantityToAdd)
 {
 	__keys = new List<std::string>();
-	__log.open("log.txt", std::ios::out);	// DEBUG
+	//__log.open("log.txt", std::ios::out);	// DEBUG
 	__resizeCount = 0;
 
 	if (MathUtil::isPrimeMillerRabin(quantityToAdd, 4))
@@ -157,12 +157,12 @@ template<typename T>
 HashTable<T>::~HashTable() {
 
 	// DEBUG
-	__log << "Rehashes: " << __resizeCount << std::endl;
+	/*__log << "Rehashes: " << __resizeCount << std::endl;
 	__log << "Collisions: " << __collisionCount << std::endl;
 	__log << "Load Factor: " << this->loadFactor() << std::endl;
 	__log << "Occupancy: " << __occupancy << std::endl;
 	__log << "Capacity: " << __capacity << std::endl;
-	__log.close();
+	__log.close();*/
 	// end DEBUG
 	__keys->clear();
 	this->__clear();
