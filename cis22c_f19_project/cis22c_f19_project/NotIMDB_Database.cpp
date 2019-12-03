@@ -76,7 +76,16 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 	the name of the movie is changed
 	update the search engine bst when edits are made to movies via removal
 	op == 1 : editted title
-	op == 2 : editted year  */
+	op == 2 : editted year
+	3 : ID
+
+	toggle between various comparisons:
+	1 by movieID
+	2 by rating
+	3 by year
+	4 by title
+	5 by runtime
+*/
 Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, const Movie& movieToEdit, int op)
 {
 	// check for correct operation
@@ -86,120 +95,74 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 	BinarySearchTree<std::string, Movie> found;
 	List<std::string>* keywords;
 	std::string keyword, keywords_preprocess, firstCharOfKeyword;
+
 	// create copy of the movie
 	Movie edittedMovie(movieToEdit);
+
+	switch (op)
+	{
+	case 1:
+		edittedMovie.setTitle(newAttribute);
+		break;
+	case 2:
+		edittedMovie.setYearReleased(newAttribute);
+		break;
+	case 3:
+		edittedMovie.setID(newAttribute);
+		break;
+	case 4:
+		edittedMovie.setRuntime(newAttribute);
+	case 5:
+		edittedMovie.setGenre(newAttribute);
+	case 6:
+		edittedMovie.setRating(newAttribute);
+	default:
+		break;
+	}
+
 	// preprocess keyword string
 	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(movieToEdit.getTitle() + " " + movieToEdit.getYearReleased()));
 	keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
-	
-	if (op == 1)
-	{
-		// update the movie
-		edittedMovie.setTitle(newAttribute);
-		// tokenize the keywords
-		keywords = StringUtil::split(keywords_preprocess, "|");
-		// remove all matched keyword and movie pairs from the search engine
-		for (int j = 0; j < keywords->getLength(); j++)
-		{
-			keyword = keywords->getEntry(j);
-			firstCharOfKeyword = std::string(1, keyword[0]);
-			try {
-				// check for existence in the dictionary
-				found = __searchEngineBST[firstCharOfKeyword];
-				// remove from target bst
-				__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
-			}
-			// first character of a keyword was not found to denote a key in the table
-			catch (const CustomException& e)
-			{
-				// @TODO figure out what happens when the keyword is not found 
-				// technically should not have exceptions because all the keyword, movie
-				// pairs should exist in the table of trees
-			}
-			// memory clean the tokenized keywords of old movie
-			delete keywords;
-			
-		}
-		/* Add the keyword, movie pairs for updated movie */
-		// preprocess the keywords of the update movie
-		keywords_preprocess = StringUtil::lowercase(StringUtil::strip(edittedMovie.getTitle() + " " + edittedMovie.getYearReleased()));
-		keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
-		keywords = StringUtil::split(keywords_preprocess, "_");
-		int SIZE = keywords->getLength();
-		for (int i = 0; i < SIZE; i++) 
-		{ 
-			// get the keyword
-			keyword = keywords->getEntry(i);
-			// key to table of bst
-			firstCharOfKeyword = std::string(1, keyword[0]);
-			try {
-				// check in the dictionary for bst
-				found = __searchEngineBST[firstCharOfKeyword];
-				__searchEngineBST[firstCharOfKeyword].add(keyword, edittedMovie);
-			}
-			catch (const CustomException& e)
-			{
-				// create a new bst such that the first character of the keyword denotes 
-			// a key to a tree in the table of bst 
-				__searchEngineBST.add(std::string(1, keywords->getEntry(i)[0]),
-					BinarySearchTree<std::string, Movie>(keywords->getEntry(i), edittedMovie));
-			}
-		}
 
+	// tokenize the keywords
+	keywords = StringUtil::split(keywords_preprocess, "|");
+	// remove all matched keyword and movie pairs from the search engine
+	for (int j = 0; j < keywords->getLength(); j++)
+	{
+		keyword = keywords->getEntry(j);
+		firstCharOfKeyword = std::string(1, keyword[0]);
+		try {
+			// check for existence in the dictionary
+			found = __searchEngineBST[firstCharOfKeyword];
+			// remove from target bst
+			__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
+		}
+		catch (...)
+		{
+			throw CustomException("Error: first character of a keyword was not found");
+		}
+		delete keywords;
 	}
 
-	if (op == 2)
+	// Add the keyword, movie pairs for updated movie
+	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(edittedMovie.getTitle() + " " + edittedMovie.getYearReleased()));
+	keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
+	keywords = StringUtil::split(keywords_preprocess, "_");
+	int SIZE = keywords->getLength();
+	for (int i = 0; i < SIZE; i++)
 	{
-		// update the movie
-		edittedMovie.setYearReleased(newAttribute);
-		// tokenize the keywords
-		keywords = StringUtil::split(keywords_preprocess, "|");
-		// remove all matched keyword and movie pairs from the search engine
-		for (int j = 0; j < keywords->getLength(); j++)
-		{
-			keyword = keywords->getEntry(j);
-			firstCharOfKeyword = std::string(1, keyword[0]);
-			try {
-				// check for existence in the dictionary
-				found = __searchEngineBST[firstCharOfKeyword];
-				// remove from target bst
-				__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
-			}
-			// first character of a keyword was not found to denote a key in the table
-			catch (const CustomException& e)
-			{
-				// @TODO figure out what happens when the keyword is not found 
-				// technically should not have exceptions because all the keyword, movie
-				// pairs should exist in the table of trees
-			}
-			// memory clean the tokenized keywords of old movie
-			delete keywords;
-
+		keyword = keywords->getEntry(i);
+		// key to table of bst
+		firstCharOfKeyword = std::string(1, keyword[0]);
+		try {
+			found = __searchEngineBST[firstCharOfKeyword];
+			__searchEngineBST[firstCharOfKeyword].add(keyword, edittedMovie);
 		}
-		/* Add the keyword, movie pairs for updated movie */
-		// preprocess the keywords of the update movie
-		keywords_preprocess = StringUtil::lowercase(StringUtil::strip(edittedMovie.getTitle() + " " + edittedMovie.getYearReleased()));
-		keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
-		keywords = StringUtil::split(keywords_preprocess, "_");
-		int SIZE = keywords->getLength();
-		for (int i = 0; i < SIZE; i++)
+		catch (...)
 		{
-			// get the keyword
-			keyword = keywords->getEntry(i);
-			// key to table of bst
-			firstCharOfKeyword = std::string(1, keyword[0]);
-			try {
-				// check in the dictionary for bst
-				found = __searchEngineBST[firstCharOfKeyword];
-				__searchEngineBST[firstCharOfKeyword].add(keyword, edittedMovie);
-			}
-			catch (const CustomException& e)
-			{
-				// create a new bst such that the first character of the keyword denotes 
-			// a key to a tree in the table of bst 
-				__searchEngineBST.add(std::string(1, keywords->getEntry(i)[0]),
-					BinarySearchTree<std::string, Movie>(keywords->getEntry(i), edittedMovie));
-			}
+			// create a new bst such that firstCharOfKeyword is a key to a tree in the table of bst
+			__searchEngineBST.add(std::string(1, keywords->getEntry(i)[0]),
+				BinarySearchTree<std::string, Movie>(keywords->getEntry(i), edittedMovie));
 		}
 	}
 }
@@ -410,9 +373,9 @@ bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearRelea
 		__movieDB[processedKey] = newMovie;
 		return true;
 	}
-	catch (...)
+	catch (CustomException e)
 	{
-		std::cout << "Error: movie could not be updated" << std::endl;
+		std::cout << e.getMessage() << std::endl;
 	}
 	return false;
 }
@@ -420,16 +383,14 @@ bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearRelea
 bool NotIMDB_Database::updateMovieID(std::string key, std::string newID)
 {
 	try {
-		Movie oldMovie = __movieDB.get(key);
-		Movie newMovie(newID, oldMovie.getTitle(), oldMovie.getYearReleased(),
-			oldMovie.getRuntime(), oldMovie.getGenres());
-		__movieDB.remove(key);
-		__movieDB.add(key, newMovie);
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newID, __movieDB[processedKey], 3);
+		__movieDB[processedKey] = newMovie;
 		return true;
 	}
 	catch (CustomException e)
 	{
-		std::cout << "Error: movie could not be updated" << std::endl;
+		std::cout << e.getMessage() << std::endl;
 	}
 	return false;
 }
@@ -437,40 +398,34 @@ bool NotIMDB_Database::updateMovieID(std::string key, std::string newID)
 bool NotIMDB_Database::updateMovieRuntime(std::string key, std::string newRuntime)
 {
 	try {
-		Movie oldMovie = __movieDB.get(key);
-		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(),
-			oldMovie.getYearReleased(), newRuntime, oldMovie.getGenres());
-		__movieDB.remove(key);
-		__movieDB.add(key, newMovie);
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newRuntime, __movieDB[processedKey], 4);
+		__movieDB[processedKey] = newMovie;
 		return true;
 	}
 	catch (CustomException e)
 	{
-		std::cout << "Error: movie could not be updated" << std::endl;
+		std::cout << e.getMessage() << std::endl;
 	}
 	return false;
 }
 
-// TODO: what is format of genres?
 bool NotIMDB_Database::updateMovieGenre(std::string key, std::string newGenreName, int op)
 {
 	try {
-		Movie oldMovie = __movieDB.get(key);
+		std::string processedKey = __processSearchEntry(key);
 		std::string genres;
 		if (op)
 			genres = newGenreName;
 		else
-			genres = oldMovie.getGenres().append(newGenreName);
-
-		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(),
-			oldMovie.getYearReleased(), oldMovie.getRuntime(), genres);
-		__movieDB.remove(key);
-		__movieDB.add(key, newMovie);
+			genres = __movieDB[processedKey].getGenres().append(newGenreName);
+		Movie newMovie = __updateSearchEngineBST(genres, __movieDB[processedKey], 5);
+		__movieDB[processedKey] = newMovie;
 		return true;
 	}
 	catch (CustomException e)
 	{
-		std::cout << "Error: movie could not be updated" << std::endl;
+		std::cout << e.getMessage() << std::endl;
 	}
 	return false;
 }
@@ -478,16 +433,14 @@ bool NotIMDB_Database::updateMovieGenre(std::string key, std::string newGenreNam
 bool NotIMDB_Database::updateMovieRating(std::string key, std::string newKey)
 {
 	try {
-		Movie oldMovie = __movieDB.get(key);
-		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(), oldMovie.getYearReleased(),
-			oldMovie.getRuntime(), oldMovie.getGenres(), newKey);
-		__movieDB.remove(key);
-		__movieDB.add(newKey, newMovie);
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newKey, __movieDB[processedKey], 6);
+		__movieDB[processedKey] = newMovie;
 		return true;
 	}
 	catch (CustomException e)
 	{
-		std::cout << "Error: movie could not be updated" << std::endl;
+		std::cout << e.getMessage() << std::endl;
 	}
 	return false;
 }

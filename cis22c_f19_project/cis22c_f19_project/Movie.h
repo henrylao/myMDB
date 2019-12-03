@@ -32,9 +32,9 @@ public:
 	Movie(std::string tconstID, std::string title, 
 		std::string year, std::string runTime, 
 		std::string genres);
-	Movie(std::string tconstID, std::string title,
+	/*Movie(std::string tconstID, std::string title,
 		std::string year, std::string runTime,
-		std::string genres, std::string rating);
+		std::string genres, std::string rating);*/
 	//----------------------------------------------------
 	// Mutators Section
 	//----------------------------------------------------

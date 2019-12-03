@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -118,6 +118,7 @@
     <ClInclude Include="binary_node_kvpair.h" />
     <ClInclude Include="BST_KVpair.h" />
     <ClInclude Include="binary_tree_kvpair.h" />
+    <ClInclude Include="CustomException.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HashTable.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="NotIMDB_Database.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CustomException.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="HashUtil.cpp" />
