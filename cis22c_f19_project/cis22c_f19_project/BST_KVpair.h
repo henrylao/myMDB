@@ -18,10 +18,10 @@ protected:
 	//------------------------------------------------------------
 	// Recursively finds where the given node should be placed and
 	// inserts it in a leaf at that point.
-	BinaryNode<K, V>* insertInorder(BinaryNode<K, V>* t_sub_tree_ptr, BinaryNode<K, V>* newNode);
+	BinaryNode<K, V>* insertInorder(BinaryNode<K, V>* subNode, BinaryNode<K, V>* newNode);
 	// Removes the given t_target value from the tree while maintaining a
 	// binary search tree.
-	BinaryNode<K, V>* removeValue(BinaryNode<K, V>* t_sub_tree_ptr, const K t_target, bool& success);
+	BinaryNode<K, V>* removeValue(BinaryNode<K, V>* subNode, const K& t_target, const V& value, bool& success);
 	// Removes a given node from a tree while maintaining a
 	// binary search tree.
 	BinaryNode<K, V>* removeNode(BinaryNode<K, V>* t_node_ptr);
@@ -29,10 +29,10 @@ protected:
 	// pointed to by t_node_ptr.
 	// Sets t_inorder_successor to the value in this node.
 	// Returns a pointer to the revised subtree.
-	BinaryNode<K, V>* removeLeftmostNode(BinaryNode<K, V>* t_sub_tree_ptr, K& t_inorder_successor);
+	BinaryNode<K, V>* removeLeftmostNode(BinaryNode<K, V>* subNode, K& t_inorder_successor);
 	// Returns a pointer to the node containing the given value,
 	// or nullptr if not found.
-	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& t_target) const;
+	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& targeKey, const V& targeVal) const;
 	// call on root or parent tree to find the leftmost node
 	BinaryNode<K, V>* getLeftmostNode(BinaryNode<K, V>* t_root);
 	void printBreadthFirstRecursively(BinaryNode<K,V>* t_node_ptr);
@@ -62,7 +62,7 @@ public:
 	void setRootVal(const K& t_new_val) { this->m_root->setVal(t_new_val); }
 	//const throw (PrecondViolatedExcep);
 	bool add(const K& t_new_item, const V& newValues);
-	bool remove(const K& t_item);
+	bool remove(const K& key, const V& value);
 	void clear() { BinaryNodeTree<K, V>::destroyTree(this->m_root); }
 	K getKey(const K& t_item) const throw (NotFoundException);
 	bool contains(const K& t_item) const;
@@ -222,10 +222,10 @@ std::ostream& BinarySearchTree<K, V>::serializePostorder(std::ostream& t_out, Bi
 
 }
 template <class K, class V>
-bool BinarySearchTree<K, V>::remove(const K& t_item)
+bool BinarySearchTree<K, V>::remove(const K& targetKey, const V& targetValue)
 {
 	bool success = false;
-	this->m_root = this->removeValue(this->m_root, t_item, success);
+	this->m_root = this->removeValue(this->m_root, targetKey, targetValue, success);
 	return (success ? true : false);
 	//throw new NotFoundException("Item not found"));
 }
@@ -310,45 +310,49 @@ BinaryNode<K, V>* BinarySearchTree<K, V>::removeNode(BinaryNode<K, V>* t_node_to
 }
 template <class K, class V>
 BinaryNode<K, V>* BinarySearchTree<K, V>::removeValue(
-	BinaryNode<K, V>* t_sub_tree_ptr,
-	const K t_target,
+	BinaryNode<K, V>* subNode,
+	const K& targeKey,
+	const V& targetVal,
 	bool& t_success)
 {
 	// tree node is null case
-	if (t_sub_tree_ptr == nullptr)
+	if (subNode == nullptr)
 	{
 		t_success = false;
 		return nullptr;
 	}
 	// target found case
-	else if (t_sub_tree_ptr->getKey() == t_target)
+	else if (subNode->getKey() == targeKey && subNode->getVal() == targetVal)
 	{
-		t_sub_tree_ptr = this->removeNode(t_sub_tree_ptr);
+		subNode = this->removeNode(subNode);
 		t_success = true;
-		return t_sub_tree_ptr;
+		return subNode;
 	}
 	// handle left of tree case
-	else if (t_sub_tree_ptr->getKey() > t_target)
+	else if (subNode->getKey() > targeKey)
 	{
 		BinaryNode<K, V>* temp_node_ptr = nullptr;
-		temp_node_ptr = this->removeValue(t_sub_tree_ptr->getLeftChildPtr(), t_target, t_success);
-		t_sub_tree_ptr->setLeftChildPtr(temp_node_ptr);
-		return t_sub_tree_ptr;
+		temp_node_ptr = this->removeValue(subNode->getLeftChildPtr(), targeKey, targetVal, t_success);
+		subNode->setLeftChildPtr(temp_node_ptr);
+		return subNode;
 	}
 	// handle right of tree case
 	else
 	{
 		BinaryNode<K, V>* temp_node_ptr = nullptr;
-		temp_node_ptr = this->removeValue(t_sub_tree_ptr->getRightChildPtr(), t_target, t_success);
-		t_sub_tree_ptr->setRightChildPtr(temp_node_ptr);
-		return t_sub_tree_ptr;
+		temp_node_ptr = this->removeValue(subNode->getRightChildPtr(), targeKey, targetVal, t_success);
+		subNode->setRightChildPtr(temp_node_ptr);
+		return subNode;
 	}
 }
 template <class K, class V>
-BinaryNode<K, V>* BinarySearchTree<K, V>::findNode(BinaryNode<K, V>* t_tree_ptr, const K& t_target) const
+BinaryNode<K, V>* BinarySearchTree<K, V>::findNode(
+	BinaryNode<K, V>* t_tree_ptr,
+	const K& targeKey,
+	const V& targeVal) const
 {
 	bool success = false;
-	BinaryNode<K, V>* found_ptr = BinaryNodeTree<K, V>::findNode(t_tree_ptr, t_target, success);
+	BinaryNode<K, V>* found_ptr = BinaryNodeTree<K, V>::findNode(t_tree_ptr, targeKey, targeVal, success);
 	return found_ptr;
 }
 template <class K, class V>
