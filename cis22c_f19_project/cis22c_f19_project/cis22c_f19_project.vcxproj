@@ -120,7 +120,6 @@
     <ClInclude Include="binary_tree_kvpair.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GUI.h" />
-    <ClInclude Include="GUI_lib.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="HashTableNode.h" />
     <ClInclude Include="HashUtil.h" />

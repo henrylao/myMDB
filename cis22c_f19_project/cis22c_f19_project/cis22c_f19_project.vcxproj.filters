@@ -117,9 +117,6 @@
     <ClInclude Include="BST_KVpair.h">
       <Filter>Collection\Trees</Filter>
     </ClInclude>
-    <ClInclude Include="GUI_lib.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">
