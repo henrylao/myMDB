@@ -12,7 +12,7 @@ public:
     Stack();
     virtual ~Stack();
     bool push(const T &newItem);
-	size_t size() { return List<T>::getLength(); }
+	size_t size() const { return List<T>::getLength(); } 
     bool pop();
     T peek() const;
 };
