@@ -402,18 +402,15 @@ bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string new
 	return false;
 }*/
 
-// key is the movie's title
 bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearReleased)
 {
 	try {
-		Movie oldMovie = __movieDB.get(key);
-		Movie newMovie(oldMovie.getID(), oldMovie.getTitle(), newYearReleased,
-			oldMovie.getRuntime(), oldMovie.getGenres());
-		__movieDB.remove(key);
-		__movieDB.add(key, newMovie);
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newYearReleased, __movieDB[processedKey], 2);
+		__movieDB[processedKey] = newMovie;
 		return true;
 	}
-	catch (CustomException e)
+	catch (...)
 	{
 		std::cout << "Error: movie could not be updated" << std::endl;
 	}
