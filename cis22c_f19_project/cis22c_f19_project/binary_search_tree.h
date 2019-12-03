@@ -5,11 +5,11 @@
 #include "binary_tree.h"
 #include "binary_tree_interface.h"
 
-template <typename T>
-class BinarySearchTree : protected BinaryNodeTree<T>
+template <typename K, typename V>
+class BinarySearchTree : protected BinaryNodeTree<K, V>
 {
 private:
-	BinaryNode<T>* m_root;
+	BinaryNode<K, V>* m_root;
 	int m_out_traverse;
 protected:
 	//------------------------------------------------------------
@@ -18,51 +18,52 @@ protected:
 	//------------------------------------------------------------
 	// Recursively finds where the given node should be placed and
 	// inserts it in a leaf at that point.
-	BinaryNode<T>* insertInorder(BinaryNode<T>* t_sub_tree_ptr, BinaryNode<T>* newNode);
+	BinaryNode<K, V>* insertInorder(BinaryNode<K, V>* t_sub_tree_ptr, BinaryNode<K, V>* newNode);
 	// Removes the given t_target value from the tree while maintaining a
 	// binary search tree.
-	BinaryNode<T>* removeValue(BinaryNode<T>* t_sub_tree_ptr, const T t_target, bool& success);
+	BinaryNode<K, V>* removeValue(BinaryNode<K, V>* t_sub_tree_ptr, const K t_target, bool& success);
 	// Removes a given node from a tree while maintaining a
 	// binary search tree.
-	BinaryNode<T>* removeNode(BinaryNode<T>* t_node_ptr);
+	BinaryNode<K, V>* removeNode(BinaryNode<K, V>* t_node_ptr);
 	// Removes the leftmost node in the left subtree of the node
 	// pointed to by t_node_ptr.
 	// Sets t_inorder_successor to the value in this node.
 	// Returns a pointer to the revised subtree.
-	BinaryNode<T>* removeLeftmostNode(BinaryNode<T>* t_sub_tree_ptr, T& t_inorder_successor);
+	BinaryNode<K, V>* removeLeftmostNode(BinaryNode<K, V>* t_sub_tree_ptr, K& t_inorder_successor);
 	// Returns a pointer to the node containing the given value,
 	// or nullptr if not found.
-	BinaryNode<T>* findNode(BinaryNode<T>* t_tree_ptr, const T& t_target) const;
+	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& t_target) const;
 	// call on root or parent tree to find the leftmost node
-	BinaryNode<T>* getLeftmostNode(BinaryNode<T>* t_root);
+	BinaryNode<K, V>* getLeftmostNode(BinaryNode<K, V>* t_root);
 	// fileIO helper functions
-	std::ostream& serializeInorder(std::ostream& t_out, BinaryNode<T>* t_node_ptr);
-	std::ostream& serializePostorder(std::ostream& t_out, BinaryNode<T>* t_node_ptr);
-	std::ostream& serializePreorder(std::ostream& t_out, BinaryNode<T>* t_node_ptr);
-	std::ostream& serializeBreadthFirst(std::ostream& t_out, BinaryNode<T>* t_node_ptr);
+	std::ostream& serializeInorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr);
+	std::ostream& serializePostorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr);
+	std::ostream& serializePreorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr);
+	std::ostream& serializeBreadthFirst(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr);
 public:
 	//------------------------------------------------------------
 	// Constructor and Destructor Section.
 	//------------------------------------------------------------
 	BinarySearchTree() : m_root(nullptr), m_out_traverse(0) {}
-	BinarySearchTree(const T& t_root_item) : m_root(t_root_item) {}
+	BinarySearchTree(const K& t_root_key, const V& t_root_val) : m_root(t_root_key, t_root_val) {}
 	// Copy constructor
-	BinarySearchTree(const BinarySearchTree<T>& t_tree) : BinaryNodeTree<T>(t_tree) {}
+	BinarySearchTree(const BinarySearchTree<K, V>& t_tree) : BinaryNodeTree<K, V>(t_tree) {}
 	virtual ~BinarySearchTree();
 	//------------------------------------------------------------
 	// Public Methods Section.
 	//------------------------------------------------------------
 	bool isEmpty() const { return (this->m_root == nullptr ? true : false); }
-	int getHeight() const { return BinaryNodeTree<T>::getHeightHelper(this->m_root); }
-	int getNumberOfNodes() const { return BinaryNodeTree<T>::getNumberOfNodesHelper(this->m_root); }
-	T getRootData() const throw (PrecondViolatedExcep);
-	void setRootData(const T& t_new_item) { this->m_root->setItem(t_new_item); }
+	int getHeight() const { return BinaryNodeTree<K, V>::getHeightHelper(this->m_root); }
+	int getNumberOfNodes() const { return BinaryNodeTree<K, V>::getNumberOfNodesHelper(this->m_root); }
+	K getRootKey() const throw (PrecondViolatedExcep);
+	void setRootKey(const K& t_new_key) { this->m_root->setKey(t_new_key); }
+	void setRootVal(const K& t_new_val) { this->m_root->setVal(t_new_val); }
 	//const throw (PrecondViolatedExcep);
-	bool add(const T& t_new_item);
-	bool remove(const T& t_item);
-	void clear() { BinaryNodeTree<T>::destroyTree(this->m_root); }
-	T getItem(const T& t_item) const throw (NotFoundException);
-	bool contains(const T& t_item) const;
+	bool add(const K& t_new_item);
+	bool remove(const K& t_item);
+	void clear() { BinaryNodeTree<K, V>::destroyTree(this->m_root); }
+	K getKey(const K& t_item) const throw (NotFoundException);
+	bool contains(const K& t_item) const;
 	/* Set the current order of traversal for output
 	0 - inorder | 1 - preorder | 2 - postorder | 3 - breadthFirst |
 	@pre integer between 0 and 3 (inclusive)
@@ -76,20 +77,20 @@ public:
 	// Public Traversal Section
 	//------------------------------------------------------------
 	//	Order Traversal (Recursive) Section
-	void preorderTraverse(void visit(T&)) const { BinaryNodeTree<T>::preorder(visit, this->m_root); }
-	void inorderTraverse(void visit(T&)) const { BinaryNodeTree<T>::inorder(visit, this->m_root); }
-	void postorderTraverse(void visit(T&)) const { BinaryNodeTree<T>::postorder(visit, this->m_root); }
-	void breadthFirstTraverse(void visit(T&)) const { BinaryNodeTree<T>::breadthFirst(visit, this->m_root); }
+	void preorderTraverse(void visit(K&)) const { BinaryNodeTree<K, V>::preorder(visit, this->m_root); }
+	void inorderTraverse(void visit(K&)) const { BinaryNodeTree<K, V>::inorder(visit, this->m_root); }
+	void postorderTraverse(void visit(K&)) const { BinaryNodeTree<K, V>::postorder(visit, this->m_root); }
+	void breadthFirstTraverse(void visit(K&)) const { BinaryNodeTree<K, V>::breadthFirst(visit, this->m_root); }
 	//------------------------------------------------------------
 	// Overloaded Operator Section.
 	//------------------------------------------------------------
-	BinarySearchTree<T>& operator=(const BinarySearchTree<T>& t_rhs);
+	BinarySearchTree<K, V>& operator=(const BinarySearchTree<K, V>& t_rhs);
 	/* Outputs to the ostream object using the << operator
 	@pre the order for traversal is between 0 and 3 (inclusive)
 	@post binarySearchTree data is written to the ostream object according to the current set
 	order of output traversal*/
-	template <typename U>      // all instantiations of this template are my friends
-	friend std::ostream& operator<<(std::ostream& t_out, BinarySearchTree<U>& t_bst);
+	template <typename U, typename W>      // all instantiations of this template are my friends
+	friend std::ostream& operator<<(std::ostream& t_out, BinarySearchTree<U, W>& t_bst);
 	//------------------------------------------------------------
 	//  Serialization Section
 	//------------------------------------------------------------
@@ -98,20 +99,20 @@ public:
 	std::ostream& serializePreorderTraverse(std::ostream& t_out) { return this->serializePreorder(t_out, this->m_root); }
 	std::ostream& serializeBreadthFirstTraverse(std::ostream& t_out) { return this->serializeBreadthFirst(t_out, this->m_root); }
 }; // end BinarySearchTree
-template <typename T>
-std::ostream& BinarySearchTree<T>::serializeBreadthFirst(std::ostream& t_out, BinaryNode<T>* t_node_ptr)
+template <typename K, typename V>
+std::ostream& BinarySearchTree<K, V>::serializeBreadthFirst(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr)
 {
-	Queue<BinaryNode<T>*> node_q;
+	Queue<BinaryNode<K, V>*> node_q;
 	if (t_node_ptr == nullptr)
 		return t_out;
 	node_q.enqueue(t_node_ptr);
 
 	while (!node_q.is_empty())
 	{
-		BinaryNode<T>* pNode = node_q.front();
+		BinaryNode<K, V>* pNode = node_q.front();
 		if (pNode != nullptr)
 		{
-			T item = pNode->getItem();
+			K item = pNode->getKey();
 			t_out << item ;
 			node_q.dequeue();
 			if (pNode->getLeftChildPtr() != nullptr)
@@ -123,16 +124,16 @@ std::ostream& BinarySearchTree<T>::serializeBreadthFirst(std::ostream& t_out, Bi
 	return t_out;
 }
 
-template <typename T>
-T BinarySearchTree<T>::getRootData() const throw (PrecondViolatedExcep)
+template <typename K, typename V>
+K BinarySearchTree<K, V>::getRootKey() const throw (PrecondViolatedExcep)
 {
 	if (!this->isEmpty())
-		return this->m_root->getItem();
+		return this->m_root->getKey();
 	else
 		throw PrecondViolatedExcep("No data in root node");
 }
-template <typename T>
-std::ostream& operator<<(std::ostream& t_out, BinarySearchTree<T>& t_bst)
+template <typename U, typename W>
+std::ostream& operator<<(std::ostream& t_out, BinarySearchTree<U, W>& t_bst)
 {
 	if (t_bst.getOutTraverse() == 0) {
 		t_bst.serializeInorderTraverse(t_out);
@@ -153,24 +154,24 @@ std::ostream& operator<<(std::ostream& t_out, BinarySearchTree<T>& t_bst)
 	else 
 		return t_out;
 }
-template <typename T>
-std::ostream& BinarySearchTree<T>::serializeInorder(std::ostream& t_out, BinaryNode<T>* t_node_ptr)
+template <typename K, typename V>
+std::ostream& BinarySearchTree<K, V>::serializeInorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr)
 {
 	if (t_node_ptr != nullptr)
 	{
 		this->serializeInorder(t_out, t_node_ptr->getLeftChildPtr());
-		t_out << t_node_ptr->getItem() ;
+		t_out << t_node_ptr->getKey() ;
 		this->serializeInorder(t_out, t_node_ptr->getRightChildPtr());
 	}
 	return t_out;
 
 }
-template <typename T>
-std::ostream&  BinarySearchTree<T>::serializePreorder(std::ostream& t_out, BinaryNode<T>* t_node_ptr)
+template <typename K, typename V>
+std::ostream&  BinarySearchTree<K, V>::serializePreorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr)
 {
 	if (t_node_ptr != nullptr)
 	{
-		t_out << t_node_ptr->getItem() ;
+		t_out << t_node_ptr->getKey() ;
 		this->serializePreorder(t_out, t_node_ptr->getLeftChildPtr());
 		this->serializePreorder(t_out, t_node_ptr->getRightChildPtr());
 
@@ -178,20 +179,20 @@ std::ostream&  BinarySearchTree<T>::serializePreorder(std::ostream& t_out, Binar
 	return t_out;
 }
 
-template <typename T>
-std::ostream& BinarySearchTree<T>::serializePostorder(std::ostream& t_out, BinaryNode<T>* t_node_ptr)
+template <typename K, typename V>
+std::ostream& BinarySearchTree<K, V>::serializePostorder(std::ostream& t_out, BinaryNode<K, V>* t_node_ptr)
 {
 	if (t_node_ptr != nullptr)
 	{
 		this->serializeInorder(t_out, t_node_ptr->getLeftChildPtr());
 		this->serializeInorder(t_out, t_node_ptr->getRightChildPtr());
-		t_out << t_node_ptr->getItem() ;
+		t_out << t_node_ptr->getKey() ;
 	}
 	return t_out;
 
 }
-template <class T>
-bool BinarySearchTree<T>::remove(const T& t_item)
+template <class K, class V>
+bool BinarySearchTree<K, V>::remove(const K& t_item)
 {
 	bool success = false;
 	this->m_root = this->removeValue(this->m_root, t_item, success);
@@ -199,14 +200,14 @@ bool BinarySearchTree<T>::remove(const T& t_item)
 	//throw new NotFoundException("Item not found"));
 }
 
-template <class T>
-BinaryNode<T>* BinarySearchTree<T>::removeLeftmostNode(
-	BinaryNode<T>* t_node_to_delete,
-	T& t_inorder_successor)
+template <class K, class V>
+BinaryNode<K, V>* BinarySearchTree<K, V>::removeLeftmostNode(
+	BinaryNode<K, V>* t_node_to_delete,
+	K& t_inorder_successor)
 {
 	if (t_node_to_delete->getLeftChildPtr() == nullptr)
 	{
-		t_inorder_successor = t_node_to_delete->getItem();
+		t_inorder_successor = t_node_to_delete->getKey();
 		return this->removeNode(t_node_to_delete);
 	}
 	else
@@ -217,19 +218,19 @@ BinaryNode<T>* BinarySearchTree<T>::removeLeftmostNode(
 	}
 }
 
-template <class T>
-T BinarySearchTree<T>::getItem(const T& t_item) const throw (NotFoundException)
+template <class K, class V>
+K BinarySearchTree<K, V>::getKey(const K& t_item) const throw (NotFoundException)
 {
 	bool found_success = false;
-	BinaryNode<T>* found_node_ptr = this->findNode(this->m_root, t_item);
+	BinaryNode<K, V>* found_node_ptr = this->findNode(this->m_root, t_item);
 
 	if (found_node_ptr == nullptr)
 		throw NotFoundException("Item not found");
 	else
-		return found_node_ptr->getItem();
+		return found_node_ptr->getKey();
 }
-template <class T>
-BinaryNode<T>* BinarySearchTree<T>::getLeftmostNode(BinaryNode<T>* t_root)
+template <class K, class V>
+BinaryNode<K, V>* BinarySearchTree<K, V>::getLeftmostNode(BinaryNode<K, V>* t_root)
 {
 	// base case: leftmost child is null
 	if (t_root->getLeftChildPtr() == nullptr)
@@ -241,8 +242,8 @@ BinaryNode<T>* BinarySearchTree<T>::getLeftmostNode(BinaryNode<T>* t_root)
 		return this->getLeftmostNode(t_root->getLeftChildPtr());
 	}
 }
-template <class T>
-BinaryNode<T>* BinarySearchTree<T>::removeNode(BinaryNode<T>* t_node_to_delete)
+template <class K, class V>
+BinaryNode<K, V>* BinarySearchTree<K, V>::removeNode(BinaryNode<K, V>* t_node_to_delete)
 {
 	// base case: null root case
 	if (t_node_to_delete == nullptr)
@@ -258,7 +259,7 @@ BinaryNode<T>* BinarySearchTree<T>::removeNode(BinaryNode<T>* t_node_to_delete)
 	else if ((t_node_to_delete->getLeftChildPtr() != nullptr && t_node_to_delete->getRightChildPtr() == nullptr)
 		|| (t_node_to_delete->getLeftChildPtr() == nullptr && t_node_to_delete->getRightChildPtr() != nullptr))
 	{
-		BinaryNode<T>* node_to_connect = nullptr;
+		BinaryNode<K, V>* node_to_connect = nullptr;
 		if (t_node_to_delete->getLeftChildPtr() == nullptr)
 			node_to_connect = t_node_to_delete->getRightChildPtr();
 		delete t_node_to_delete;
@@ -268,19 +269,19 @@ BinaryNode<T>* BinarySearchTree<T>::removeNode(BinaryNode<T>* t_node_to_delete)
 	// tree case
 	else
 	{
-		T inord_succ_item;
-		BinaryNode<T>* temp_node_ptr = this->removeLeftmostNode(t_node_to_delete->getRightChildPtr(), inord_succ_item);
+		K inord_succ_item;
+		BinaryNode<K, V>* temp_node_ptr = this->removeLeftmostNode(t_node_to_delete->getRightChildPtr(), inord_succ_item);
 		t_node_to_delete->setRightChildPtr(temp_node_ptr);
-		t_node_to_delete->setItem(inord_succ_item);
+		t_node_to_delete->setKey(inord_succ_item);
 		return t_node_to_delete;
 	}
 	return t_node_to_delete;
 
 }
-template <class T>
-BinaryNode<T>* BinarySearchTree<T>::removeValue(
-	BinaryNode<T>* t_sub_tree_ptr,
-	const T t_target,
+template <class K, class V>
+BinaryNode<K, V>* BinarySearchTree<K, V>::removeValue(
+	BinaryNode<K, V>* t_sub_tree_ptr,
+	const K t_target,
 	bool& t_success)
 {
 	// tree node is null case
@@ -290,16 +291,16 @@ BinaryNode<T>* BinarySearchTree<T>::removeValue(
 		return nullptr;
 	}
 	// target found case
-	else if (t_sub_tree_ptr->getItem() == t_target)
+	else if (t_sub_tree_ptr->getKey() == t_target)
 	{
 		t_sub_tree_ptr = this->removeNode(t_sub_tree_ptr);
 		t_success = true;
 		return t_sub_tree_ptr;
 	}
 	// handle left of tree case
-	else if (t_sub_tree_ptr->getItem() > t_target)
+	else if (t_sub_tree_ptr->getKey() > t_target)
 	{
-		BinaryNode<T>* temp_node_ptr = nullptr;
+		BinaryNode<K, V>* temp_node_ptr = nullptr;
 		temp_node_ptr = this->removeValue(t_sub_tree_ptr->getLeftChildPtr(), t_target, t_success);
 		t_sub_tree_ptr->setLeftChildPtr(temp_node_ptr);
 		return t_sub_tree_ptr;
@@ -307,54 +308,54 @@ BinaryNode<T>* BinarySearchTree<T>::removeValue(
 	// handle right of tree case
 	else
 	{
-		BinaryNode<T>* temp_node_ptr = nullptr;
+		BinaryNode<K, V>* temp_node_ptr = nullptr;
 		temp_node_ptr = this->removeValue(t_sub_tree_ptr->getRightChildPtr(), t_target, t_success);
 		t_sub_tree_ptr->setRightChildPtr(temp_node_ptr);
 		return t_sub_tree_ptr;
 	}
 }
-template <class T>
-BinaryNode<T>* BinarySearchTree<T>::findNode(BinaryNode<T>* t_tree_ptr, const T& t_target) const
+template <class K, class V>
+BinaryNode<K, V>* BinarySearchTree<K, V>::findNode(BinaryNode<K, V>* t_tree_ptr, const K& t_target) const
 {
 	bool success = false;
-	BinaryNode<T>* found_ptr = BinaryNodeTree<T>::findNode(t_tree_ptr, t_target, success);
+	BinaryNode<K, V>* found_ptr = BinaryNodeTree<K, V>::findNode(t_tree_ptr, t_target, success);
 	return found_ptr;
 }
-template <class T>
-bool BinarySearchTree<T>::contains(const T& t_target) const
+template <class K, class V>
+bool BinarySearchTree<K, V>::contains(const K& t_target) const
 {
-	BinaryNode<T>* node_found_ptr = nullptr;
+	BinaryNode<K, V>* node_found_ptr = nullptr;
 	node_found_ptr = this->findNode(this->m_root, t_target);
 	return (node_found_ptr != nullptr ? true : false);
 }
-template <class T>
-bool BinarySearchTree<T>::add(const T& t_new_item)
+template <class K, class V>
+bool BinarySearchTree<K, V>::add(const K& t_new_item)
 {
-	BinaryNode<T>* new_node = new BinaryNode<T>(t_new_item);
+	BinaryNode<K, V>* new_node = new BinaryNode<K, V>(t_new_item);
 	this->m_root = this->insertInorder(this->m_root, new_node);
 	return true;
 }	// end add
-template <class T>
-BinarySearchTree<T>::~BinarySearchTree()
+template <class K, class V>
+BinarySearchTree<K, V>::~BinarySearchTree()
 {
 	this->clear();
 }	// end destructor
-template <class T>
-BinaryNode<T>* BinarySearchTree<T>::insertInorder(BinaryNode<T>* tree_node, BinaryNode<T>* add_node) {
+template <class K, class V>
+BinaryNode<K, V>* BinarySearchTree<K, V>::insertInorder(BinaryNode<K, V>* tree_node, BinaryNode<K, V>* add_node) {
 	if (tree_node == nullptr)
 		return add_node;
-	else if (tree_node->getItem() > add_node->getItem()) {
-		BinaryNode<T>* temp_node = this->insertInorder(tree_node->getLeftChildPtr(), add_node);
+	else if (tree_node->getKey() > add_node->getKey()) {
+		BinaryNode<K, V>* temp_node = this->insertInorder(tree_node->getLeftChildPtr(), add_node);
 		tree_node->setLeftChildPtr(temp_node);
 	}
 	else {
-		BinaryNode<T>* temp_node = insertInorder(tree_node->getRightChildPtr(), add_node);
+		BinaryNode<K, V>* temp_node = insertInorder(tree_node->getRightChildPtr(), add_node);
 		tree_node->setRightChildPtr(temp_node);
 	}
 	return tree_node;
 }	// end insertInorder
-template <class T>
-BinarySearchTree<T>& BinarySearchTree<T>::operator=(const BinarySearchTree<T>& t_rhs)
+template <class K, class V>
+BinarySearchTree<K, V>& BinarySearchTree<K, V>::operator=(const BinarySearchTree<K, V>& t_rhs)
 {
 	this->clear();
 	this->m_root = this->copyTree(t_rhs.m_root);

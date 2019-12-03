@@ -7,50 +7,50 @@
 #include "PrecondViolatedExcep.h"
 #include "queue.h"
 
-template <typename T>
-class BinaryNodeTree : public BinaryTreeInterface<T> 
+template <typename K, typename V>
+class BinaryNodeTree : public BinaryTreeInterface<K, V> 
 {
 private:
-	BinaryNode<T>* m_root;	// pointer to root node
+	BinaryNode<K, V>* m_root;	// pointer to root node
 protected:
 	//------------------------------------------------------------
 	// Protected Utility Methods Section:
 	// Recursive helper methods for the public methods.
 	//------------------------------------------------------------
 	// Recursively count the height of the tree
-	int getHeightHelper(BinaryNode<T>* t_sub_node_ptr) const;
+	int getHeightHelper(BinaryNode<K, V>* t_sub_node_ptr) const;
 	// Recursively count the number of the nodes
-	int getNumberOfNodesHelper(BinaryNode<T>* t_sub_node_ptr) const;
+	int getNumberOfNodesHelper(BinaryNode<K, V>* t_sub_node_ptr) const;
 	// Recursively deletes all nodes from the tree.
-	void destroyTree(BinaryNode<T>* t_sub_node_ptr);
+	void destroyTree(BinaryNode<K, V>* t_sub_node_ptr);
 	// Recursively adds a new node to the tree in a left/right fashion to
 	// keep the tree balanced.
-	BinaryNode<T>* balancedAdd(BinaryNode<T>* t_sub_node_ptr,
-		BinaryNode<T>* new_node_ptr);
+	BinaryNode<K, V>* balancedAdd(BinaryNode<K, V>* t_sub_node_ptr,
+		BinaryNode<K, V>* new_node_ptr);
 	// Removes the target value from the tree by calling moveValuesUpTree
 	// to overwrite value with value from child.
-	BinaryNode<T>* removeValue(BinaryNode<T>* t_sub_node_ptr, const T t_target, bool& t_success);
+	BinaryNode<K, V>* removeValue(BinaryNode<K, V>* t_sub_node_ptr, const K t_target, bool& t_success);
 	// Copies values up the tree to overwrite value in current node until
 	// a leaf is reached; the leaf is then removed, since its value is
 	// stored in the parent.
-	BinaryNode<T>* moveValuesUpTree(BinaryNode<T>* t_sub_node_ptr);
+	BinaryNode<K, V>* moveValuesUpTree(BinaryNode<K, V>* t_sub_node_ptr);
 	// Recursively searches for target value in the tree by using a
 	// preorder traversal.
-	BinaryNode<T>* findNode(BinaryNode<T>* t_node_ptr,
-		const T& t_target,
+	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_node_ptr,
+		const K& t_target,
 		bool& t_success) const;
 	// Copies the tree rooted at t_node_ptr and returns a pointer to
 	// the copy.
-	BinaryNode<T>*copyTree(const BinaryNode<T>* t_node_ptr) const;
+	BinaryNode<K, V>*copyTree(const BinaryNode<K, V>* t_node_ptr) const;
 	// Recursive traversal helper methods:
-	void preorder(void visit(T&),
-		BinaryNode<T>* t_node_ptr) const;
-	void inorder(void visit(T&),
-		BinaryNode<T>* t_node_ptr) const;
-	void postorder(void visit(T&),
-		BinaryNode<T>* t_node_ptr) const;
-	void breadthFirst(void visit(T&),
-		BinaryNode<T>* t_node_ptr) const;
+	void preorder(void visit(K&),
+		BinaryNode<K, V>* t_node_ptr) const;
+	void inorder(void visit(K&),
+		BinaryNode<K, V>* t_node_ptr) const;
+	void postorder(void visit(K&),
+		BinaryNode<K, V>* t_node_ptr) const;
+	void breadthFirst(void visit(K&),
+		BinaryNode<K, V>* t_node_ptr) const;
 	// Returns the bigger input
 	int max(const int& a, const int& b) const;
 
@@ -59,67 +59,68 @@ public:
 	// Constructor and Destructor Section.
 	//------------------------------------------------------------
 	BinaryNodeTree();
-	BinaryNodeTree(const T& t_root_item);
-	BinaryNodeTree(const T& t_root_item,
-		const BinaryNodeTree<T>* left_node_ptr,
-		const BinaryNodeTree<T>* right_node_ptr);
+	BinaryNodeTree(const K& t_root_key, const V& t_root_val);
+	BinaryNodeTree(const K& t_root_key, const V& t_root_val,
+		const BinaryNodeTree<K, V>* left_node_ptr,
+		const BinaryNodeTree<K, V>* right_node_ptr);
 	// Copy constructor
-	BinaryNodeTree(const BinaryNodeTree<T>& tree);
+	BinaryNodeTree(const BinaryNodeTree<K, V>& tree);
 	virtual ~BinaryNodeTree();
 	//------------------------------------------------------------
 	// Public BinaryTreeInterface Methods Section.
 	//------------------------------------------------------------
 	virtual bool isEmpty() const;
 	virtual int getHeight() const;
-	virtual int getLevel(const T& target);
+	virtual int getLevel(const K& target);
 	int getNumberOfNodes() const;
-	T getRootData() const throw (PrecondViolatedExcep);
-	void setRootData(const T& t_item);
-	bool add(const T& t_item); // Adds a node
-	bool remove(const T& data); // Removes a node
+	K getRootKey() const throw (PrecondViolatedExcep);
+	V getRootVal() const throw (PrecondViolatedExcep);
+	void setRootData(const K& t_key);
+	bool add(const K& t_key); // Adds a node
+	bool remove(const K& data); // Removes a node
 	void clear();
-	T getItem(const T& t_item) const throw (NotFoundException);
-	bool contains(const T& t_item) const;
+	K getKey(const K& t_key) const throw (NotFoundException);
+	bool contains(const K& t_key) const;
 	//------------------------------------------------------------
 	// Public Traversals Section.
 	//------------------------------------------------------------
-	void preorderTraverse(void visit(T&)) const;
-	void inorderTraverse(void visit(T&)) const;
-	void postorderTraverse(void visit(T&)) const;
-	void breadthFirstTraverse(void visit(T&)) const;
+	void preorderTraverse(void visit(K&)) const;
+	void inorderTraverse(void visit(K&)) const;
+	void postorderTraverse(void visit(K&)) const;
+	void breadthFirstTraverse(void visit(K&)) const;
 	//------------------------------------------------------------
 	// Overloaded Operator Section.
 	//------------------------------------------------------------
 	BinaryNodeTree& operator=(const BinaryNodeTree& t_rhs);
 }; // end BinaryNodeTree
-template <class T>
-T BinaryNodeTree<T>::getItem(const T& t_item) const throw (NotFoundException)
+template <class K, class V>
+K BinaryNodeTree<K, V>::getKey(const K& t_key) const throw (NotFoundException)
 {
 	bool found_success = false;
-	BinaryNode<T>* found_node_ptr = this->findNode(this->m_root, t_item, found_success);
+	BinaryNode<K, V>* found_node_ptr = this->findNode(this->m_root, t_key, found_success);
 
 	if (found_node_ptr == nullptr)
-		throw NotFoundException("Item not found");
+		throw NotFoundException("Key not found");
 	else 
-		return found_node_ptr->getItem();
+		return found_node_ptr->getKey();
 }
 
-template <class T>
-void BinaryNodeTree<T>::setRootData(const T& t_item) 
+template <class K, class V>
+void BinaryNodeTree<K, V>::setRootData(const K& t_key) 
 {
-	this->m_root->setItem(t_item);
+	this->m_root->setItem(t_key);
 }	// end setRootData
 
-template <class T>
-bool BinaryNodeTree<T>::remove(const T& t_target)
+template <class K, class V>
+bool BinaryNodeTree<K, V>::remove(const K& t_target)
 {
 	bool removed = false;
 	this->removeValue(this->m_root, t_target, removed);
 	return removed;
 }
-template <class T>
-BinaryNode<T>* BinaryNodeTree<T>::findNode(BinaryNode<T>* t_node_ptr,
-	const T& t_target,
+template <class K, class V>
+BinaryNode<K, V>* BinaryNodeTree<K, V>::findNode(BinaryNode<K, V>* t_node_ptr,
+	const K& t_target,
 	bool& t_success) const
 {
 	if (t_node_ptr == nullptr)
@@ -128,7 +129,7 @@ BinaryNode<T>* BinaryNodeTree<T>::findNode(BinaryNode<T>* t_node_ptr,
 		return t_node_ptr;
 	}
 	else {
-		if (t_node_ptr->getItem() == t_target)
+		if (t_node_ptr->getKey() == t_target)
 		{
 			t_success = true;
 			return t_node_ptr;
@@ -136,13 +137,13 @@ BinaryNode<T>* BinaryNodeTree<T>::findNode(BinaryNode<T>* t_node_ptr,
 		else
 		{
 			// found on left child node of parent
-			BinaryNode<T>* left_node_ptr = this->findNode(t_node_ptr->getLeftChildPtr(), t_target, t_success);
+			BinaryNode<K, V>* left_node_ptr = this->findNode(t_node_ptr->getLeftChildPtr(), t_target, t_success);
 			if (left_node_ptr != nullptr)
 			{
 				return left_node_ptr;
 			}
 			// found on right child node of parent
-			BinaryNode<T>* right_node_ptr = this->findNode(t_node_ptr->getRightChildPtr(), t_target, t_success);
+			BinaryNode<K, V>* right_node_ptr = this->findNode(t_node_ptr->getRightChildPtr(), t_target, t_success);
 			if (right_node_ptr != nullptr)
 			{
 				return right_node_ptr;
@@ -153,90 +154,99 @@ BinaryNode<T>* BinaryNodeTree<T>::findNode(BinaryNode<T>* t_node_ptr,
 	return nullptr;
 }	// end findNode
 
-template <class T>
-bool BinaryNodeTree<T>::contains(const T& t_target) const
+template <class K, class V>
+bool BinaryNodeTree<K, V>::contains(const K& t_target) const
 {
 	bool found = false;
-	BinaryNode<T>* node_found_ptr = this->findNode(this->m_root, t_target, found);
+	BinaryNode<K, V>* node_found_ptr = this->findNode(this->m_root, t_target, found);
 	return found;
 }	// end contains
-template <class T>
-int BinaryNodeTree<T>::getNumberOfNodes() const {
+template <class K, class V>
+int BinaryNodeTree<K, V>::getNumberOfNodes() const {
 	return this->getNumberOfNodesHelper(this->m_root);
 }	// end getNumberOfNodes
-template <class T>
-BinaryNodeTree<T>::~BinaryNodeTree()
+template <class K, class V>
+BinaryNodeTree<K, V>::~BinaryNodeTree()
 {
 	this->clear();
 }	// end destructor
-template <class T>
-int BinaryNodeTree<T>::getHeight() const
+template <class K, class V>
+int BinaryNodeTree<K, V>::getHeight() const
 {
 	if (this->m_root == nullptr)
 		return 0;
 	else 
 		return this->getHeightHelper(this->m_root);
 }	// end getHeight
-template<typename T>
-int BinaryNodeTree<T>::getLevel(const T & target)
+template <typename K, typename V>
+int BinaryNodeTree<K, V>::getLevel(const K& target)
 {	
 	int height = this->getHeight();
 
 	return 0;
 }
-template <class T>
-T BinaryNodeTree<T>::getRootData() const throw (PrecondViolatedExcep) {
+template <class K, class V>
+K BinaryNodeTree<K, V>::getRootKey() const throw (PrecondViolatedExcep) {
 	if (this->isEmpty())
 		throw new PrecondViolatedExcep();
 	else
-		return this->m_root->getItem();
-}	// end getRootData
-template <class T>
-void BinaryNodeTree<T>::clear() 
+		return this->m_root->getKey();
+}	// end getRootKey
+
+template<typename K, typename V>
+V BinaryNodeTree<K, V>::getRootVal() const throw(PrecondViolatedExcep)
 {
-	BinaryNode<T>* old_root = this->m_root;
+	if (this->isEmpty())
+		throw new PrecondViolatedExcep();
+	else
+		return this->m_root->getVal();
+}
+template <class K, class V>
+void BinaryNodeTree<K, V>::clear() 
+{
+	BinaryNode<K, V>* old_root = this->m_root;
 	this->destroyTree(old_root);
 	this->m_root = nullptr;
 }	// end clear
-template <class T>
-BinaryNodeTree<T>::BinaryNodeTree() : m_root(nullptr)
+template <class K, class V>
+BinaryNodeTree<K, V>::BinaryNodeTree() : m_root(nullptr)
 {
 } // end default constructor
-template <class T>
-BinaryNodeTree<T>::BinaryNodeTree(const T& t_root_item) {
-	m_root = new BinaryNode<T>(t_root_item, nullptr, nullptr);
+template <class K, class V>
+BinaryNodeTree<K, V>::BinaryNodeTree(const K& t_root_key, const V& t_root_val) {
+	m_root = new BinaryNode<K, V>(t_root_key, nullptr, nullptr);
 } // end constructor
-template <class T>
-BinaryNodeTree<T>::BinaryNodeTree(const T& t_root_item,
-	const BinaryNodeTree<T>* left_node_ptr,
-	const BinaryNodeTree<T>* right_node_ptr)
+template <class K, class V>
+BinaryNodeTree<K, V>::BinaryNodeTree(const K& t_root_key, const V& t_root_val,
+	const BinaryNodeTree<K, V>* left_node_ptr,
+	const BinaryNodeTree<K, V>* right_node_ptr)
 {
-	m_root = new BinaryNode<T>(t_root_item,
+	m_root = new BinaryNode<K, V>(t_root_key,
 		copyTree(left_node_ptr->m_root),
 		copyTree(right_node_ptr->m_root));
 } // end constructor
-template < class T>
-BinaryNode<T>* BinaryNodeTree<T>::copyTree(const BinaryNode<T>* t_old_root_ptr) const{
-	BinaryNode<T>* new_node_ptr = nullptr;
+template <class K, class V>
+BinaryNode<K, V>* BinaryNodeTree<K, V>::copyTree(const BinaryNode<K, V>* t_old_root_ptr) const{
+	BinaryNode<K, V>* new_node_ptr = nullptr;
 	// Copy tree nodes during a preorder traversal
 	if (t_old_root_ptr != nullptr)
 	{
 		// Copy node
-		new_node_ptr = new BinaryNode<T>(t_old_root_ptr->getItem(),nullptr, nullptr);
+		new_node_ptr = new BinaryNode<K, V>(t_old_root_ptr->getKey(),nullptr, nullptr);
 		new_node_ptr->setLeftChildPtr(copyTree(t_old_root_ptr->getLeftChildPtr()));
 		new_node_ptr->setRightChildPtr(copyTree(t_old_root_ptr->getRightChildPtr()));
 	} // end if
 	return new_node_ptr;
 } // end copyTree
-template < class T>
-BinaryNodeTree<T>::
-BinaryNodeTree(const BinaryNodeTree<T>& t_node_ptr)
+template <class K, class V>
+BinaryNodeTree<K, V>::
+BinaryNodeTree(const BinaryNodeTree<K, V>& t_node_ptr)
 {
 	m_root = copyTree(t_node_ptr.m_root);
 } // end copy constructor
-template < class T>
-void BinaryNodeTree<T>::
-destroyTree(BinaryNode<T>* t_sub_node_ptr)
+template <class K, class V>
+void BinaryNodeTree<K, V>::
+destroyTree(BinaryNode<K, V>* t_sub_node_ptr)
 {
 	if (t_sub_node_ptr != nullptr)
 	{
@@ -246,8 +256,8 @@ destroyTree(BinaryNode<T>* t_sub_node_ptr)
 		delete t_sub_node_ptr;
 	} // end if
 } // end destroyTree
-template < class T>
-int BinaryNodeTree<T>::getHeightHelper(BinaryNode<T>* t_sub_node_ptr) const
+template <class K, class V>
+int BinaryNodeTree<K, V>::getHeightHelper(BinaryNode<K, V>* t_sub_node_ptr) const
 {
 	if (t_sub_node_ptr == nullptr)
 		return 0;
@@ -255,24 +265,24 @@ int BinaryNodeTree<T>::getHeightHelper(BinaryNode<T>* t_sub_node_ptr) const
 		return ( 1 + this->max(this->getHeightHelper(t_sub_node_ptr->getLeftChildPtr()),
 			this->getHeightHelper(t_sub_node_ptr->getRightChildPtr())));
 } // end getHeightHelper
-template < class T>
-bool BinaryNodeTree<T>::add(const T& t_item)
+template <class K, class V>
+bool BinaryNodeTree<K, V>::add(const K& t_key)
 {
-	BinaryNode<T>* new_node_ptr = new BinaryNode<T>(t_item);
+	BinaryNode<K, V>* new_node_ptr = new BinaryNode<K, V>(t_key);
 	m_root = balancedAdd(m_root, new_node_ptr);
 	return true;
 } // end add
-template < class T>
-BinaryNode<T>* BinaryNodeTree<T>::balancedAdd(
-	BinaryNode<T>* t_sub_node_ptr,
-	BinaryNode<T>* t_new_node_ptr)
+template <class K, class V>
+BinaryNode<K, V>* BinaryNodeTree<K, V>::balancedAdd(
+	BinaryNode<K, V>* t_sub_node_ptr,
+	BinaryNode<K, V>* t_new_node_ptr)
 {
 	if (t_sub_node_ptr == nullptr)
 		return t_new_node_ptr;
 	else
 	{
-		BinaryNode<T>* leftPtr = t_sub_node_ptr->getLeftChildPtr();
-		BinaryNode<T>* rightPtr = t_sub_node_ptr->getRightChildPtr();
+		BinaryNode<K, V>* leftPtr = t_sub_node_ptr->getLeftChildPtr();
+		BinaryNode<K, V>* rightPtr = t_sub_node_ptr->getRightChildPtr();
 		if (getHeightHelper(leftPtr) > getHeightHelper(rightPtr))
 		{
 			rightPtr = balancedAdd(rightPtr, t_new_node_ptr);
@@ -287,50 +297,50 @@ BinaryNode<T>* BinaryNodeTree<T>::balancedAdd(
 	} // end if
 } // end balancedAdd
 
-template < class T>
-void BinaryNodeTree<T>::inorder(
-	void visit(T&),
-	BinaryNode<T>* t_node_ptr) const
+template <class K, class V>
+void BinaryNodeTree<K, V>::inorder(
+	void visit(K&),
+	BinaryNode<K, V>* t_node_ptr) const
 {
 	if (t_node_ptr != nullptr)
 	{
 		inorder(visit, t_node_ptr->getLeftChildPtr());
-		T theItem = t_node_ptr->getItem();
+		K theItem = t_node_ptr->getKey();
 		visit(theItem);
 		inorder(visit, t_node_ptr->getRightChildPtr());
 	} // end if
 } // end inorder
 
-template < class T>
-void BinaryNodeTree<T>::preorder(
-	void visit(T&),
-	BinaryNode<T>* t_node_ptr) const
+template <class K, class V>
+void BinaryNodeTree<K, V>::preorder(
+	void visit(K&),
+	BinaryNode<K, V>* t_node_ptr) const
 {
 	if (t_node_ptr != nullptr)
 	{
-		T theItem = t_node_ptr->getItem();
+		K theItem = t_node_ptr->getKey();
 		visit(theItem);
 		preorder(visit, t_node_ptr->getLeftChildPtr());
 		preorder(visit, t_node_ptr->getRightChildPtr());
 	} // end if
 } // end preorder
-template < class T>
-void BinaryNodeTree<T>::postorder(
-	void visit(T&),
-	BinaryNode<T>* t_node_ptr) const
+template <class K, class V>
+void BinaryNodeTree<K, V>::postorder(
+	void visit(K&),
+	BinaryNode<K, V>* t_node_ptr) const
 {
 	if (t_node_ptr != nullptr)
 	{
 		postorder(visit, t_node_ptr->getLeftChildPtr());
 		postorder(visit, t_node_ptr->getRightChildPtr());
-		T theItem = t_node_ptr->getItem();
+		K theItem = t_node_ptr->getKey();
 		visit(theItem);
 	} // end if
 } // end postorder
-template<typename T>
-void BinaryNodeTree<T>::breadthFirst(void visit(T&), BinaryNode<T>* t_node_ptr) const
+template <typename K, typename V>
+void BinaryNodeTree<K, V>::breadthFirst(void visit(K&), BinaryNode<K, V>* t_node_ptr) const
 {
-	Queue<BinaryNode<T>*> node_q;
+	Queue<BinaryNode<K, V>*> node_q;
 
 	if (t_node_ptr == nullptr)
 		return;
@@ -338,10 +348,10 @@ void BinaryNodeTree<T>::breadthFirst(void visit(T&), BinaryNode<T>* t_node_ptr) 
 
 	while (!node_q.is_empty())
 	{
-		BinaryNode<T>* pNode = node_q.front();
+		BinaryNode<K, V>* pNode = node_q.front();
 		if (pNode != nullptr)
 		{
-			T item = pNode->getItem();
+			K item = pNode->getKey();
 			visit(item);
 			node_q.dequeue();
 			if (pNode->getLeftChildPtr() != nullptr)
@@ -352,8 +362,8 @@ void BinaryNodeTree<T>::breadthFirst(void visit(T&), BinaryNode<T>* t_node_ptr) 
 	}
 
 }
-template < class T>
-int BinaryNodeTree<T>::getNumberOfNodesHelper(BinaryNode<T>* t_sub_node_ptr) const {
+template <class K, class V>
+int BinaryNodeTree<K, V>::getNumberOfNodesHelper(BinaryNode<K, V>* t_sub_node_ptr) const {
 	if (t_sub_node_ptr == nullptr)
 		return 0;
 	else
@@ -361,10 +371,10 @@ int BinaryNodeTree<T>::getNumberOfNodesHelper(BinaryNode<T>* t_sub_node_ptr) con
 			+ this->getNumberOfNodesHelper(t_sub_node_ptr->getRightChildPtr()));
 } // end getNumberOfNodesHelper
 
-template < class T>
-BinaryNode<T>* BinaryNodeTree<T>::moveValuesUpTree(BinaryNode<T>* t_sub_node_ptr) {
-	BinaryNode<T>* left_child_ptr = nullptr;
-	BinaryNode<T>* right_note_ptr = nullptr;
+template <class K, class V>
+BinaryNode<K, V>* BinaryNodeTree<K, V>::moveValuesUpTree(BinaryNode<K, V>* t_sub_node_ptr) {
+	BinaryNode<K, V>* left_child_ptr = nullptr;
+	BinaryNode<K, V>* right_note_ptr = nullptr;
 	left_child_ptr = t_sub_node_ptr->getLeftChildPtr();
 	right_note_ptr = t_sub_node_ptr->getRightChildPtr();
 	
@@ -379,37 +389,37 @@ BinaryNode<T>* BinaryNodeTree<T>::moveValuesUpTree(BinaryNode<T>* t_sub_node_ptr
 	{
 		if (left_child_ptr != nullptr)
 		{
-			t_sub_node_ptr->setItem(left_child_ptr->getItem());
+			t_sub_node_ptr->setItem(left_child_ptr->getKey());
 			t_sub_node_ptr->setLeftChildPtr(this->moveValuesUpTree(left_child_ptr));
 		}	
 		else
 		{
-			t_sub_node_ptr->setItem(right_note_ptr->getItem());
+			t_sub_node_ptr->setItem(right_note_ptr->getKey());
 			t_sub_node_ptr->setLeftChildPtr(this->moveValuesUpTree(right_note_ptr));
 
 		}	// end if
 	}	// end if
 	return t_sub_node_ptr;
 }	//	end moveValuesUpTree
-template < class T>
-BinaryNode<T>* BinaryNodeTree<T>::removeValue(
-	BinaryNode<T>* t_sub_node_ptr,
-	const T t_target, bool& t_success) 
+template <class K, class V>
+BinaryNode<K, V>* BinaryNodeTree<K, V>::removeValue(
+	BinaryNode<K, V>* t_sub_node_ptr,
+	const K t_target, bool& t_success) 
 {
 	//// DEBUG
 	//std::cout << "Parent: ";
 	//if (t_sub_node_ptr != nullptr)
 	//{
-	//	std::cout << t_sub_node_ptr->getItem() << std::endl;
+	//	std::cout << t_sub_node_ptr->getKey() << std::endl;
 
 	//	std::cout << "Left: ";
 	//	if (t_sub_node_ptr->getLeftChildPtr() != nullptr)
-	//		std::cout << t_sub_node_ptr->getLeftChildPtr()->getItem();
+	//		std::cout << t_sub_node_ptr->getLeftChildPtr()->getKey();
 	//	else
 	//		std::cout << "None";
 	//	std::cout << " Right: ";
 	//	if (t_sub_node_ptr->getRightChildPtr() != nullptr)
-	//		std::cout << t_sub_node_ptr->getRightChildPtr()->getItem() << std::endl;
+	//		std::cout << t_sub_node_ptr->getRightChildPtr()->getKey() << std::endl;
 	//	else
 	//		std::cout << "None\n";
 	//}
@@ -427,7 +437,7 @@ BinaryNode<T>* BinaryNodeTree<T>::removeValue(
 	else
 	{
 		// parent node contains target
-		if (t_sub_node_ptr->getItem() == t_target)
+		if (t_sub_node_ptr->getKey() == t_target)
 		{
 			t_sub_node_ptr = moveValuesUpTree(t_sub_node_ptr);
 			t_success = true;
@@ -437,7 +447,7 @@ BinaryNode<T>* BinaryNodeTree<T>::removeValue(
 		else 
 		{
 			// check left child
-			BinaryNode<T>* target_node_ptr = removeValue(t_sub_node_ptr->getLeftChildPtr(), t_target, t_success);
+			BinaryNode<K, V>* target_node_ptr = removeValue(t_sub_node_ptr->getLeftChildPtr(), t_target, t_success);
 			t_sub_node_ptr->setLeftChildPtr(target_node_ptr);
 			if (!t_success)
 			{
@@ -449,37 +459,37 @@ BinaryNode<T>* BinaryNodeTree<T>::removeValue(
 	}
 
 }	// end removeValue
-template < class T>
-void BinaryNodeTree<T>::inorderTraverse(void visit(T&)) const
+template <class K, class V>
+void BinaryNodeTree<K, V>::inorderTraverse(void visit(K&)) const
 {
 	this->inorder(visit, this->m_root);
 }	// end inorderTraverse
-template < class T>
-void BinaryNodeTree<T>::preorderTraverse(void visit(T&)) const
+template <class K, class V>
+void BinaryNodeTree<K, V>::preorderTraverse(void visit(K&)) const
 {
 	this->preorder(visit, this->m_root);
 }	// end preorderTraverse
-template < class T>
-void BinaryNodeTree<T>::postorderTraverse(void visit(T&)) const
+template <class K, class V>
+void BinaryNodeTree<K, V>::postorderTraverse(void visit(K&)) const
 {
 	this->postorder(visit, this->m_root);
 }	// end postorderTraverse
-template<typename T>
-void BinaryNodeTree<T>::breadthFirstTraverse(void visit(T&)) const
+template <typename K, typename V>
+void BinaryNodeTree<K, V>::breadthFirstTraverse(void visit(K&)) const
 {
 	this->breadthFirst(visit, this->m_root);
 }
-template < class T>
-bool BinaryNodeTree<T>::isEmpty() const {
+template <class K, class V>
+bool BinaryNodeTree<K, V>::isEmpty() const {
 	return (this->m_root == nullptr ? true : false);
 } // end isEmpty
-template <class T> 
-int BinaryNodeTree<T>::max(const int& a, const int& b) const {
+template <class K, class V> 
+int BinaryNodeTree<K, V>::max(const int& a, const int& b) const {
 	return (a < b) ? b : a;     // or: return comp(a,b)?b:a; for version (2)
 
 }// end max
-template<class T>
-BinaryNodeTree<T>& BinaryNodeTree<T>::operator=(const BinaryNodeTree<T>& t_rhs)
+template<class K, class V>
+BinaryNodeTree<K, V>& BinaryNodeTree<K, V>::operator=(const BinaryNodeTree<K, V>& t_rhs)
 {
 	this->clear();
 	this->m_root = this->copyTree(t_rhs.m_root);

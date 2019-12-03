@@ -2,7 +2,7 @@
 @file BinaryTreeInterface.h */
 #ifndef _BINARY_TREE_INTERFACE
 #define _BINARY_TREE_INTERFACE
-template < class ItemType>
+template < class K, class V>
 class BinaryTreeInterface
 {
 public:
@@ -14,7 +14,7 @@ public:
 	virtual int getHeight() const = 0;
 	/** Gets the level of the node
 	@return The levle of the node. */
-	//virtual int getLevel(const ItemType& target);
+	//virtual int getLevel(const K& target);
 	/** Gets the number of nodes in this binary tree.
 	@return The number of nodes in the binary tree. */
 	virtual int getNumberOfNodes() const = 0;
@@ -22,7 +22,7 @@ public:
 	@pre The binary tree is not empty.
 	@post The root’s data has been returned, and the binary tree is unchanged.
 	@return The data in the root of the binary tree. */
-	virtual ItemType getRootData() const = 0;
+	virtual K getRootKey() const = 0;
 	/** Replaces the data item in the root of this binary tree
 	with the given data, if the tree is not empty. However, if
 	the tree is empty, inserts a new root node containing the
@@ -30,33 +30,33 @@ public:
 	@pre None.
 	@post The data in the root of the binary tree is as given.
 	@param newData The data for the root. */
-	virtual void setRootData(const ItemType& newData) = 0;
+	virtual void setRootKey(const K& newData) = 0;
 	/** Adds a new node containing the given data to this binary tree.
 	@param newData The data for the new node. 
 	@post The binary tree contains a new node.
 	@return True if the addition is successful, or false not. */
-	virtual bool add(const ItemType& newData) = 0;
+	virtual bool add(const K& newData) = 0;
 	/** Removes all nodes from this binary tree. */
 	virtual void clear() = 0;
 	/** Tests whether a given entry occurs in this binary tree.
 	@post The binary search tree is unchanged.
 	@param anEntry The entry to find.
 	@return True if the entry occurs in the tree, or false if not. */
-	virtual bool contains(const ItemType& anEntry) const = 0;
+	virtual bool contains(const K& anEntry) const = 0;
 	/** Traverses this binary tree in preorder and
 	calls the function visit once for each node.
 	@param visit A client-defined function that performs an operation on
 	or with the data in each visited node. */
-	virtual void preorderTraverse(void visit(ItemType&)) const = 0;
+	virtual void preorderTraverse(void visit(K&)) const = 0;
 	/** Traverses this binary tree in inorder and
 	calls the function visit once for each node.
 	@param visit A client-defined function that performs an operation on
 	or with the data in each visited node. */
-	virtual void inorderTraverse(void visit(ItemType&)) const = 0;
+	virtual void inorderTraverse(void visit(K&)) const = 0;
 	/** Traverses this binary tree in postorder and
 	calls the function visit once for each node.
 	@param visit A client-defined function that performs an operation on
 	or with the data in each visited node. */
-	virtual void postorderTraverse(void visit(ItemType&)) const = 0;
+	virtual void postorderTraverse(void visit(K&)) const = 0;
 };
 #endif
