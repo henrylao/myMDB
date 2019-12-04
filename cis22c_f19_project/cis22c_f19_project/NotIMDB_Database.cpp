@@ -423,8 +423,9 @@ void NotIMDB_Database::testKeywordWeightedSearch(const std::string & searchEntry
 bool NotIMDB_Database::foundMovie(std::string key) const
 {
 	Movie* found;
+	std::string processedKey = processSearchEntry(key);
 	try {
-		found = (*__movieDB)[key];
+		found = (*__movieDB)[processedKey];
 		return true;
 	}
 	catch (const CustomException& e)
