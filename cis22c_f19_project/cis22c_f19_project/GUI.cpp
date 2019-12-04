@@ -105,7 +105,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					}
 				}
 				// scroll through list
-				else 
+				else if (choice == 1)
 				{
 
 					// show initial found
@@ -560,7 +560,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 		try
 		{
 			// clean query 
-			selectedMovieTitle = db.processSearchEntry(selectedMovieTitle);
+			selectedMovieTitle = db.processSearchEntry(selectedMovieTitle);		//getKey
 			if (!(db.foundMovie(selectedMovieTitle)))
 			{
 				movieSelectedFromList = false;
@@ -671,27 +671,34 @@ void GUI::UI_edit(NotIMDB_Database &db)
 			b = true;
 		}
 		catch (const CustomException& e) {
-			int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
-			if (tryAgain != 1)
+			std::cout << "Sorry, I couldn't find an exact match in the database.\n";
+			int tryAgain = menu_prompt("Would you like see related seaches?", menu_yes_no, 2);
+			if (tryAgain == 1)
 			{
 				selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
 				if (selectedMovieTitle.length() == 0 && b == true)
 					return;
 				// no potential movies found
-				else if (selectedMovieTitle.length() == 0 && b != true)
+				else if (selectedMovieTitle.length() != 0 && b != true)
 				{
-					std::cout << e.getMessage() << std::endl;
-					int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+					if (selectedMovieTitle == "R") return;
+					goodInput = false;
+					//std::cout << e.getMessage() << std::endl;
+					/*int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
 					goodInput = false;
 					if (tryAgain != 1)
 					{
 						return;
-					}
+					}*/
 				}
 				else {
 					// movie was chosen from the list therefore don't reprompt
 					movieSelectedFromList = true;
 				}
+			}
+			else if (tryAgain == 2)
+			{
+				b = true;
 			}
 		}
 
@@ -705,7 +712,7 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 	bool b = false;
 	do
 	{
-		int choice = menu_prompt("What would you like to do?", GUI::menu_operations, 5);
+		int choice = menu_prompt("What would you like to do?", GUI::menu_operations, 6);
 		switch (choice)
 		{
 		case 1:
@@ -909,11 +916,11 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 		// return to the main search menu
 		case 2:
 			exit = false;
-			return "";
+			return "S";
 		// return the main menu
 		case 3:
 			exit = true;
-			return "";
+			return "R";
 		}
 	}
 }
