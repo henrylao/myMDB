@@ -117,6 +117,9 @@
     <ClInclude Include="BST_pair.h">
       <Filter>Collection\Trees</Filter>
     </ClInclude>
+    <ClInclude Include="CustomException.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">
@@ -148,6 +151,9 @@
       <Filter>Exception</Filter>
     </ClCompile>
     <ClCompile Include="PrecondViolatedExcep.cpp">
+      <Filter>Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomException.cpp">
       <Filter>Exception</Filter>
     </ClCompile>
   </ItemGroup>
