@@ -98,9 +98,11 @@ public:
 	// ------------------------------------------
 	void				displayMovieTableStats() const;
 	/* Function handles string cleaning to and processing with 
-	the keyword search engine. Displayed is a list of movies 
+	the keyword search engine. Returned is a list of movies 
 	in order of relevance to the userEntry */
-	List<Movie>* 		readMovie(std::string key, bool& exactMatch) const;
+	List<Movie>* 		readMovies(std::string key, bool& exactMatch) const;
+	/* Use to directly display a movie by a known key of the format: title_name_year */
+	bool				readAMovie(std::string key) const;
 	void				displaySearchEngineState() const;
 	void				unitTest();
 };

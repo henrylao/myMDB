@@ -52,7 +52,9 @@ bool GUI::isValidYear(std::string year)
 
 void GUI::UI_search(const NotIMDB_Database &db)
 {
-
+	int currentIndex = 0;
+	int counter = 0;
+	bool doneScrolling = false;
 	bool doneSearching = false;
 	bool exactMatch = false;
 	while (!doneSearching) {
@@ -71,10 +73,11 @@ void GUI::UI_search(const NotIMDB_Database &db)
 			}
 		}
 		else {
-			List<Movie>* sortedMovies = db.readMovie(user_in, exactMatch);
+			List<Movie>* keywordMovies = db.readMovies(user_in, exactMatch);
 			const int START = 0;
-			const int MSIZE = sortedMovies->getLength();
-			if (sortedMovies->getLength() == 0)
+			const int MSIZE = keywordMovies->getLength();
+			const int END = MSIZE - 1;
+			if (keywordMovies->getLength() == 0)
 			{
 				int choice;
 				std::cout << "I couldn't find an exact match in the database.\n";
@@ -87,7 +90,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 			}
 			else if (exactMatch)
 			{
-				std::cout << "I found an exact match in the database.\n" << sortedMovies->getEntry(0) << std::endl;
+				std::cout << "I found an exact match in the database.\n" << keywordMovies->getEntry(0) << std::endl;
 				std::cout << "I also found other related matches as well...\n" << std::endl;
 
 				int choice;
@@ -102,80 +105,120 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					}
 				}
 				// scroll through list
-				else {
-					int STOP;
-					int currentIndex = 0;
-					if (sortedMovies->getLength() > 4) {
-						std::cout << "Here are the next 3 entries:\n" <<
-							sortedMovies->getEntry(1) << divider << "\n" <<
-							sortedMovies->getEntry(2) << divider << "\n" <<
-							sortedMovies->getEntry(3) << divider << "\n";
-						currentIndex += 4;
-						bool doneScrolling = false;
-						while (!doneScrolling) {
-							int scrollBoundIndex;
-							choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
-							std::cout << divider << endl;
-							switch (choice)
-							{
-							// view next set
-							case 1:
-								for (int i = currentIndex; i < currentIndex + 3 && currentIndex + 3 < MSIZE; i++)
-								{
-									std::cout << sortedMovies->getEntry(currentIndex);
-									std::cout << divider << endl;
-								}
-								currentIndex += 3;
-								if (currentIndex > MSIZE)
-								{
-									currentIndex = MSIZE;
-								}
-								break;
-							// view previous set 
-							case 2:
-								for (int i = currentIndex - 3; i > START && i < MSIZE && i < currentIndex; i++)
-								{
-									std::cout << sortedMovies->getEntry(i);
-									std::cout << divider << endl;
-								}
-								currentIndex -= 3;
-								if (currentIndex < START)
-								{
-									currentIndex = START;
-								}
-								break;
-							// go to the start of the list showing first few results
-							case 3:
-								currentIndex = 0;
-								STOP = currentIndex += 4;
-								for (currentIndex; currentIndex < STOP; currentIndex++)
-								{
-									std::cout << sortedMovies->getEntry(currentIndex);
-									std::cout << divider << endl;
-								}
-								break;
-							// go to the end of the list showing the last few results ~3/4
-							case 4:
-							{
-								currentIndex = MSIZE - 4;
-								if (currentIndex < 0)
-									currentIndex = 0;
-								for (currentIndex; currentIndex < MSIZE; currentIndex++)
-								{
-									std::cout << sortedMovies->getEntry(currentIndex);
-									std::cout << divider << endl;
-								}
-							}
-							break;
-							// leave search section
-							case 5:
-								return;
-								break;
-							}
-						}
+				else 
+				{
 
+					// show initial found
+					int counter = 0;
+					int optionNum = 1;
+					int currentPos = 0;
+					std::cout << divider << std::endl;
+					std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
+					// exit case 
+					if (MSIZE > 3)
+					{
+						std::cout << "Here are the first 3 entries:\n" <<
+							keywordMovies->getEntry(0) << divider << "\n" <<
+							keywordMovies->getEntry(1) << divider << "\n" <<
+							keywordMovies->getEntry(2) << divider << "\n";
+						currentPos = 3;
 					}
-
+					else
+					{
+						for (int i = 0; i < MSIZE; i++)
+						{
+							std::cout << keywordMovies->getEntry(i) << std::endl;
+							std::cout << divider << std::endl;
+							currentPos++;
+						}
+					}
+					// resets from the end of case 1 to allow use mobility
+					doneScrolling = false;
+					while (!doneScrolling) {
+						// scrolls by 1 movie each time
+						choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
+						std::cout << divider << endl;
+						switch (choice)
+						{
+							// view next set 
+						case 1:
+						{
+							currentIndex += 3;
+							if (currentIndex == END || currentIndex > END) {
+								std::cout << "We can't go further forward\n";
+							}
+							//  reposition accordingly to redisplay current state
+							if (currentIndex > MSIZE)
+								currentIndex = MSIZE - 3;
+							if (currentIndex < 0)
+								currentIndex = 0;
+							// attempt to show the next 3- 4 movies
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// view prev. set 
+						case 2:
+						{
+							currentIndex -= 3;
+							if (currentIndex == START || currentIndex) {
+								std::cout << "We can't go further back\n";
+							}
+							if (currentIndex < 0)
+								currentIndex = 0;
+							// attempt to show the next 3- 4 movies
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// go to the start of the list showing first few results
+						case 3:
+						{
+							currentIndex = 0;
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// go to the end of the list showing the last few results ~3/4
+						case 4:
+						{
+							currentIndex = END - 3;
+							if (currentIndex > MSIZE)
+								currentIndex = MSIZE - 3;
+							// handle small list case
+							if (currentIndex < 0)
+								currentIndex = 0;
+							// attempt to show the next 3- 4 movies
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// leave to search section
+						case 5:
+							doneScrolling = true;
+							break;
+						}
+					} // end scroll loop
 				}
 			}
 			else {
@@ -200,93 +243,118 @@ void GUI::UI_search(const NotIMDB_Database &db)
 				}
 				// scroll through list
 				else {
-					int currentIndex = 0;
-
-					if (sortedMovies->getLength() >= 4) {
-						std::cout << divider << endl;
-						std::cout << "Here are the 3 most relevant movies:\n";
-						std::cout << divider << endl;
-						for (currentIndex; currentIndex < 3 && currentIndex < sortedMovies->getLength(); currentIndex++)
-						{
-							std::cout << sortedMovies->getEntry(currentIndex);
-							std::cout << divider << endl;
-						}
-
-						bool doneScrolling = false;
-						while (!doneScrolling) {
-							int scrollBoundIndex = currentIndex + 3;
-							choice = menu_prompt("What would you like to do?", menu_search_scroll, 3);
-							std::cout << divider << endl;
-
-							switch (choice)
-							{
-								int scrollBoundIndex;
-							case 1:
-								scrollBoundIndex = currentIndex + 3;
-								for (currentIndex; currentIndex < sortedMovies->getLength();
-									currentIndex++)
-								{
-									if (currentIndex > scrollBoundIndex)
-										break;
-									std::cout << sortedMovies->getEntry(currentIndex);
-									std::cout << divider << endl;
-								}
-								break;
-							case 2:
-								currentIndex -= 3;
-								scrollBoundIndex = currentIndex + 3;
-								if (currentIndex < 0 || scrollBoundIndex < 0)
-								{
-									std::cout << "I can't go further back! We're at the beginning of the list!!!\n\n" << std::endl;
-									currentIndex = 0;
-									scrollBoundIndex = 3;
-									if (scrollBoundIndex > sortedMovies->getLength())
-									{
-										scrollBoundIndex = sortedMovies->getLength() - 1;
-									}
-									else
-									{
-										for (int i = 0; i < sortedMovies->getLength(); i++)
-										{
-											std::cout << sortedMovies->getEntry(i);
-											std::cout << divider << endl;
-										}
-									}
-
-								}
-								else if (currentIndex == 0)
-								{
-									for (currentIndex; currentIndex < scrollBoundIndex; currentIndex++)
-									{
-										std::cout << sortedMovies->getEntry(currentIndex);
-										std::cout << divider << endl;
-									}
-								}
-								break;
-							case 3:
-								return;
-								break;
-
-							}
-						}
-
+					// show initial found
+					int counter = 0;
+					int optionNum = 1;
+					int currentPos = 0;
+					std::cout << divider << std::endl;
+					std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
+					// exit case 
+					if (MSIZE > 3)
+					{
+						std::cout << "Here are the first 3 entries:\n" <<
+							keywordMovies->getEntry(0) << divider << "\n" <<
+							keywordMovies->getEntry(1) << divider << "\n" <<
+							keywordMovies->getEntry(2) << divider << "\n";
+						currentPos = 3;
 					}
-					else {
-						std::cout << "Here are the movies: \n\n";
-						for (int i = 0; i < sortedMovies->getLength(); i++)
+					else
+					{
+						for (int i = 0; i < MSIZE; i++)
 						{
-							if (i > 3)
-								break;
-							std::cout << sortedMovies->getEntry(i) << std::endl;
-							std::cout << GUI::divider << std::endl;
+							std::cout << keywordMovies->getEntry(i) << std::endl;
+							std::cout << divider << std::endl;
+							currentPos++;
 						}
-						choice = menu_prompt("What would you like to do?", menu_continue_search, 2);
-						if (choice == 2)
+					}
+					// resets from the end of case 1 to allow use mobility
+					doneScrolling = false;
+
+					while (!doneScrolling) {
+						// scrolls by 1 movie each time
+						choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
+						std::cout << divider << endl;
+						switch (choice)
 						{
-							return;
+							// view next set 
+						case 1:
+						{
+							currentIndex += 3;
+							if (currentIndex == END || currentIndex > END) {
+								std::cout << "We can't go further forward\n";
+							}
+							//  reposition accordingly to redisplay current state
+							if (currentIndex > MSIZE)
+								currentIndex = MSIZE - 3;
+							if (currentIndex < 0)
+								currentIndex = 0;
+							// attempt to show the next 3- 4 movies
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
 							break;
 						}
-					}
+						// view prev. set 
+						case 2:
+						{
+							currentIndex -= 3;
+							if (currentIndex == START || currentIndex) {
+								std::cout << "We can't go further back\n";
+							}
+							if (currentIndex < 0)
+								currentIndex = 0;
+							// attempt to show the next 3- 4 movies
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// go to the start of the list showing first few results
+						case 3:
+						{
+							currentIndex = 0;
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// go to the end of the list showing the last few results ~3/4
+						case 4:
+						{
+							currentIndex = END - 3;
+							if (currentIndex > MSIZE)
+								currentIndex = MSIZE - 3;
+							// handle small list case
+							if (currentIndex < 0)
+								currentIndex = 0;
+							// attempt to show the next 3- 4 movies
+							while (counter < 3 && currentIndex < MSIZE)
+							{
+								std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+								counter++;
+								currentIndex++;
+							}
+							counter = 0;
+							break;
+						}
+						// leave to search section
+						case 5:
+							doneScrolling = true;
+							break;
+						}
+					} // end scroll loop
 
 				}
 
@@ -379,7 +447,7 @@ void GUI::UI_remove(NotIMDB_Database &db)
 			else
 			{
 				std::cout << GUI::divider << std::endl;
-				db.readMovie(selectedMovieTitle, exactMatchFound);
+				db.readMovies(selectedMovieTitle, exactMatchFound);
 				int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
 				if (confirm == 1)
 				{
@@ -472,7 +540,10 @@ void GUI::UI_edit(NotIMDB_Database &db)
 					}
 				}
 				else
+				{
+					goodInput = true;
 					break;
+				}
 			}
 			else
 				break;
@@ -487,7 +558,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				throw CustomException("Error: movie not found in database");
 			}
 			std::cout << std::endl << GUI::divider << std::endl;
-			db.readMovie(selectedMovieTitle, exactMatchFound);
+			db.readMovies(selectedMovieTitle, exactMatchFound);
 			std::cout << std::endl << GUI::divider << std::endl;
 			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 6);
 			switch (attribute)
@@ -592,19 +663,25 @@ void GUI::UI_edit(NotIMDB_Database &db)
 		}
 		catch (const CustomException& e)
 		{
-			selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
-			if (selectedMovieTitle.length() == 0 && b == true)
+			// exit to main
+			if ( b == true)
 				return;
 			// no potential movies found
+			else if (selectedMovieTitle.length() > 0 && b == false)
+			{
+				selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
+
+			}
 			else if (selectedMovieTitle.length() == 0 && b != true)
 			{
-				std::cout << e.getMessage() << std::endl;
 				int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
 				goodInput = false;
 				if (tryAgain != 1)
 				{
 					return;
 				}
+				goodInput = false;
+				continue;
 			}
 			else {
 				// movie was chosen from the list therefore don't reprompt
@@ -658,62 +735,159 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 		return "";
 	}
 	bool exactMatch = false;
-	List<Movie>* keywordMovies = db.readMovie(userIn, exactMatch);
+	List<Movie>* keywordMovies = db.readMovies(userIn, exactMatch);
 	bool doneSelecting = false;
 	exit = false;
 	const int START = 0;
-	const int MSIZE = keywordMovies->getLength();
-	// return nothing 
-	if (MSIZE == 0)
-		return "";
-	int choice;
-	int currentIndex = 0;
-	std::string menu_select_from_edit_menu[] =
+	int MSIZE = 0;
+	int END = 0;
+	try {
+		MSIZE = (*keywordMovies).getLength();
+		END = MSIZE - 1;
+	}
+	catch (...)
 	{
-		"Movie Option 1", 
-		"Movie Option 2",
-		"Movie Option 3",
-		"Go back to the previous 3 movies",
-		"Move onto the next 3 movies",
-		"Return to the main menu"
-	};
+		return "";
+	}
+	// return nothing 
+	/*if (MSIZE == 0)
+		return "";*/
+	int choice;
+	bool doneScrolling = false;
+	int currentIndex = 0;
 	// display 3 items at a time
 	while (!doneSelecting)
 	{
+		int counter = 0;
 		int optionNum = 1;
+		int currentPos = 0;
 		std::cout << divider << std::endl;
 		std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
-		//std::cout << std::endl;
-		//for (int i = currentIndex; i < currentIndex + 3 && i < MSIZE; i++)
-		//{
-		//	//std::cout << i % 4 << std::endl;
-		//	std::cout << "Option " << optionNum << ":\n";
-		//	std::cout << divider << std::endl;
-		//	std::cout << keywordMovies->getEntry(i) << std::endl;
-		//	std::cout << divider << std::endl;
-		//	optionNum++;
-		//}
-		//currentIndex = currentIndex + optionNum - 1;
-		//optionNum = 1;
-		//if (currentIndex > MSIZE)
-		//{
-		//	currentIndex = MSIZE - 3;
-		//}
-		choice = menu_prompt("What would you like to do?", menu_search_browse, 3);
 		// exit case 
+		if (MSIZE > 3)
+		{
+			std::cout << "Here are the first 3 entries:\n" <<
+				keywordMovies->getEntry(0) << divider << "\n" <<
+				keywordMovies->getEntry(1) << divider << "\n" <<
+				keywordMovies->getEntry(2) << divider << "\n";
+			currentPos = 3;
+		}
+		else
+		{
+			for (int i = 0; i < MSIZE; i++)
+			{
+				std::cout << keywordMovies->getEntry(i) << std::endl;
+				std::cout << divider << std::endl;
+				currentPos++;
+			}
+		}
+		choice = menu_prompt("What would you like to do?", menu_search_browse, 3);
+		// resets from the end of case 1 to allow use mobility
+		doneScrolling = false;
+
 		switch(choice) {
 		// browse list of movies found
 		case 1:
+			
+			while (!doneScrolling) {
+				// scrolls by 1 movie each time
+				choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
+				std::cout << divider << endl;
+				switch (choice)
+				{
+				// view next set 
+				case 1: 
+				{
+					currentIndex += 3;
+					if (currentIndex == END || currentIndex > END) {
+						std::cout << "*************************************" << std::endl;
+						std::cout << "*\tWe can't go further forward\t*\n";
+						std::cout << "*************************************" << std::endl;
+					}
+					//  reposition accordingly to redisplay current state
+					if (currentIndex > MSIZE)
+						currentIndex = MSIZE - 3;
+					if (currentIndex < 0)
+						currentIndex = 0;
+					// attempt to show the next 3- 4 movies
+					while (counter < 3 && currentIndex < MSIZE)
+					{
+						std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+						counter++;
+						currentIndex++;
+					}
+					counter = 0;
+					break;
+				}
+				// view prev. set 
+				case 2:
+				{
+					currentIndex -= 3;
+					if (currentIndex == START || currentIndex) {
+						std::cout << "*************************************" << std::endl;
+						std::cout << "*\tWe can't go further back\t*\n";
+						std::cout << "*************************************" << std::endl;
+
+					}
+					if (currentIndex < 0)
+						currentIndex = 0;
+					// attempt to show the next 3- 4 movies
+					while (counter < 3 && currentIndex < MSIZE)
+					{
+						std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+						counter++;
+						currentIndex++;
+					}
+					counter = 0;
+					break;
+				}
+				// go to the start of the list showing first few results
+				case 3:
+				{
+					currentIndex = 0;
+					while (counter < 3 && currentIndex < MSIZE)
+					{
+						std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+						counter++;
+						currentIndex++;
+					}
+					counter = 0;
+					break;
+				}
+				// go to the end of the list showing the last few results ~3/4
+				case 4:
+				{
+					currentIndex = END - 3;
+					if (currentIndex > MSIZE)
+						currentIndex = MSIZE - 3;
+					// handle small list case
+					if (currentIndex < 0)
+						currentIndex = 0;
+					// attempt to show the next 3- 4 movies
+					while (counter < 3 && currentIndex < MSIZE)
+					{
+						std::cout << keywordMovies->getEntry(currentIndex) << divider << "\n";
+						counter++;
+						currentIndex++;
+					}
+					counter = 0;
+					break;
+				}
+				// leave to search section
+				case 5:
+					doneScrolling = true;
+					break;
+				}
+			} // end scroll loop
 			break;
 		// return to the main search menu
 		case 2:
-			break;
+			exit = false;
+			return "";
 		// return the main menu
 		case 3:
 			exit = true;
 			return "";
-			break;
 		}
 	}
-
 }

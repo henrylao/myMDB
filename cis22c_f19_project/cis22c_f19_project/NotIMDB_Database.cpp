@@ -435,7 +435,7 @@ sets the passed exactMatch to true if an exact match was found
 @post confirmation of exactMatch and a list of movies if found 
 @param key any keyword
 @return pointer to a list of movies */
-List<Movie>* NotIMDB_Database::readMovie(std::string key, bool& exactMatch) const
+List<Movie>* NotIMDB_Database::readMovies(std::string key, bool& exactMatch) const
 {
 	std::string processedKey = StringUtil::lowercase(StringUtil::strip(key));
 	processedKey = StringUtil::replace(processedKey, " ", "_");
@@ -457,6 +457,17 @@ List<Movie>* NotIMDB_Database::readMovie(std::string key, bool& exactMatch) cons
 	return listOfMoviesByWeight;
 }
 
+
+bool NotIMDB_Database::readAMovie(std::string key) const
+{
+	std::string processedKey = processSearchEntry(key);
+	if (foundMovie(processedKey))
+	{
+		std::cout << *(*__movieDB)[processedKey] << std::endl;
+		return true;
+	}
+	return false;
+}
 
 void NotIMDB_Database::displaySearchEngineState() const
 {
@@ -488,7 +499,7 @@ void NotIMDB_Database::unitTest()
 	NotIMDB_Database db;
 	bool exactMatchFound = false;
 	db.loadFromFile(path);
-	db.readMovie("Miss Jerry", exactMatchFound);
+	db.readMovies("Miss Jerry", exactMatchFound);
 	db.saveToFile("output.tsv");
 
 	std::cout << divider << std::endl;
@@ -503,7 +514,7 @@ void NotIMDB_Database::unitTest()
 	db.showMostRecentDelete();
 	db.undoMostRecentDelete();
 	std::cout << divider << std::endl;
-	db.readMovie("Miss Jerry", exactMatchFound);
+	db.readMovies("Miss Jerry", exactMatchFound);
 	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
 	List<Movie*>* movies = FileIO::buildMovieList(path);
 	db.createMovie(*movies->getEntry(5));

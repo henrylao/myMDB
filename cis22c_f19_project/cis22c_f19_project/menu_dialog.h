@@ -71,14 +71,15 @@ namespace GUI {
 		"View the previous set of movies",
 		"Go to the start of the list",
 		"Go to the end of the list",
-		"Exit to main menu"
+		"Return to previous search menu page"
 	};
-
+	/* 1 browse list | 2 start search | 3 exit to main menu*/
 	const std::string menu_search_browse[] = {
 		"Browse the list of movies",
 		"Start a new search",
 		"Exit to the main menu"
 	};
+	
 	const std::string menu_continue_search[] = {
 		"Continue searching",
 		"Return to main menu"
