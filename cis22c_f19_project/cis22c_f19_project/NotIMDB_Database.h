@@ -10,13 +10,13 @@
 #include "BST_pair.h"
 #include "CustomException.h"
 #include "NotFoundException.h"
+#include <chrono>
 
 class NotIMDB_Database
 {
 private:
-	// movie titles & actor names are keys for accessing the table
-	HashTable<Movie>										__movieDB;
-	Stack<Movie>											__deletedMovies;
+	HashTable<Movie*>*										__movieDB;
+	Stack<Movie*>*											__deletedMovies;
 	HashTable<BinarySearchTree<std::string, Movie>*>*		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
@@ -24,7 +24,7 @@ private:
 
 	void				__loadMovies(List<Movie>* movies);
 	/* tokenizes movie attributes ie movie name */
-	void				__buildMovieBST(List<Movie>* movies);
+	void				__buildBSTSearchEngine(List<Movie>* movies);
 	/* to be called during updates to a specific movie where either the year or
 	the name of the movie is changed
 	update the search engine bst when edits are made to movies via removal
@@ -35,7 +35,7 @@ private:
 	a keyword-node
 	
 	*/
-	List<Movie>*		__getKeywordWeightedMovies(const std::string& searchEntry) const;
+	List<Movie*>*		__getKeywordWeightedMovies(const std::string& searchEntry) const;
 	/* Internal function for processing a search entry.
 	First strips the search entry string of whitespaces from the left and right.
 	Then, replaces any remaining whitespaces with an underscore: "_"
@@ -49,7 +49,8 @@ public:
 	// Constructor & Destructor Section
 	// ------------------------------------------
 	NotIMDB_Database() {
-		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>*>(35);
+		__deletedMovies = new Stack<Movie*>();
+		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>*>(1000);
 	}
 	virtual ~NotIMDB_Database() {
 		std::string key;
@@ -69,10 +70,7 @@ public:
 	bool  				loadFromFile(std::string path);
 	// save to a default path or a custom path/name
 	void  				saveToFile(string path = "data//output.tsv");
-	bool				createMovie(const Movie& newMovie)
-	{
-		return __movieDB.add(newMovie.getTitle(), newMovie);
-	}
+	bool				createMovie(const Movie& newMovie) { return __movieDB->add(newMovie.getTitle(), new Movie(newMovie)); }
 
 	// ------------------------------------------
 	// Delete Section

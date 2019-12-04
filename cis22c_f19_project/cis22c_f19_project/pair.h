@@ -21,6 +21,8 @@ public:
 	bool operator<=(const Pair& pair) const;
 	bool operator>(const Pair& pair) const;
 	bool operator>=(const Pair& pair) const;
+	void setValue(const V& value) { __value = value; }
+	void setKey(const K& key) {	__key = key; }
 	/* 1: compare by key
 	2: compare by value */
 	void setCompareByKey() { __compareConfig = 1; }
@@ -35,8 +37,11 @@ bool Pair<K, V>::operator==(const Pair & pair) const
 	{
 	case 1:
 		return (__key == pair.__key ? true : false);
+		break;
+
 	case 2:
 		return (__value == pair.__value ? true : false);
+		break;
 
 	}
 	return false;
@@ -49,8 +54,10 @@ bool Pair<K, V>::operator<(const Pair & pair) const
 	{
 	case 1:
 		return (__key < pair.__key ? true : false);
+		break;
 	case 2:
 		return (__value < pair.__value ? true : false);
+		break;
 
 	}
 	return false;
@@ -63,8 +70,11 @@ bool Pair<K, V>::operator<=(const Pair & pair) const
 	{
 	case 1:
 		return (__key <= pair.__key ? true : false);
+		break;
+
 	case 2:
 		return (__value <= pair.__value ? true : false);
+		break;
 
 	}
 	return false;
@@ -91,8 +101,11 @@ bool Pair<K, V>::operator>=(const Pair & pair) const
 	{
 	case 1:
 		return (__key >= pair.__key ? true : false);
+		break;
+
 	case 2:
 		return (__value >= pair.__value ? true : false);
+		break;
 
 	}
 	return false;
