@@ -26,7 +26,7 @@ public:
 	bool isEmpty() const { return __list->is_empty(); }
 	/** Gets the current number of entries in this list.
 	@return The integer number of entries currently in the list. */
-	int getLength() const { return __list->size(); }
+	size_t getLength() const { return __list->size(); }
 	//----------------------------------------------------
 	// Mutators Section
 	//----------------------------------------------------
