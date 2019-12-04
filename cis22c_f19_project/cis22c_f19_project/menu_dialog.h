@@ -41,6 +41,7 @@ namespace GUI {
 		"Add a new movie",
 		"Remove a movie",
 		"Edit a movie",
+		"Undo a deletion",
 		"Exit program"
 	};
 

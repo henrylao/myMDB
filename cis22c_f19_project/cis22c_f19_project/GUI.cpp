@@ -378,7 +378,8 @@ void GUI::UI_add(NotIMDB_Database &db)
 	std::string newMovieTitle;
 	std::cout << "\nEnter the title of the movie you want to add: ";
 	std::getline(std::cin, newMovieTitle);
-
+	std::string runtime;
+	std::string id = "";
 	int newMovieYear;
 	double newMovieRating;
 	bool b = false;
@@ -415,12 +416,44 @@ void GUI::UI_add(NotIMDB_Database &db)
 		}
 	} while (!b);
 
+	b = false;
+	do
+	{
+		try
+		{
+			std::cout << "\nEnter an id for the movie. For example tt03231: ";
+			std::cin >> id;
+			b = true;
+		}
+		catch (const CustomException& e)
+		{
+			std::cout << e.getMessage() << std::endl;
+		}
+	} while (!b);
+
+	b = false;
+	do
+	{
+		try
+		{
+			std::cout << "\nEnter a runtimes(minutes) for the movie. For example 135: ";
+			std::cin >> runtime;
+			b = true;
+		}
+		catch (const CustomException& e)
+		{
+			std::cout << e.getMessage() << std::endl;
+		}
+	} while (!b);
+
 	std::cin.ignore();
 	std::string newMovieGenre;
 	std::cout << "\nEnter the movie's genre: ";
 	std::getline(std::cin, newMovieGenre);
 
 	Movie newMovie;
+	newMovie.setRuntime(runtime);
+	newMovie.setID(id);
 	newMovie.setYearReleased(std::to_string(newMovieYear));
 	newMovie.setRating(std::to_string(newMovieRating));
 	newMovie.setGenre(newMovieGenre);
@@ -705,7 +738,7 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 	bool b = false;
 	do
 	{
-		int choice = menu_prompt("What would you like to do?", GUI::menu_operations, 5);
+		int choice = menu_prompt("What would you like to do?", GUI::menu_operations, 6);
 		switch (choice)
 		{
 		case 1:
