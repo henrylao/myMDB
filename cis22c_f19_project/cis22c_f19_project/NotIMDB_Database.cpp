@@ -134,10 +134,13 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		break;
 	case 4:
 		edittedMovie.setRuntime(newAttribute);
+		break;
 	case 5:
 		edittedMovie.setGenre(newAttribute);
+		break;
 	case 6:
 		edittedMovie.setRating(newAttribute);
+		break;
 	default:
 		break;
 	}
@@ -335,7 +338,8 @@ bool NotIMDB_Database::foundMovie(std::string key)
 {
 	Movie found;
 	try {
-		found = __movieDB[key];
+		std::string processedKey = __processSearchEntry(key);
+		found = __movieDB[processedKey];
 		return true;
 	}
 	catch (const CustomException& e)
