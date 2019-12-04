@@ -33,8 +33,8 @@ protected:
 	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& targeKey) const;
 	// call on root or parent tree to find the leftmost node
 	BinaryNode<K, V>* getLeftmostNode(BinaryNode<K, V>* t_root);
-	void printBreadthFirstRecursively(BinaryNode<K,V>* pNode);
-	void printSingleLevelRecursively(BinaryNode<K,V>* pNode, int level);
+	void printSingleLevel(BinaryNode<K,V>* pNode);
+	void printSingleLevelIteratively(BinaryNode<K,V>* pNode, int level);
 	// fileIO helper functions
 	std::ostream& serializeInorder(std::ostream& t_out, BinaryNode<K, V>* pNode);
 	std::ostream& serializePostorder(std::ostream& t_out, BinaryNode<K, V>* pNode);
@@ -100,26 +100,26 @@ public:
 	std::ostream& serializePostorderTraverse(std::ostream& t_out) { return this->serializePostorder(t_out, this->__root); }
 	std::ostream& serializePreorderTraverse(std::ostream& t_out) { return this->serializePreorder(t_out, this->__root); }
 	std::ostream& serializeBreadthFirstTraverse(std::ostream& t_out) { return this->serializeBreadthFirst(t_out, this->__root); }
-	void printBreadthFirst() { this->printBreadthFirstRecursively(this->__root); }
+	void printBreadthFirst() { this->printSingleLevel(this->__root); }
 
 	bool addValue(const K & newKey, const V & newValue);
-
+	List<V>*	getValues(K& key)  { return findNode(__root, key)->getValues(); }
 }; // end BinarySearchTree
 
 
 template <typename K, typename V>
-void BinarySearchTree<K,V>::printBreadthFirstRecursively(BinaryNode<K,V>* pNode)
+void BinarySearchTree<K,V>::printSingleLevel(BinaryNode<K,V>* pNode)
 {
-	int height = this->getHeight();
+	int height = getHeight();
 	for (int i = 1; i <= height; i++)
 	{
 		std::cout << "Level " << i << " \t ";
-		this->printSingleLevelRecursively(pNode, i);
+		this->printSingleLevelIteratively(pNode, i);
 		std::cout << std::endl;
 	}
 }
 template <typename K, typename V>
-void BinarySearchTree<K,V>::printSingleLevelRecursively(BinaryNode<K,V>* pNode, int level)
+void BinarySearchTree<K,V>::printSingleLevelIteratively(BinaryNode<K,V>* pNode, int level)
 {
 	if (pNode == nullptr)
 		return;
@@ -136,8 +136,8 @@ void BinarySearchTree<K,V>::printSingleLevelRecursively(BinaryNode<K,V>* pNode, 
 	}
 	else if (level > 1)
 	{
-		this->printSingleLevelRecursively(pNode->getLeftChildPtr(), level - 1);
-		this->printSingleLevelRecursively(pNode->getRightChildPtr(), level - 1);
+		this->printSingleLevelIteratively(pNode->getLeftChildPtr(), level - 1);
+		this->printSingleLevelIteratively(pNode->getRightChildPtr(), level - 1);
 	}
 }
 template <typename K, typename V>
