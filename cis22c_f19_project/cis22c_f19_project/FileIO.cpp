@@ -14,25 +14,38 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 	// begin populating
 	Movie newMovie;
 	List<Movie>* movies = new List<Movie>();
-	List<std::string>* dataList;
+	List<std::string>* dataList = nullptr;	// data tokenized 
 	std::string genres;
 	while (infile.good())
 	{
-		getline(infile, data);	// read entire line
-		data = StringUtil::strip(data);
-		if (data.length() > 0)
-		{
+		try {
+			getline(infile, data);	// read entire line
+			data = StringUtil::strip(data);
 			dataList = StringUtil::split(data, "|");
-			//cout << *dataList << endl;	// DEBUG
-			//std::cout << data << std::endl;
-			genres = dataList->getEntry(dataList->getLength() - 1);
-			//cout << *genres << endl;	// DEBUG
-			newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], genres);
-			//cout << newMovie << endl;	// DEBUG
-			data = "";
-			delete dataList;
-			movies->append(newMovie);
+			if (data != "" && dataList->getLength() == 5)
+			{
+				
+				//cout << *dataList << endl;	// DEBUG
+				//std::cout << data << std::endl;
+				genres = dataList->getEntry(dataList->getLength() - 1);
+				//cout << *genres << endl;	// DEBUG
+				newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], genres);
+				//cout << newMovie << endl;	// DEBUG
+				data = "";
+				genres = "";
+				delete dataList;
+				movies->append(newMovie);
+			}
 		}
+		catch (...)
+		{
+			std::cout << newMovie << std::endl;
+			std::cout << *movies << std::endl;
+			std::cout << genres << std::endl;
+			if (dataList != nullptr)
+				std::cout << *dataList << std::endl;
+		}
+		
 
 	}
 	return movies;
