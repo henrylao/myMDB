@@ -136,7 +136,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					doneScrolling = false;
 					while (!doneScrolling) {
 						// scrolls by 1 movie each time
-						choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
+						choice = menu_prompt("What would you like to do?", menu_search_scroll, 6);
 						std::cout << divider << endl;
 						switch (choice)
 						{
@@ -213,11 +213,15 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							counter = 0;
 							break;
 						}
-						// leave to search section
 						case 5:
 							doneScrolling = true;
 							break;
+						case 6:
+							doneScrolling = true;
+							return;
+							break;
 						}
+						
 					} // end scroll loop
 				}
 			}
@@ -272,7 +276,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 
 					while (!doneScrolling) {
 						// scrolls by 1 movie each time
-						choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
+						choice = menu_prompt("What would you like to do?", menu_search_scroll, 6);
 						std::cout << divider << endl;
 						switch (choice)
 						{
@@ -349,9 +353,12 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							counter = 0;
 							break;
 						}
-						// leave to search section
 						case 5:
 							doneScrolling = true;
+							break;
+						case 6:
+							doneScrolling = true;
+							return;
 							break;
 						}
 					} // end scroll loop
@@ -478,7 +485,7 @@ void GUI::promptLoadFile(NotIMDB_Database &db)
 	//std::string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
 	std::string infile_prompt = "Enter the file path for an input file .tsv file\nExample: C:\\data\\input.tsv\nHit enter to use the default .tsv file in this program's directory\n";
 	std::string user_in = "";
-	std::string defaultPath = "title_basics_cleaned_final_trimmed_10.tsv";
+	std::string defaultPath = "title_basics_cleaned_final_trimmed_500.tsv";
 	ifstream infile;
 	while (!done_file_load)
 	{
@@ -511,6 +518,50 @@ void GUI::promptLoadFile(NotIMDB_Database &db)
 	std::cout << "\n";
 	infile.close();
 }
+void GUI::UI_edit(NotIMDB_Database &db)
+{
+	bool doneEditting = false;
+	int choice;
+	bool movieFound;
+	std::string userIn = "";
+	while (!doneEditting)
+	{
+		getline(std::cin, userIn);
+		userIn = db.processSearchEntry(userIn);
+		movieFound = db.foundMovie(userIn);
+		if (movieFound)
+		{
+			choice = menu_prompt("Please select from the following: ", menu_attributes, 7);
+			switch (choice)
+			{
+			case 1:
+				std::cout << "Please enter a new title\n";
+				getline(std::cin, userIn);
+				break;
+			case 2:
+				std::cout << "Please enter a new release year\n";
+				getline(std::cin, userIn);
+				break;
+
+			case 3:
+				break;
+
+			case 4: 
+				break;
+
+			case 5: 
+				break;
+			case 6:
+				break;
+
+			case 7: 
+				break;
+
+			}
+		}
+	}
+}
+
 
 void GUI::UI_edit(NotIMDB_Database &db)
 {
@@ -518,7 +569,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 	bool b = false;
 	bool movieSelectedFromList = false;
 	// input required to be atleast 1 character long
-	bool goodInput = false;	
+	bool goodInput = false;
 	std::string selectedMovieTitle = "";
 	do
 	{
@@ -528,8 +579,10 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				selectedMovieTitle = "";
 				std::cout << "Enter the title and year of a movie you want to edit or a keyword of the movie: ";
 				std::getline(std::cin, selectedMovieTitle);
+				//std::cout << selectedMovieTitle << std::endl;	// DEBUG
 				selectedMovieTitle = StringUtil::strip(selectedMovieTitle);
-				if (!(selectedMovieTitle.length() > 0))
+				//std::cout << selectedMovieTitle << std::endl;	// DEBUG
+				if (selectedMovieTitle.length() == 0)
 				{
 					std::cout << "I can't process your input" << std::endl;
 					int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
@@ -661,33 +714,29 @@ void GUI::UI_edit(NotIMDB_Database &db)
 
 			b = true;
 		}
-		catch (const CustomException& e)
-		{
-			// exit to main
-			if ( b == true)
-				return;
-			// no potential movies found
-			else if (selectedMovieTitle.length() > 0 && b == false)
+		catch (const CustomException& e) {
+			int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+			if (tryAgain != 1)
 			{
 				selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
-
-			}
-			else if (selectedMovieTitle.length() == 0 && b != true)
-			{
-				int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
-				goodInput = false;
-				if (tryAgain != 1)
-				{
+				if (selectedMovieTitle.length() == 0 && b == true)
 					return;
+				// no potential movies found
+				else if (selectedMovieTitle.length() == 0 && b != true)
+				{
+					std::cout << e.getMessage() << std::endl;
+					int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+					goodInput = false;
+					if (tryAgain != 1)
+					{
+						return;
+					}
 				}
-				goodInput = false;
-				continue;
+				else {
+					// movie was chosen from the list therefore don't reprompt
+					movieSelectedFromList = true;
+				}
 			}
-			else {
-				// movie was chosen from the list therefore don't reprompt
-				movieSelectedFromList = true;
-			}
-			
 		}
 
 	} while (!b);
@@ -716,11 +765,32 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 			UI_edit(db);
 			break;
 		case 5:
+		{
+			if (db.canUndoDelete())
+			{
+				std::cout << "This was the most recently deleted movie: " << std::endl;
+				db.showMostRecentDelete();
+				std::cout << "Would you like to undo this deletion?" << std::endl;
+				
+				int choice = menu_prompt("Would you like to undo this deletion?", menu_yes_no, 2);
+				if (choice == 1)
+				{
+					db.undoMostRecentDelete();
+				}
+			}
+			else {
+				std::cout << "You have to delete something from the database before you can undo a deletion" << std::endl;
+			}
+		}
+		break;
+		case 6:
 			std::cout << "Exiting the program..." << std::endl;
 			b = true;
 			break;
 		}
 	} while (!b);
+	std::cout << "Saving to output.tsv" << std::endl;
+	db.saveToFile();
 }
 
 /* Allow user to select from a list of approximated matches
