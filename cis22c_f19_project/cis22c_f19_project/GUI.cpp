@@ -378,7 +378,8 @@ void GUI::UI_add(NotIMDB_Database &db)
 	std::string newMovieTitle;
 	std::cout << "\nEnter the title of the movie you want to add: ";
 	std::getline(std::cin, newMovieTitle);
-
+	std::string runtime;
+	std::string id = "";
 	int newMovieYear;
 	double newMovieRating;
 	bool b = false;
@@ -415,12 +416,44 @@ void GUI::UI_add(NotIMDB_Database &db)
 		}
 	} while (!b);
 
+	b = false;
+	do
+	{
+		try
+		{
+			std::cout << "\nEnter an id for the movie. For example tt03231: ";
+			std::cin >> id;
+			b = true;
+		}
+		catch (const CustomException& e)
+		{
+			std::cout << e.getMessage() << std::endl;
+		}
+	} while (!b);
+
+	b = false;
+	do
+	{
+		try
+		{
+			std::cout << "\nEnter a runtimes(minutes) for the movie. For example 135: ";
+			std::cin >> runtime;
+			b = true;
+		}
+		catch (const CustomException& e)
+		{
+			std::cout << e.getMessage() << std::endl;
+		}
+	} while (!b);
+
 	std::cin.ignore();
 	std::string newMovieGenre;
 	std::cout << "\nEnter the movie's genre: ";
 	std::getline(std::cin, newMovieGenre);
 
 	Movie newMovie;
+	newMovie.setRuntime(runtime);
+	newMovie.setID(id);
 	newMovie.setYearReleased(std::to_string(newMovieYear));
 	newMovie.setRating(std::to_string(newMovieRating));
 	newMovie.setGenre(newMovieGenre);
@@ -485,7 +518,7 @@ void GUI::promptLoadFile(NotIMDB_Database &db)
 	//std::string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
 	std::string infile_prompt = "Enter the file path for an input file .tsv file\nExample: C:\\data\\input.tsv\nHit enter to use the default .tsv file in this program's directory\n";
 	std::string user_in = "";
-	std::string defaultPath = "title_basics_cleaned_final_trimmed_500.tsv";
+	std::string defaultPath = "title_basic_demo_data_500.tsv";
 	ifstream infile;
 	while (!done_file_load)
 	{

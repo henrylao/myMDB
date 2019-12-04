@@ -81,6 +81,7 @@ public:
 	// ------------------------------------------
 	// find movie by oldName, hold a copy of the movie delete movie of old name, update copy to newName, finally
 	// add back into table
+	/* Updating requires access to the key == moviename_year */
 	bool				updateMovieName(std::string oldMovieName, std::string newMovieName);
 	bool				updateMovieYear(std::string key, std::string newYearReleased);
 	bool				updateMovieID(std::string key, std::string newID);

@@ -11,7 +11,6 @@ int main()
 {
 	NotIMDB_Database db;
 	GUI::UI_run_application(db);
-	//db.unitTest();
 	system("pause");
 	return 0;
 }

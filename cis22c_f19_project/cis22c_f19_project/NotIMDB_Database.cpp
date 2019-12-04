@@ -226,124 +226,6 @@ Movie* NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute,
 	}
 	return edittedMovie;
 }
-//
-//List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & searchEntry) const
-//{
-//	// process search entry
-//	std::string processedKey = processSearchEntry(searchEntry);
-//	// table for tallying occurences in the bst
-//	HashTable<int> movieTallyTable;
-//	// tokenize the processed search entry
-//	List<std::string>* keywords = StringUtil::split(processedKey, "_");
-//	List<Movie*>* sortedByWeightMovies = new List<Movie*>();
-//
-//	/* Find all relevant keyword relations to movies */
-//	// variables for accessing table of BSTs
-//	std::string keyword;
-//	size_t SIZE = keywords->getLength();
-//	std::string firstCharOfKeyword;
-//	// list of movies growing in size of matches by keywords
-//	List<Movie*> moviesByKeyword;
-//	// for each keyword get the bst associated with the first character of the keyword
-//	for (size_t i = 0; i < SIZE; i++)
-//	{
-//		// new list of movies for each keyword in a loop
-//		keyword = keywords->getEntry(i);
-//		firstCharOfKeyword = std::string(1, keyword[0]);
-//		// verified key case
-//		try {
-//			std::string keyFound = __searchEngineBST->get(firstCharOfKeyword)->getKey(keyword);
-//			BinarySearchTree<std::string, Movie*>* keywordTree = (__searchEngineBST->get(firstCharOfKeyword));
-//			for (size_t i = 0; i < keywordTree->getValues(keyword)->getLength(); i++)
-//			{
-//				//std::cout << *keywordTree->getValues(keyword) << std::endl;			 // DEBUG
-//				moviesByKeyword.append(keywordTree->getValues(keyword)->getEntry(i));
-//			}
-//			//.getValues(keyword) << std::endl;
-//			size_t MBK_SIZE = moviesByKeyword.getLength();
-//			// loop through the list of values from
-//			for (size_t j = 0; j < MBK_SIZE; j++)
-//			{
-//				// create the processedMovieName which acts a key for access values in the table
-//				std::string processedMovieName = processSearchEntry(moviesByKeyword.getEntry(j)->getTitle() 
-//					+ " " + moviesByKeyword.getEntry(j)->getYearReleased());
-//				try {
-//					processedMovieName = processSearchEntry(processedMovieName);
-//					// if an associated weight exists for the movie increment by 1
-//					size_t found = movieTallyTable[processedMovieName];
-//					movieTallyTable[processedMovieName] += 1;
-//				}
-//				// processed movie title does not exist in the table of weighted movies
-//				catch (const CustomException& e)
-//				{
-//					movieTallyTable.add(processedMovieName, 1);
-//				}
-//			}
-//		}
-//		// key not found in any node of tree
-//		catch (...) { 
-//			// do nothing
-//		}
-//	}
-//	/* Finally check for an exact match == movie_name_and_year
-//	and give weight to the exact match denoted by a percentage of
-//	the summed values of the keys in the tally table */
-//	bool foundExact = false;
-//	size_t WMT_SIZE = movieTallyTable.size();
-//	try {
-//		Movie* exactMovie = (*__movieDB)[processedKey];
-//		exactMovie = nullptr;
-//		foundExact = true;
-//	}
-//	catch (...)
-//	{
-//		// do nothing 
-//	}
-//	List<std::string> WMT_KEYS = movieTallyTable.keys();
-//	size_t sumOfWeight = 0;
-//	if (foundExact)
-//	{
-//		for (size_t i = 0; i < movieTallyTable.size(); i++)
-//			sumOfWeight += movieTallyTable[WMT_KEYS.getEntry(i)];
-//
-//		movieTallyTable[processedKey] += (sumOfWeight * .75);
-//	}
-//
-//	// build the array of movies sorted by their tallied values
-//	Pair<Movie*, int>** weightMoviesArr = new Pair<Movie*, int>*[WMT_SIZE];
-//
-//	for (size_t i = 0; i < WMT_SIZE; i++)
-//	{
-//		std::string key = WMT_KEYS.getEntry(i);
-//		//std::cout << (*__movieDB)[key] << std::endl;	// DEBUG
-//		weightMoviesArr[i] = new Pair<Movie*, int>();
-//		weightMoviesArr[i]->setCompareByValue();
-//		// movie addresses to be added 
-//		weightMoviesArr[i]->setKey((*__movieDB)[key]);
-//		weightMoviesArr[i]->setValue(movieTallyTable[key]);
-//		// movies are created in ascending order
-//		//std::cout << weightMoviesArr[i]->getKey() << std::endl;	// DEBUG
-//	}
-//	// sort pairs of Movie & Weight by their weight
-//	SortUtil::quickSort(weightMoviesArr, 0, WMT_SIZE - 1);
-//	//std::cout << "Post Sort" << std::endl;	// DEBUG
-//	for (size_t i = 0; i < WMT_SIZE; i++)
-//	{
-//		//std::cout << *weightMoviesArr[i]->getKey() << std::endl; // DEBUG
-//
-//		sortedByWeightMovies->append(weightMoviesArr[i]->getKey());
-//		// movies are created in ascending order
-//	}
-//	if (movieTallyTable.keys().getLength() == 0)
-//		return new List<Movie*>();
-//	for (size_t i = 0; i < WMT_SIZE; i++)
-//	{
-//		delete weightMoviesArr[i];
-//	}
-//	delete[] weightMoviesArr;
-//	// mem clean
-//	return sortedByWeightMovies;
-//}
 List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & searchEntry) const
 {
 	// process search entry
@@ -541,8 +423,9 @@ void NotIMDB_Database::testKeywordWeightedSearch(const std::string & searchEntry
 bool NotIMDB_Database::foundMovie(std::string key) const
 {
 	Movie* found;
+	std::string processedKey = processSearchEntry(key);
 	try {
-		found = (*__movieDB)[key];
+		found = (*__movieDB)[processedKey];
 		return true;
 	}
 	catch (const CustomException& e)
