@@ -8,6 +8,10 @@ namespace GUI {
 		"Try again",
 		"Exit to main menu"
 	};
+	const std::string menu_try_again_or_exit_prog[] = {
+		"Try again",
+		"Exit program"
+	};
 
 	const std::string menu_continue_operation[] = {
 		"Yes, Continue the operation",

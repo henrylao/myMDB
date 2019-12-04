@@ -2,7 +2,7 @@
 #include "GUI.h"
 #include "SortAlgos.h"
 
-void NotIMDB_Database::__loadMovies(List<Movie>* movies)
+void NotIMDB_Database::__loadMovies(List<Movie*>* movies)
 {
 	Movie* newMovie;
 	int MSIZE;
@@ -11,7 +11,7 @@ void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 
 	for (int i = 0; i < MSIZE; i++)
 	{
-		newMovie = new Movie(movies->getEntry(i));
+		newMovie = movies->getEntry(i);
 
 		// preprocess the key
 		std::string key = newMovie->getTitle() + " " + newMovie->getYearReleased();
@@ -25,11 +25,11 @@ void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 }
 
 /* create the map of bsts such that the first character of each tokenized word
-signifies a key in the dictionary */
-void NotIMDB_Database::__buildBSTSearchEngine(List<Movie>* movies)
+signifies a key in the dictionary, does not delete the input list pointer */
+void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 {
 	int SIZE = movies->getLength();
-	Movie newMovie;
+	Movie* newMovie = nullptr;
 	List<std::string>* keywords;
 	std::string keyword, keywords_preprocess;
 	BinarySearchTree<std::string, Movie>* found = nullptr;
@@ -42,7 +42,7 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie>* movies)
 		newMovie = movies->getEntry(i);
 		/*  homogenize characters in the string */
 		// strip then turn into lowercase
-		keywords_preprocess = StringUtil::lowercase(StringUtil::strip(newMovie.getTitle() + " " + newMovie.getYearReleased()));
+		keywords_preprocess = StringUtil::lowercase(StringUtil::strip(newMovie->getTitle() + " " + newMovie->getYearReleased()));
 		keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
 
 		// create a list of keywords from movie title and year
@@ -59,7 +59,7 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie>* movies)
 				found = (*__searchEngineBST)[firstCharOfKeyword];
 				std::string keywordFound = found->getKey(keyword);
 				// simply add if keywordFound else the exception caught will signify to add the new keyword
-				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, newMovie);
+				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, *newMovie);
 				//found.printBreadthFirst();	// DBEUG
 
 			}
@@ -71,7 +71,7 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie>* movies)
 				__searchEngineBST->add(firstCharOfKeyword,
 					new BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
 				(*__searchEngineBST)[firstCharOfKeyword]->addKey(keyword);
-				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword,newMovie);
+				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, *newMovie);
 				//found.printBreadthFirst();	// DBEUG
 
 			}
@@ -80,7 +80,7 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie>* movies)
 				// create the new node holdsing the keyword
 				found->addKey(keyword);
 				// append to the list of values in the newly created keyword-node
-				found->addValue(keyword, newMovie);
+				found->addValue(keyword, *newMovie);
 				//found.printBreadthFirst();	// DBEUG
 			}
 
@@ -90,7 +90,6 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie>* movies)
 
 	}
 	found = nullptr;
-	delete movies;
 }
 
 /* to be called during updates to a specific movie where either the year or
@@ -414,9 +413,13 @@ bool NotIMDB_Database::readMovie(std::string key) const
 	catch (const CustomException& e)
 	{
 		std::cout << "I couldn't find what you were looking for in the database" << std::endl;
-		return false;
 	}
-	return false;
+	std::cout << "Here are the movies most sorted in relevance to your search: " << std::endl;
+	List<Movie*>* weightedMovies = __getKeywordWeightedMovies(key);
+	for (int i = 0; i < weightedMovies->getLength(); i++)
+	{
+		std::cout << *weightedMovies->getEntry(i) << std::endl;
+	}
 }
 
 void NotIMDB_Database::displaySearchEngineState() const
@@ -449,61 +452,67 @@ void NotIMDB_Database::unitTest()
 	NotIMDB_Database db;
 
 	db.loadFromFile(path);
-	//db.readMovie("Miss Jerry");
-	//db.saveToFile("output.tsv");
+	db.readMovie("Miss Jerry");
+	db.saveToFile("output.tsv");
 
-	//std::cout << divider << std::endl;
-	//std::cout << "Pre-delete:" << std::endl;
-	//db.displayMovieTableStats();
-	//std::cout << divider << std::endl;
+	std::cout << divider << std::endl;
+	std::cout << "Pre-delete:" << std::endl;
+	db.displayMovieTableStats();
+	std::cout << divider << std::endl;
 
-	//std::cout << "Post-delete:" << std::endl;
-	//db.displayMovieTableStats();
-	//std::cout << divider << std::endl;
+	std::cout << "Post-delete:" << std::endl;
+	db.displayMovieTableStats();
+	std::cout << divider << std::endl;
 
-	//db.showMostRecentDelete();
-	//db.undoMostRecentDelete();
-	//std::cout << divider << std::endl;
-	//db.readMovie("Miss Jerry");
-	//path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
-	//List<Movie>* movies = FileIO::buildMovieList(path);
-	//db.createMovie(movies->getEntry(5));
-	//db.displayMovieTableStats();
-	//db.displaySearchEngineState();
-	//db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
+	db.showMostRecentDelete();
+	db.undoMostRecentDelete();
+	std::cout << divider << std::endl;
+	db.readMovie("Miss Jerry");
+	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
+	List<Movie*>* movies = FileIO::buildMovieList(path);
+	db.createMovie(*movies->getEntry(5));
+	db.displayMovieTableStats();
+	db.displaySearchEngineState();
+	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
 
-	//db.displaySearchEngineState();	// BUGGED
-	//db.testKeywordWeightedSearch("Miss Jerry");
-	//db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
-	//db.displaySearchEngineState();	// BUGGED
-	//db.testKeywordWeightedSearch("Miss");
+	db.displaySearchEngineState();	// BUGGED
+	db.testKeywordWeightedSearch("Miss Jerry");
+	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
+	db.displaySearchEngineState();	// BUGGED
+	db.testKeywordWeightedSearch("Miss");
 	db.testKeywordWeightedSearch("El blocao 1909");
+
+	for (int i = 0; i < movies->getLength(); i++)
+	{
+		delete movies->getEntry(i);
+	}
+	delete movies;
 }
 
 
 bool NotIMDB_Database::loadFromFile(std::string path)
 {
-	List<Movie>* movies = nullptr;
-
-	//std::thread t1( FileIO::loadActorsIntoList, actorFilePath, actors);
+	List<Movie*>* movies;
+	// allocate memory for a list to contain movie values
 	auto start = std::chrono::high_resolution_clock::now();
 	movies = FileIO::buildMovieList(path);
 	auto finish = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = finish - start;
-	std::cout << "File Read Elapsed time: " << elapsed.count() << " s\n";
-
+	std::cout << "File to List Generation Elapsed time: " << elapsed.count() << " s\n";
+	// create table of movies
 	start = std::chrono::high_resolution_clock::now();
 	__loadMovies(movies);
 	finish = std::chrono::high_resolution_clock::now();
 	elapsed = finish - start;
-	std::cout << "Movie Load From List Elapsed time: " << elapsed.count() << " s\n";
-
+	std::cout << "Movie Load From List to Table Elapsed time: " << elapsed.count() << " s\n";
+	// create search engine
 	start = std::chrono::high_resolution_clock::now();
 	__buildBSTSearchEngine(movies);
 	finish = std::chrono::high_resolution_clock::now();
 	elapsed = finish - start;
-	std::cout << "Search Engine Creation Elapsed time: " << elapsed.count() << " s\n";
-
+	std::cout << "Table of BST Search Engine Creation Elapsed time: " << elapsed.count() << " s\n";
+	// list memory clean
+	delete movies;
 	return true;
 }
 

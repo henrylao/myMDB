@@ -22,9 +22,9 @@ private:
 	// Internal Helper Method Section
 	// ------------------------------------------
 
-	void				__loadMovies(List<Movie>* movies);
+	void				__loadMovies(List<Movie*>* movies);
 	/* tokenizes movie attributes ie movie name */
-	void				__buildBSTSearchEngine(List<Movie>* movies);
+	void				__buildBSTSearchEngine(List<Movie*>* movies);
 	/* to be called during updates to a specific movie where either the year or
 	the name of the movie is changed
 	update the search engine bst when edits are made to movies via removal
@@ -53,6 +53,11 @@ public:
 		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>*>(1000);
 	}
 	virtual ~NotIMDB_Database() {
+		/*HashTable<Movie*>*									
+		Stack<Movie*>*											
+		HashTable<BinarySearchTree<std::string, Movie>*>*		
+		*/
+		// memory clean search engine
 		std::string key;
 		List<std::string> keys = __searchEngineBST->keys();
 		for (int i = 0; i < __searchEngineBST->keys().getLength(); i++)
@@ -63,10 +68,35 @@ public:
 		}
 		// delete the table
 		delete __searchEngineBST;
+
+		
+		// memory clean up for undo stack
+		int SSIZE = __deletedMovies->size();
+		Movie* pMovie;
+		while (__deletedMovies->size() > 0) {
+			pMovie = __deletedMovies->peek();
+			delete pMovie;
+			__deletedMovies->pop();
+		}
+		delete __deletedMovies;
+
+
+		// memory clean movie table
+		size_t SIZE = __movieDB->size();
+		keys = __movieDB->keys();
+		for (size_t i = 0; i < SIZE; i++)
+		{
+			// delete addresses of movies
+			delete (*__movieDB)[keys.getEntry(i)];
+		}
+		delete __movieDB;
 	}
 	// ------------------------------------------
 	// Create/FileIO Section
 	// ------------------------------------------
+	/* This is the main function for handling database creation from a file.
+	The function handles memory allocated for creation of objects read from file. 
+	@return true if successfully opened and created */
 	bool  				loadFromFile(std::string path);
 	// save to a default path or a custom path/name
 	void  				saveToFile(string path = "data//output.tsv");
@@ -104,6 +134,9 @@ public:
 	// Read Section
 	// ------------------------------------------
 	void				displayMovieTableStats() const;
+	/* Function handles string cleaning to and processing with 
+	the keyword search engine. Displayed is a list of movies 
+	in order of relevance to the userEntry */
 	bool				readMovie(std::string key) const;
 	void				displaySearchEngineState() const;
 	void				unitTest();

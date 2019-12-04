@@ -1,6 +1,6 @@
 #include "FileIO.h"
 
-List<Movie>* FileIO::buildMovieList(std::string path)
+List<Movie*>*& FileIO::buildMovieList(std::string path)
 {
 	// attempt open file
 	std::ifstream infile;
@@ -8,12 +8,14 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 	infile.open(path, std::ios::in);
 
 	// handle bad file path case
-	if (!infile.good())
-		return nullptr;
+	if (!infile.good()) {
+		List<Movie*>* pList = new List<Movie*>();
+		return pList;
+	}
 
 	// begin populating
-	Movie newMovie;
-	List<Movie>* movies = new List<Movie>();
+	Movie* newMovie = nullptr;
+	List<Movie*>* movies = new List<Movie*>();
 	List<std::string>* dataList = nullptr;	// data tokenized 
 	std::string genres;
 	while (infile.good())
@@ -29,7 +31,7 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 				//std::cout << data << std::endl;
 				genres = dataList->getEntry(dataList->getLength() - 1);
 				//cout << *genres << endl;	// DEBUG
-				newMovie = Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], genres);
+				newMovie = new Movie((*dataList)[0], (*dataList)[1], (*dataList)[2], (*dataList)[3], genres);
 				//cout << newMovie << endl;	// DEBUG
 				data = "";
 				genres = "";
@@ -50,7 +52,7 @@ List<Movie>* FileIO::buildMovieList(std::string path)
 	}
 	return movies;
 }
-void FileIO::loadMoviesIntoList(std::string path, List<Movie>* movies)
+void FileIO::loadMoviesIntoList(std::string path, List<Movie*>* movies)
 {
 	movies = buildMovieList(path);
 }
