@@ -221,7 +221,6 @@ void GUI::UI_edit(NotIMDB_Database &db)
 			std::cout << std::endl << GUI::divider << std::endl;
 			db.readMovie(selectedMovieTitle);
 			std::cout << std::endl << GUI::divider << std::endl;
-
 			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 6);
 			switch (attribute)
 			{
@@ -276,14 +275,35 @@ void GUI::UI_edit(NotIMDB_Database &db)
 			}
 			case 5:
 			{
-				std::string newGenre;
-				std::cout << "Enter the new genre of the movie: ";
-				std::getline(std::cin, newGenre);
-				std::cout << std::endl;
-				if (db.updateMovieGenre(selectedMovieTitle, newGenre, 1))
-					std::cout << "Edited successfully!" << std::endl;
-				else
-					throw CustomException("Error while updating genre: " + selectedMovieTitle);
+				bool b = false;
+				do
+				{
+					int select = GUI::menu_prompt("How would you like to edit genres of this movie?", GUI::menu_edit_genre, 2);
+					if (select == 1)
+					{
+						std::string newGenre;
+						std::cout << "Enter the new genre of the movie: ";
+						std::getline(std::cin, newGenre);
+						std::cout << std::endl;
+						if (db.updateMovieGenre(selectedMovieTitle, newGenre, 0))
+							std::cout << "Edited successfully!" << std::endl;
+						else
+							throw CustomException("Error while updating genre: " + selectedMovieTitle);
+						b = true;
+					}
+					else if (select == 2)
+					{
+						std::string newGenre;
+						std::cout << "Enter the new genre of the movie: ";
+						std::getline(std::cin, newGenre);
+						std::cout << std::endl;
+						if (db.updateMovieGenre(selectedMovieTitle, newGenre, 1))
+							std::cout << "Edited successfully!" << std::endl;
+						else
+							throw CustomException("Error while updating genre: " + selectedMovieTitle);
+						b = true;
+					}
+				} while (!b);
 				break;
 			}
 			case 6:
@@ -298,8 +318,6 @@ void GUI::UI_edit(NotIMDB_Database &db)
 					throw CustomException("Error while updating score: " + selectedMovieTitle);
 				break;
 			}
-			default:
-				break;
 			}
 
 			b = true;

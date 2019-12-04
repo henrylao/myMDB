@@ -75,6 +75,11 @@ namespace GUI {
 		"Return to main menu"
 	};
 
+	const std::string menu_edit_genre[] = {
+		"Add new genre to current genres",
+		"Create new genres"
+	};
+
 	//const std::string menu_display[] = {
 	//	"Display movies by title",
 	//	"Display movies by release year",
