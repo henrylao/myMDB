@@ -33,6 +33,17 @@ Movie::Movie(std::string tconstID, std::string title, std::string year, std::str
 
 }
 
+//Movie::Movie(std::string tconstID, std::string title, std::string year, std::string runTime, std::string genres, std::string rating)
+//{
+//	__movieID = tconstID;
+//	__title = title;
+//	__genres = genres;
+//	__yearReleased = year;
+//	__runtimeMinutes = runTime;
+//	__rating = rating;
+//	__compareConfig = 2;
+//}
+
 void Movie::clear()
 {
 }
