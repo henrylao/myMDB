@@ -22,6 +22,12 @@ namespace GUI {
 		"Yes",
 		"No"
 	};
+	
+	const std::string menu_yes_no2[] = {
+		"Try another search",
+		"Look at the a list of potential matches",
+		"Exit to the main menu"
+	};
 
 	const std::string menu_continue_program[] = {
 		"Yes",
@@ -71,7 +77,8 @@ namespace GUI {
 		"View the previous set of movies",
 		"Go to the start of the list",
 		"Go to the end of the list",
-		"Return to previous search menu page"
+		"Search another entry",
+		"Return to main menu"
 	};
 	/* 1 browse list | 2 start search | 3 exit to main menu*/
 	const std::string menu_search_browse[] = {
