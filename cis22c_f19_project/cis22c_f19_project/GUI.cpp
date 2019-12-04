@@ -72,7 +72,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 	}
 	case 3:
 	{
-		bool !b = false;
+		bool b = false;
 		do
 		{
 			try
@@ -81,153 +81,86 @@ void GUI::UI_search(const NotIMDB_Database &db)
 				std::cout << "(Should between 0.0 ~ 10.0): " << std::endl;
 				std::getline(std::cin, in);
 				if (std::stod(in) > 10.0 || std::stod(in) < 0.0)
-					throw 0;
+					throw CustomException("Error: invalid movie rating");;
 				UI_search_by_ratings(std::stod(in) /*const database& database*/);
 				b = true;
 			}
 			catch(const CustomException& e)
 			{
-				std::cerr << e.what() << '\n';
+				std::cout << e.getMessage() << std::endl;
 			}
 		} while (!b);
 		break;
 	}
 	case 4:
 	{
-		while (1)
+		bool b = false;
+		do
 		{
 			try
 			{
 				std::cout << "Please insert the genre of the movie you want to search: " << std::endl;
 				std::getline(std::cin, in);
-				//TODO:
-				//if (invalid genre)
-				//	throw 0;
+				// TODO: genre validation
 				UI_search_by_genre(in /*const database& database*/);
-				break;
+				b = true;
 			}
-			catch (...)
+			catch(const CustomException& e)
 			{
-				std::cout << "The genre you insert does not exist!" << std::endl;
+				std::cout << e.getMessage() << std::endl;
 			}
-		}
+		} while (!b);
 		break;
 	}
-	case 5:
-	{
-		try
-		{
-			std::cout << "Please insert the cast of the movie you want to search: " << std::endl;
-			std::getline(std::cin, in);
-			//TODO:
-			//if (invalid cast)
-			//	throw 0;
-			UI_search_by_cast(in);
-			///*const database& database*/);
-			break;
-		}
-		catch (...)
-		{
-			std::cout << "The cast you insert does not exist!" << std::endl;
-		}
+	default:
 		break;
-	}
-	case 6:
-	{
-		return;
-	}
 	}
 }
 
 void GUI::UI_add(NotIMDB_Database &db)
 {
-	std::string tmp;
-	std::string in_title;
-	int in_year;
-	double in_rate;
-	List<std::string> in_g;
-	List<std::string> in_c;
+	std::cout << GUI::divider << std::endl;
 
-	//Insert title
-	std::cout << "Please insert the title of the movie you want to add: " << std::endl;
-	std::getline(std::cin, in_title);
-	std::cout << std::endl;
+	std::string newMovieTitle;
+	std::cout << "\nEnter the title of the movie you want to add: ";
+	std::getline(std::cin, newMovieTitle);
 
-	//Insert release year
-	while (1)
+	int newMovieYear;
+	double newMovieRating;
+	bool b = false;
+	do
 	{
 		try
 		{
-			std::cout << "Please insert the release year of the the movie you want to add(Should be less than 2019): " << std::endl;
-			std::getline(std::cin, tmp);
-			if (std::stoi(tmp) > 2019)
-				throw 0;
-			break;
+			std::cout << "\nEnter the release year: ";
+			std::cin >> newMovieYear;
+			if (newMovieYear > 2020 || newMovieYear < 1820)
+				throw CustomException("Error: invalid release year");
+
+			std::cout << "\nEnter the movie's rating (0.0 - 10.0): ";
+			std::cin >> newMovieRating;
+			if (newMovieYear > 10.0 || newMovieYear < 0.0)
+				throw CustomException("Error: invalid movie rating");
+
+			b = true;
 		}
-		catch (...)
+		catch(const CustomException& e)
 		{
-			std::cout << "Year date should less than 2019!" << std::endl;
+			std::cout << e.getMessage() << std::endl;
 		}
-	}
-	in_year = std::stoi(tmp);
-	std::cout << std::endl;
+	} while (!b);
 
-	//Insert ratings
-	while (1)
-	{
-		try
-		{
-			std::cout << "Please insert the ratings of the the movie you want to add(Should between 0.0 ~ 10.0): " << std::endl;
-			std::getline(std::cin, tmp);
-			if (std::stod(tmp) < 0.0 || std::stod(tmp) > 10.0)
-				throw 0;
-			break;
-		}
-		catch (...)
-		{
-			std::cout << "Ratings should between 0.0 ~ 10.0" << std::endl;
-		}
-	}
-	in_rate = std::stod(tmp);
-	std::cout << std::endl;
+	std::string newMovieGenre;
+	std::cout << "\nEnter the movie's genre: ";
+	std::getline(std::cin, newMovieGenre);
 
-	//Insert genres
-	while (1)
-	{
-		try
-		{
-			std::cout << "Please insert the genre of the the movie you want to add(Press enter to stop inserting): " << std::endl;
-			std::getline(std::cin, tmp);
-			if (tmp == "")
-				break;
-			//TODO:
-			//if (invalid genre)
-			//	throw 0;
-			in_g.append(tmp);
-		}
-		catch (...)
-		{
-			std::cout << "The genre you insert does not exist!" << std::endl;
-		}
-	}
-	std::cout << std::endl;
-
-	//Insert cast
-	while (1)
-	{
-		std::cout << "Please insert the cast of the the movie you want to add(Press enter to stop inserting): " << std::endl;
-		std::getline(std::cin, tmp);
-		if (tmp == "")
-			break;
-		in_c.append(tmp);
-	}
-	std::cout << std::endl;
-
-	//TODO: Create movie obj
-
-	std::cout << "This is the movie you want to add: " << std::endl;
-	//TODO: Display obj
-
+	// TODO: find best way to insert to db
+	Movie newMovie;
+	newMovie.setYearReleased(std::to_string(newMovieYear));
+	newMovie.setRating(std::to_string(newMovieRating));
+	newMovie.setGenre(newMovieGenre);
+	newMovie.setTitle(newMovieTitle);
+	std::cout << newMovie << std::endl;
 	std::cout << "Added successfully!" << std::endl;
 }
 
