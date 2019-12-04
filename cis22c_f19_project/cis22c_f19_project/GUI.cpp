@@ -518,50 +518,6 @@ void GUI::promptLoadFile(NotIMDB_Database &db)
 	std::cout << "\n";
 	infile.close();
 }
-void GUI::UI_edit(NotIMDB_Database &db)
-{
-	bool doneEditting = false;
-	int choice;
-	bool movieFound;
-	std::string userIn = "";
-	while (!doneEditting)
-	{
-		getline(std::cin, userIn);
-		userIn = db.processSearchEntry(userIn);
-		movieFound = db.foundMovie(userIn);
-		if (movieFound)
-		{
-			choice = menu_prompt("Please select from the following: ", menu_attributes, 7);
-			switch (choice)
-			{
-			case 1:
-				std::cout << "Please enter a new title\n";
-				getline(std::cin, userIn);
-				break;
-			case 2:
-				std::cout << "Please enter a new release year\n";
-				getline(std::cin, userIn);
-				break;
-
-			case 3:
-				break;
-
-			case 4: 
-				break;
-
-			case 5: 
-				break;
-			case 6:
-				break;
-
-			case 7: 
-				break;
-
-			}
-		}
-	}
-}
-
 
 void GUI::UI_edit(NotIMDB_Database &db)
 {
