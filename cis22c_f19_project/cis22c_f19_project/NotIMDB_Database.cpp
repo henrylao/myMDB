@@ -232,7 +232,8 @@ bool NotIMDB_Database::foundMovie(std::string key)
 {
 	Movie found;
 	try {
-		found = __movieDB[key];
+		std::string processedKey = __processSearchEntry(key);
+		found = __movieDB[processedKey];
 		return true;
 	}
 	catch (const CustomException& e)
