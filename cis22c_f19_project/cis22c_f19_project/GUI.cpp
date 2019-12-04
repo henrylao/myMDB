@@ -303,7 +303,14 @@ void GUI::UI_edit(NotIMDB_Database &db)
 			}
 			case 6:
 			{
-				// TODO: rating validation
+				double newMovieRating;
+				std::cout << "Enter the new rating (0.0 - 10.0): ";
+				cin >> newMovieRating;
+				std::cout << std::endl;
+				if (db.updateMovieRating(selectedMovieTitle, std::to_string(newMovieRating)))
+					std::cout << "Edited successfully!" << std::endl;
+				else
+					throw CustomException("Error while updating score: " + selectedMovieTitle);
 				break;
 			}
 			default:
@@ -324,9 +331,34 @@ void GUI::UI_edit(NotIMDB_Database &db)
 	} while (!b);
 }
 
-void GUI::UI_run_application()
+void GUI::UI_run_application(NotIMDB_Database & db)
 {
-	//std::cout << "Welcome to NotNetfix!" << std::endl;
+	std::cout << "Welcome to the Movie Database\n\n";
+	bool b = false;
+	do
+	{
+		int choice = menu_prompt("What would you like to do?", GUI::menu_operations, 5);
+		switch (choice)
+		{
+		case 1:
+			UI_search(db);
+			break;
+		case 2:
+			UI_add(db);
+			break;
+		case 3:
+			UI_remove(db);
+			break;
+		case 4:
+			UI_edit(db);
+			break;
+		default:
+			std::cout << "Exiting the program..." << std::endl;
+			b = true;
+			break;
+		}
+	} while (!b);
+	
 
 	//bool end = true;
 	//while (end) {

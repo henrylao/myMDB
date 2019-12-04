@@ -30,6 +30,6 @@ namespace GUI
 	// Edit help funciton
 	void UI_edit(NotIMDB_Database & db);
 	void UI_edit_old(NotIMDB_Database & db);
-	void UI_run_application();
+	void UI_run_application(NotIMDB_Database & db);
 }
 #endif

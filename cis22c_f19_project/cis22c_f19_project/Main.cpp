@@ -7,8 +7,12 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
 	NotIMDB_Database db;
 	db.unitTest();
+
+	GUI::UI_run_application(db);
+	system("pause");
 	return 0;
 }
