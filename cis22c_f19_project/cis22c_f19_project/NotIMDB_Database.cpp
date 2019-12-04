@@ -139,10 +139,13 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		break;
 	case 4:
 		edittedMovie.setRuntime(newAttribute);
+		break;
 	case 5:
 		edittedMovie.setGenre(newAttribute);
+		break;
 	case 6:
 		edittedMovie.setRating(newAttribute);
+		break;
 	default:
 		break;
 	}
@@ -285,7 +288,7 @@ List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & s
 		{
 			// do nothing
 		}
-		
+
 	}
 	// build the arry of movies sorted by their dictionary*[WM value (weight) here
 	size_t WMT_SIZE = weightedMovieTitles.size();
@@ -298,7 +301,7 @@ List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & s
 		//std::cout << *(*__movieDB)[key] << std::endl;	// DEBUG
 		weightMoviesArr[i] = new Pair<Movie*, int>();
 		weightMoviesArr[i]->setCompareByValue();
-		// movie addresses to be added 
+		// movie addresses to be added
 		weightMoviesArr[i]->setKey((*__movieDB)[key]);
 		weightMoviesArr[i]->setValue(weightedMovieTitles[key]);
 

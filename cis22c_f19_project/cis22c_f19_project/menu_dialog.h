@@ -51,9 +51,10 @@ namespace GUI {
 	const std::string menu_attributes[] = {
 		"Title",
 		"Release year",
-		"Ratings",
+		"ID",
+		"Runtime",
 		"Genre",
-		"Cast"
+		"Ratings"
 	};
 
 	const std::string menu_continue_edit[] = {
