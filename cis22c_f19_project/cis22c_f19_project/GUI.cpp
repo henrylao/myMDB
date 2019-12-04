@@ -1,149 +1,145 @@
 #include "GUI.h"
 
-bool GUI::isValidName(string name) {
+bool GUI::isValidName(std::string name)
+{
 	int size = name.size();
 	for (int i = 0; i < size; i++)
 	{
-		if (!isalpha(name[i]))
-		{
-			if (isdigit(name[i]))
-			{
-				return false;
-			}
-		}
-
+		if (!isalpha(name[i]) && isdigit(name[i]))
+			return false;
 	}
 	return true;
 }
-bool GUI::isValidMonth(string month) {
+
+bool GUI::isValidMonth(std::string month)
+{
 	int size = month.size();
-	if (size != 2)
-		return false;
-	if (stoi(month) > 12 || stoi(month) < 1)
+	if (size != 2 || stoi(month) > 12 || stoi(month) < 1)
 		return false;
 	for (int i = 0; i < size; i++)
 	{
 		if (isalpha(month[i]))
-		{
 			return false;
-		}
-
 	}
 	return true;
 }
-bool GUI::isValidDay(string day) {
+
+bool GUI::isValidDay(std::string day)
+{
 	int size = day.size();
-	if (size != 2)
-		return false;
-	if (stoi(day) > 31 || stoi(day) < 1)
+	if (size != 2 || stoi(day) > 31 || stoi(day) < 1)
 		return false;
 	for (int i = 0; i < size; i++)
 	{
 		if (isalpha(day[i]))
-		{
 			return false;
-		}
-
 	}
 	return true;
 }
-bool GUI::isValidYear(string year) {
+
+bool GUI::isValidYear(std::string year)
+{
 	int size = year.size();
-	if (size > 4)
-		return false;
-	else if (size != 4)
+	if (size > 4 || size != 4)
 		return false;
 	for (int i = 0; i < size; i++)
 	{
 		if (isalpha(year[i]))
-		{
 			return false;
-		}
-
 	}
 	return true;
 }
-void GUI::UI_search(const NotIMDB_Database& db) {
+
+void GUI::UI_search(const NotIMDB_Database &db)
+{
 	std::string in;
 	int choice = GUI::menu_prompt("How do you want to search movies by?", GUI::menu_search, 6);
 	switch (choice)
 	{
-		case 1: {
-			std::cout << "Please insert the title of the movie you want to search: " << std::endl;
-			std::getline(std::cin, in);
-			UI_search_by_title(in/*const database& database*/);
-			break;
-		}
-		case 2: {
-			std::cout << "Please insert the release year of the movie you want to search: " << std::endl;
-			std::getline(std::cin, in);
-			UI_search_by_year(std::stoi(in)/*const database& database*/);
-			break;
-		}
-		case 3: {
-			while (1)
-			{
-				try
-				{
-					std::cout << "Please insert the ratings of the movie you want to search(Should between 0.0 ~ 10.0): " << std::endl;
-					std::getline(std::cin, in);
-					if (std::stod(in) > 10.0 || std::stod(in) < 0.0)
-						throw 0;
-					UI_search_by_ratings(std::stod(in)/*const database& database*/);
-					break;
-				}
-				catch (...)
-				{
-					std::cout << "Ratings should between 0.0 ~ 10.0!" << std::endl;
-				}
-			}
-			break;
-		}
-		case 4: {
-			while (1)
-			{
-				try
-				{
-					std::cout << "Please insert the genre of the movie you want to search: " << std::endl;
-					std::getline(std::cin, in);
-					//TODO:
-					//if (invalid genre)
-					//	throw 0;
-					UI_search_by_genre(in/*const database& database*/);
-					break;
-				}
-				catch (...)
-				{
-					std::cout << "The genre you insert does not exist!" << std::endl;
-				}
-			}
-			break;
-		}
-		case 5: {
+	case 1:
+	{
+		std::cout << "Please insert the title of the movie you want to search: " << std::endl;
+		std::getline(std::cin, in);
+		UI_search_by_title(in /*const database& database*/);
+		break;
+	}
+	case 2:
+	{
+		std::cout << "Please insert the release year of the movie you want to search: " << std::endl;
+		std::getline(std::cin, in);
+		UI_search_by_year(std::stoi(in) /*const database& database*/);
+		break;
+	}
+	case 3:
+	{
+		bool !b = false;
+		do
+		{
 			try
 			{
-				std::cout << "Please insert the cast of the movie you want to search: " << std::endl;
+				std::cout << "Please insert the ratings of the movie you want to search\n";
+				std::cout << "(Should between 0.0 ~ 10.0): " << std::endl;
+				std::getline(std::cin, in);
+				if (std::stod(in) > 10.0 || std::stod(in) < 0.0)
+					throw 0;
+				UI_search_by_ratings(std::stod(in) /*const database& database*/);
+				b = true;
+			}
+			catch(const CustomException& e)
+			{
+				std::cerr << e.what() << '\n';
+			}
+		} while (!b);
+		break;
+	}
+	case 4:
+	{
+		while (1)
+		{
+			try
+			{
+				std::cout << "Please insert the genre of the movie you want to search: " << std::endl;
 				std::getline(std::cin, in);
 				//TODO:
-				//if (invalid cast)
+				//if (invalid genre)
 				//	throw 0;
-				UI_search_by_cast(in);
-				///*const database& database*/);
+				UI_search_by_genre(in /*const database& database*/);
 				break;
 			}
 			catch (...)
 			{
-				std::cout << "The cast you insert does not exist!" << std::endl;
+				std::cout << "The genre you insert does not exist!" << std::endl;
 			}
+		}
+		break;
+	}
+	case 5:
+	{
+		try
+		{
+			std::cout << "Please insert the cast of the movie you want to search: " << std::endl;
+			std::getline(std::cin, in);
+			//TODO:
+			//if (invalid cast)
+			//	throw 0;
+			UI_search_by_cast(in);
+			///*const database& database*/);
 			break;
 		}
-		case 6:{
-			return;
+		catch (...)
+		{
+			std::cout << "The cast you insert does not exist!" << std::endl;
 		}
+		break;
+	}
+	case 6:
+	{
+		return;
+	}
 	}
 }
 
-void GUI::UI_add(NotIMDB_Database & db)
+void GUI::UI_add(NotIMDB_Database &db)
 {
 	std::string tmp;
 	std::string in_title;
@@ -202,7 +198,8 @@ void GUI::UI_add(NotIMDB_Database & db)
 		{
 			std::cout << "Please insert the genre of the the movie you want to add(Press enter to stop inserting): " << std::endl;
 			std::getline(std::cin, tmp);
-			if (tmp == "") break;
+			if (tmp == "")
+				break;
 			//TODO:
 			//if (invalid genre)
 			//	throw 0;
@@ -220,7 +217,8 @@ void GUI::UI_add(NotIMDB_Database & db)
 	{
 		std::cout << "Please insert the cast of the the movie you want to add(Press enter to stop inserting): " << std::endl;
 		std::getline(std::cin, tmp);
-		if (tmp == "") break;
+		if (tmp == "")
+			break;
 		in_c.append(tmp);
 	}
 	std::cout << std::endl;
@@ -233,7 +231,8 @@ void GUI::UI_add(NotIMDB_Database & db)
 	std::cout << "Added successfully!" << std::endl;
 }
 
-void GUI::UI_remove(NotIMDB_Database& db) {
+void GUI::UI_remove(NotIMDB_Database &db)
+{
 	while (1)
 	{
 		std::string input;
@@ -242,7 +241,7 @@ void GUI::UI_remove(NotIMDB_Database& db) {
 		std::cout << "Please insert the title of the movie you want to remove: " << std::endl;
 		getline(std::cin, input);
 
-		//TODO: 
+		//TODO:
 		//Search the obj
 		//If found, set boolean found = true
 
@@ -281,15 +280,14 @@ void GUI::UI_remove(NotIMDB_Database& db) {
 	}
 }
 
-
-void GUI::promptLoadFile(NotIMDB_Database& db)
+void GUI::promptLoadFile(NotIMDB_Database &db)
 {
 	int try_again;
 	bool done_file_load = false;
-	string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
-	string infile_prompt = "Enter the file path for an input file\nExample: C:\\data\\input.txt\nHit enter to use the default input.txt file in this program's directory\n";
-	string user_in = "";
-	string defaultPath = "InputData.txt";
+	std::string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
+	std::string infile_prompt = "Enter the file path for an input file\nExample: C:\\data\\input.txt\nHit enter to use the default input.txt file in this program's directory\n";
+	std::string user_in = "";
+	std::string defaultPath = "InputData.txt";
 	ifstream infile;
 
 	// prompt file path loop
@@ -340,7 +338,7 @@ void GUI::promptLoadFile(NotIMDB_Database& db)
 	}
 }
 
-void GUI::UI_edit(NotIMDB_Database& db)
+void GUI::UI_edit(NotIMDB_Database &db)
 {
 	while (1)
 	{
@@ -393,7 +391,8 @@ void GUI::UI_edit(NotIMDB_Database& db)
 			{
 				std::cout << "Year date should less than 2019!" << std::endl;
 			}
-		}in_year = std::stoi(tmp);
+		}
+		in_year = std::stoi(tmp);
 		std::cout << std::endl;
 
 		//Insert ratings
@@ -411,7 +410,8 @@ void GUI::UI_edit(NotIMDB_Database& db)
 			{
 				std::cout << "Ratings should between 0.0 ~ 10.0" << std::endl;
 			}
-		}in_rate = std::stod(tmp);
+		}
+		in_rate = std::stod(tmp);
 		std::cout << std::endl;
 
 		//Insert genres
@@ -421,7 +421,8 @@ void GUI::UI_edit(NotIMDB_Database& db)
 			{
 				std::cout << "Please insert the genre of the the movie you want to change to(Press enter to stop inserting): " << std::endl;
 				std::getline(std::cin, tmp);
-				if (tmp == "") break;
+				if (tmp == "")
+					break;
 				//TODO:
 				//if (invalid genre)
 				//	throw 0;
@@ -439,7 +440,8 @@ void GUI::UI_edit(NotIMDB_Database& db)
 		{
 			std::cout << "Please insert the cast you want to change to(Press enter to stop inserting): " << std::endl;
 			std::getline(std::cin, tmp);
-			if (tmp == "") break;
+			if (tmp == "")
+				break;
 			in_c.append(tmp);
 		}
 		std::cout << std::endl;
@@ -505,27 +507,27 @@ void GUI::UI_edit(NotIMDB_Database& db)
 //	return 0;
 //}
 
-void GUI::UI_search_by_title(std::string in_title/*,const database& database*/)
+void GUI::UI_search_by_title(std::string in_title /*,const database& database*/)
 {
 	//TODO: Search by title
 }
 
-void GUI::UI_search_by_year(int in_year/*,const database& database*/)
+void GUI::UI_search_by_year(int in_year /*,const database& database*/)
 {
 	//TODO: Search by year
 }
 
-void GUI::UI_search_by_ratings(double in_ratings/*,const database& database*/)
+void GUI::UI_search_by_ratings(double in_ratings /*,const database& database*/)
 {
 	//TODO: Search by ratings
 }
 
-void GUI::UI_search_by_genre(std::string in_genre/*,const database& database*/)
+void GUI::UI_search_by_genre(std::string in_genre /*,const database& database*/)
 {
 	//TODO: Search by genre
 }
 
-void GUI::UI_search_by_cast(std::string in_genre/*,const database& database*/)
+void GUI::UI_search_by_cast(std::string in_genre /*,const database& database*/)
 {
 	//TODO: Search by cast
 }

@@ -7,6 +7,7 @@
 #include "List.h"
 #include "menu.h"
 #include "menu_dialog.h"
+#include "CustomException.h"
 
 namespace GUI
 {
