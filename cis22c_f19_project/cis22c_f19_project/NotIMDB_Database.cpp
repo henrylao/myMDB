@@ -84,6 +84,7 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 
 }
 
+<<<<<<< Updated upstream
 std::string NotIMDB_Database::__processSearchEntry(const std::string & searchEntry)
 {
 
@@ -98,6 +99,20 @@ std::string NotIMDB_Database::__processSearchEntry(const std::string & searchEnt
 	op == 1 : editted title
 	op == 2 : editted year  */
 void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op)
+=======
+/* Internal function for maintaining the keyword search engine
+	be called during updates to a specific movie where either the year or
+	the name of the movie is change update the search engine bst when edits
+	are made to movies via removal
+	toggle between various operations:
+	1 by movieID
+	2 by rating
+	3 by year
+	4 by title
+	5 by runtime
+*/
+Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, const Movie& movieToEdit, int op)
+>>>>>>> Stashed changes
 {
 	BinarySearchTree<std::string, Movie> found;
 	List<std::string>* keywords;
@@ -138,6 +153,68 @@ void NotIMDB_Database::__updateSearchEngineBST(const std::string edittedAttribut
 	}
 }
 
+<<<<<<< Updated upstream
+=======
+List<Movie> NotIMDB_Database::__getKeywordWeightedMovies(const std::string & searchEntry) const
+{
+	// process search entry
+	std::string processSearchEntry = __processSearchEntry(searchEntry);
+	// mnovie titles will be associated with an integer value
+	HashTable<int> weightedMovieTitles;
+	// tokenize the processed search entry
+	List<std::string>* keywords = StringUtil::split(processSearchEntry, "_");
+
+	// variables for accessing table of BSTs
+	std::string keyword;
+	int SIZE = keywords->getLength();
+	List<Movie> moviesByKeyword;
+	std::string firstCharOfKeyword;
+
+	// for each keyword get the bst associated with the first character of the keyword
+	for (int i = 0; i < SIZE; i++)
+	{
+		// c
+		keyword = keywords->getEntry(i);
+		firstCharOfKeyword = std::string(1, keyword[0]);
+		// get movies of the asociated keyword-key from the BST
+		//moviesByKeyword = __searchEngineBST[firstCharOfKeyword].getValues(keyword);
+		std::cout << __searchEngineBST.get(firstCharOfKeyword).getValues(keyword) << std::endl;
+		int MBK_SIZE = moviesByKeyword.getLength();
+		// loop through the list of values from 
+		for (int j = 0; i < MBK_SIZE; i++)
+		{
+			// create the processedMovieName
+			std::string processedMovieName = moviesByKeyword.getEntry(i).getTitle() + " " + moviesByKeyword.getEntry(i).getYearReleased();
+			try {
+				processedMovieName = __processSearchEntry(processedMovieName);
+				// if an associated weight exists for the movie increment by 1
+				int found = weightedMovieTitles[processedMovieName];
+				weightedMovieTitles[processedMovieName] += 1;
+			}
+			// processed movie title does not exist in the table of weighted movies
+			catch (const CustomException& e)
+			{
+				weightedMovieTitles.add(processedMovieName, 1);
+			}
+		}
+	}
+	return List<Movie>();
+}
+
+
+std::string NotIMDB_Database::__processSearchEntry(const std::string & query) const
+{
+	std::string processedKey = StringUtil::lowercase(StringUtil::strip(query));
+	processedKey = StringUtil::replace(processedKey, " ", "_");
+	return processedKey;
+}
+
+void NotIMDB_Database::testKeywordWeightedSearch(const std::string & searchEntry) const
+{
+	List<Movie> weightedMovies = __getKeywordWeightedMovies(searchEntry);
+}
+
+>>>>>>> Stashed changes
 bool NotIMDB_Database::foundMovie(std::string key)
 {
 	Movie found;
@@ -161,8 +238,14 @@ void NotIMDB_Database::displayMovieTableStats() const
 bool NotIMDB_Database::readMovie(std::string key) const
 {
 	try {
+<<<<<<< Updated upstream
 		Movie found = __movieDB.get(key);
 		std::cout << found << std::endl;
+=======
+		// 1st match found
+		std::cout << __movieDB[processedKey] << std::endl;
+		// display keyword-weighted movie using the search engine
+>>>>>>> Stashed changes
 		return true;
 	}
 	catch (const CustomException& e)
@@ -197,6 +280,15 @@ void NotIMDB_Database::unitTest()
 	List<Movie>* movies = FileIO::buildMovieList(path);
 	db.createMovie(movies->getEntry(5));
 	db.displayMovieTableStats();
+<<<<<<< Updated upstream
+=======
+	db.displaySearchEngineState();
+	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
+
+	//db.displaySearchEngineState();	// BUGGED
+	db.testKeywordWeightedSearch("Miss Jerry");
+	system("pause");
+>>>>>>> Stashed changes
 }
 
 
@@ -282,7 +374,81 @@ void NotIMDB_Database::showMostRecentDelete() const
 {
 	if (__deletedMovies.size() > 0)
 		std::cout << __deletedMovies.peek() << std::endl;
+<<<<<<< Updated upstream
 	else
+=======
+}
+
+bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string newMovieName)
+{
+	// check for existence
+	if (!foundMovie(oldMovieName))
+		return false;
+	Movie edittedMovie = __updateSearchEngineBST(newMovieName, __movieDB[oldMovieName], 1);
+	__movieDB[newMovieName] = edittedMovie;
+	return true;
+}
+
+bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearReleased)
+{
+	try {
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newYearReleased, __movieDB[processedKey], 2);
+		__movieDB[processedKey] = newMovie;
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << e.getMessage() << std::endl;
+	}
+	return false;
+}
+
+bool NotIMDB_Database::updateMovieID(std::string key, std::string newID)
+{
+	try {
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newID, __movieDB[processedKey], 3);
+		__movieDB[processedKey] = newMovie;
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << e.getMessage() << std::endl;
+	}
+	return false;
+}
+
+bool NotIMDB_Database::updateMovieRuntime(std::string key, std::string newRuntime)
+{
+	try {
+		std::string processedKey = __processSearchEntry(key);
+		Movie newMovie = __updateSearchEngineBST(newRuntime, __movieDB[processedKey], 4);
+		__movieDB[processedKey] = newMovie;
+		return true;
+	}
+	catch (CustomException e)
+	{
+		std::cout << e.getMessage() << std::endl;
+	}
+	return false;
+}
+
+bool NotIMDB_Database::updateMovieGenre(std::string key, std::string newGenreName, int op)
+{
+	try {
+		std::string processedKey = __processSearchEntry(key);
+		std::string genres;
+		if (op)
+			genres = newGenreName;
+		else
+			genres = __movieDB[processedKey].getGenres().append(newGenreName);
+		Movie newMovie = __updateSearchEngineBST(genres, __movieDB[processedKey], 5);
+		__movieDB[processedKey] = newMovie;
+		return true;
+	}
+	catch (CustomException e)
+>>>>>>> Stashed changes
 	{
 		std::cout << "There are no movies that have been deleted\n";
 	}

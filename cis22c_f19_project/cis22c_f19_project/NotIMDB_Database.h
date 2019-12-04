@@ -31,10 +31,23 @@ private:
 	update the search engine bst when edits are made to movies via removal 
 	op == 1 : editted title 
 	op == 2 : editted year  */
+<<<<<<< Updated upstream
 	std::string			__processSearchEntry(const std::string& searchEntry);
 	void				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
 public:
+=======
+	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
+	List<Movie>			__getKeywordWeightedMovies(const std::string& searchEntry) const;
+	/* Internal function for processing a search entry.
+	First strips the search entry string of whitespaces from the left and right.
+	Then, replaces any remaining whitespaces with an underscore: "_"
+	@param any search entry of either digits or alphabet characters
+	@return a processed string of the form == "example3232_processed!_str" */
+	std::string			__processSearchEntry(const std::string& searchEntry) const;
+>>>>>>> Stashed changes
 
+public:
+	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
