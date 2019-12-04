@@ -17,7 +17,7 @@ private:
 	// movie titles & actor names are keys for accessing the table
 	HashTable<Movie>					__movieDB;
 	Stack<Movie>						__deletedMovies;
-	HashTable<BinarySearchTree<std::string, Movie>>		__searchEngineBST;
+	HashTable<BinarySearchTree<std::string, Movie>>*		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
 	// ------------------------------------------
@@ -37,8 +37,12 @@ public:
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
-	NotIMDB_Database() {}
-	virtual ~NotIMDB_Database();
+	NotIMDB_Database() {
+		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>>();
+	}
+	virtual ~NotIMDB_Database() {
+		delete __searchEngineBST;
+	}
 	// ------------------------------------------
 	// Create/FileIO Section
 	// ------------------------------------------

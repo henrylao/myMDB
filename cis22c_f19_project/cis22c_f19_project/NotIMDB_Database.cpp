@@ -50,11 +50,11 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 			firstCharOfKeyword = std::string(1, keyword[0]);
 			try {
 				// check in the dictionary
-				found = __searchEngineBST[firstCharOfKeyword];
+				found = (*__searchEngineBST)[firstCharOfKeyword];
 				std::string keywordFound = found.getKey(keyword);
 				// simply add if keywordFound else the exception caught will signify to add the new keyword
-				__searchEngineBST[firstCharOfKeyword].addValue(keyword, newMovie);
-				//found.printBreadthFirst();	// DBEUG
+				(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword, newMovie);
+				found.printBreadthFirst();	// DBEUG
 
 			}
 			// first character of a keyword was not found to denote a key in the table
@@ -62,11 +62,11 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 			{
 				// create a new bst such that the first character of the keyword denotes
 				// a key to a tree in the table of bst
-				__searchEngineBST.add(firstCharOfKeyword,
+				__searchEngineBST->add(firstCharOfKeyword,
 					BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
-				__searchEngineBST[firstCharOfKeyword].addKey(keyword);
-				__searchEngineBST[firstCharOfKeyword].addValue(keyword,newMovie);
-				//found.printBreadthFirst();	// DBEUG
+				(*__searchEngineBST)[firstCharOfKeyword].addKey(keyword);
+				(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword,newMovie);
+				found.printBreadthFirst();	// DBEUG
 
 			}
 			catch (const NotFoundException& e)
@@ -75,7 +75,7 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 				found.addKey(keyword);
 				// append to the list of values in the newly created keyword-node
 				found.addValue(keyword, newMovie);
-				//found.printBreadthFirst();	// DBEUG
+				found.printBreadthFirst();	// DBEUG
 			}
 
 		}
@@ -148,9 +148,9 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		firstCharOfKeyword = std::string(1, keyword[0]);
 		try {
 			// check for existence in the dictionary
-			found = __searchEngineBST[firstCharOfKeyword];
+			found = (*__searchEngineBST)[firstCharOfKeyword];
 			// remove from target bst
-			__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
+			(*__searchEngineBST)[firstCharOfKeyword].remove(keyword, movieToEdit);
 		}
 		catch (...)
 		{
@@ -158,15 +158,15 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 			firstCharOfKeyword = std::string(1, keyword[0]);
 			try {
 				// check in the dictionary
-				found = __searchEngineBST[firstCharOfKeyword];
-				__searchEngineBST[firstCharOfKeyword].remove(keyword, movieToEdit);
+				found = (*__searchEngineBST)[firstCharOfKeyword];
+				(*__searchEngineBST)[firstCharOfKeyword].remove(keyword, movieToEdit);
 			}
 			// first character of a keyword was not found to denote a key in the table
 			catch (const CustomException& e)
 			{
 				// create a new bst such that the first character of the keyword denotes
 				// a key to a tree in the table of bst
-				__searchEngineBST.add(std::string(1, keywords->getEntry(j)[0]),
+				__searchEngineBST->add(std::string(1, keywords->getEntry(j)[0]),
 					BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
 
 			}
@@ -186,10 +186,10 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		firstCharOfKeyword = std::string(1, keyword[0]);
 		try {
 			// check in the dictionary
-			found = __searchEngineBST[firstCharOfKeyword];
+			found = (*__searchEngineBST)[firstCharOfKeyword];
 			std::string keywordFound = found.getKey(keyword);
 			// simply add if keywordFound else the exception caught will signify to add the new keyword
-			__searchEngineBST[firstCharOfKeyword].addValue(keyword, edittedMovie);
+			(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword, edittedMovie);
 			//found.printBreadthFirst();	// DBEUG
 
 		}
@@ -198,10 +198,10 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		{
 			// create a new bst such that the first character of the keyword denotes 
 			// a key to a tree in the table of bst 
-			__searchEngineBST.add(firstCharOfKeyword,
+			__searchEngineBST->add(firstCharOfKeyword,
 				BinarySearchTree<std::string, Movie>(keywords->getEntry(i)));
-			__searchEngineBST[firstCharOfKeyword].addKey(keyword);
-			__searchEngineBST[firstCharOfKeyword].addValue(keyword, edittedMovie);
+			(*__searchEngineBST)[firstCharOfKeyword].addKey(keyword);
+			(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword, edittedMovie);
 			//found.printBreadthFirst();	// DBEUG
 
 		}
@@ -263,22 +263,25 @@ bool NotIMDB_Database::readMovie(std::string key) const
 
 void NotIMDB_Database::displaySearchEngineState() const
 {
-	List<std::string> keys = __searchEngineBST.keys();
+	List<std::string> keys = __searchEngineBST->keys();
 	int SIZE = keys.getLength();
 	for (int i = 0; i < SIZE; i++)
 	{
 		std::cout << keys.getEntry(i);
 	}
 	/* DEBUG Keyword Search Engine*/
+	BinarySearchTree<std::string, Movie> found;
 	for (int i = 0; i < SIZE; i++)
 	{
 		std::cout << GUI::divider << std::endl;
 		std::cout << "BST in table at keyword char: " << keys.getEntry(i) << std::endl;
 		std::cout << "Depth-first: " << std::endl;
-		__searchEngineBST[keys.getEntry(i)].printBreadthFirst();
+		//found = (*__searchEngineBST)[keys.getEntry(i)];
+		//found.printBreadthFirst();
+		(*__searchEngineBST)[keys.getEntry(i)].printBreadthFirst();
 	}
 	// call internal loading functions
-	std::cout << __searchEngineBST.size() << std::endl;	// DEBUG
+	std::cout << __searchEngineBST->size() << std::endl;	// DEBUG
 }
 
 void NotIMDB_Database::unitTest()
@@ -288,7 +291,7 @@ void NotIMDB_Database::unitTest()
 	NotIMDB_Database db;
 
 	db.loadFromFile(path);
-	db.readMovie("Miss Jerry");
+	/*db.readMovie("Miss Jerry");
 	db.saveToFile("output.tsv");
 
 	std::cout << divider << std::endl;
@@ -308,12 +311,11 @@ void NotIMDB_Database::unitTest()
 	List<Movie>* movies = FileIO::buildMovieList(path);
 	db.createMovie(movies->getEntry(5));
 	db.displayMovieTableStats();
-	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
-	//db.displaySearchEngineState();	// BUGGED
+	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");*/
+	db.displaySearchEngineState();	// BUGGED
 	system("pause");
 }
 
-NotIMDB_Database::~NotIMDB_Database() {}
 
 bool NotIMDB_Database::loadFromFile(std::string path)
 {
