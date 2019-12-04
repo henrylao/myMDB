@@ -11,7 +11,7 @@ private:
 	BinaryNode* __rightChild;
 public:
 	//-----------------------------
-	// CONSKRUCKORS
+	// CONSTRUCTORS
 	//-----------------------------
 	// default constructor
 	BinaryNode<K, V>();
@@ -21,7 +21,7 @@ public:
 	// init with item with with child nodes
 	BinaryNode<K, V>(const K& key, BinaryNode<K, V>* t_left_child, BinaryNode<K, V>* t_right_child);
 	//-----------------------------
-	// GEKKERS
+	// GETTERS
 	//-----------------------------
 	/* Get the item stored in the calling node
 	@pre None

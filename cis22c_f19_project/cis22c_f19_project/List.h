@@ -27,7 +27,6 @@ public:
 	/** Gets the current number of entries in this list.
 	@return The integer number of entries currently in the list. */
 	int getLength() const { return __list->size(); }
-
 	//----------------------------------------------------
 	// Mutators Section
 	//----------------------------------------------------

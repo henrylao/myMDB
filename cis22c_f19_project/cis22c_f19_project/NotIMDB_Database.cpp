@@ -1,5 +1,6 @@
 #include "NotIMDB_Database.h"
 #include "GUI.h"
+#include "SortAlgos.h"
 
 void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 {
@@ -11,7 +12,7 @@ void NotIMDB_Database::__loadMovies(List<Movie>* movies)
 		newMovie = movies->getEntry(i);
 
 		// preprocess the key
-		std::string key = newMovie.getTitle();
+		std::string key = newMovie.getTitle() + " " + newMovie.getYearReleased();
 		key = StringUtil::lowercase(StringUtil::strip(key));	// remove whitespace and turn into lowercase
 		key = StringUtil::replace(key, " ", "_");
 		// add to the table
@@ -223,7 +224,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 	}
 }
 
-List<Movie> NotIMDB_Database::__getKeywordWeightedMovies(const std::string & searchEntry) const
+List<Movie>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & searchEntry) const
 {
 	// process search entry
 	std::string processSearchEntry = __processSearchEntry(searchEntry);
@@ -231,7 +232,7 @@ List<Movie> NotIMDB_Database::__getKeywordWeightedMovies(const std::string & sea
 	HashTable<int> weightedMovieTitles;
 	// tokenize the processed search entry
 	List<std::string>* keywords = StringUtil::split(processSearchEntry, "_");
-
+	List<Movie>* sortedByWeightMovies = new List<Movie>();
 	// variables for accessing table of BSTs
 	std::string keyword;
 	int SIZE = keywords->getLength();
@@ -243,38 +244,70 @@ List<Movie> NotIMDB_Database::__getKeywordWeightedMovies(const std::string & sea
 		List<Movie> moviesByKeyword;
 		keyword = keywords->getEntry(i);
 		firstCharOfKeyword = std::string(1, keyword[0]);
-		// get movies of the asociated keyword-key from the BST
-		//moviesByKeyword = __searchEngineBST[firstCharOfKeyword].getValues(keyword);
-		BinarySearchTree<std::string, Movie>* keywordTree = (__searchEngineBST->get(firstCharOfKeyword));
-		// DEBUG
-		for (int i = 0; i < keywordTree->getValues(keyword)->getLength(); i++)
-		{
-			std::cout << *keywordTree->getValues(keyword) << std::endl;
-			moviesByKeyword.append(keywordTree->getValues(keyword)->getEntry(i));
-		}
-		//.getValues(keyword) << std::endl;
-		int MBK_SIZE = moviesByKeyword.getLength();
-		// loop through the list of values from
-		for (int j = 0; j < MBK_SIZE; j++)
-		{
-			// create the processedMovieName
-			std::string processedMovieName = moviesByKeyword.getEntry(j).getTitle() 
-				+ " " + moviesByKeyword.getEntry(j).getYearReleased();
-			try {
-				processedMovieName = __processSearchEntry(processedMovieName);
-				// if an associated weight exists for the movie increment by 1
-				int found = weightedMovieTitles[processedMovieName];
-				weightedMovieTitles[processedMovieName] += 1;
-			}
-			// processed movie title does not exist in the table of weighted movies
-			catch (const CustomException& e)
+		// verified key case
+		try {
+			std::string keyFound = __searchEngineBST->get(firstCharOfKeyword)->getKey(keyword);
+			BinarySearchTree<std::string, Movie>* keywordTree = (__searchEngineBST->get(firstCharOfKeyword));
+			// DEBUG
+			for (int i = 0; i < keywordTree->getValues(keyword)->getLength(); i++)
 			{
-				weightedMovieTitles.add(processedMovieName, 1);
+				//std::cout << *keywordTree->getValues(keyword) << std::endl;
+				moviesByKeyword.append(keywordTree->getValues(keyword)->getEntry(i));
+			}
+			//.getValues(keyword) << std::endl;
+			int MBK_SIZE = moviesByKeyword.getLength();
+			// loop through the list of values from
+			for (int j = 0; j < MBK_SIZE; j++)
+			{
+				// create the processedMovieName
+				std::string processedMovieName = moviesByKeyword.getEntry(j).getTitle()
+					+ " " + moviesByKeyword.getEntry(j).getYearReleased();
+				try {
+					processedMovieName = __processSearchEntry(processedMovieName);
+					// if an associated weight exists for the movie increment by 1
+					int found = weightedMovieTitles[processedMovieName];
+					weightedMovieTitles[processedMovieName] += 1;
+				}
+				// processed movie title does not exist in the table of weighted movies
+				catch (const CustomException& e)
+				{
+					weightedMovieTitles.add(processedMovieName, 1);
+				}
 			}
 		}
+		// key not found in any node of tree
+		catch (const NotFoundException& e)
+		{
+			// do nothing
+		}
+		
 	}
+	// build the arry of movies sorted by their dictionary value (weight) here
+	size_t WMT_SIZE = weightedMovieTitles.size();
+	Pair<Movie, int>** weightMoviesArr = new Pair<Movie, int>*[WMT_SIZE];
+
+	List<std::string> WMT_KEYS = weightedMovieTitles.keys();
+	for (size_t i = 0; i < WMT_SIZE; i++)
+	{
+		std::string key = WMT_KEYS.getEntry(i);
+		weightMoviesArr[i] = new Pair<Movie, int>(__movieDB[key], weightedMovieTitles.get(key));
+		// movies are created in ascending order
+	}
+
+	SortUtil::quickSort<Pair<Movie,int>>(weightMoviesArr, 0, WMT_SIZE);
 	std::cout << weightedMovieTitles << std::endl;
-	return List<Movie>();
+	for (size_t i = 0; i < WMT_SIZE; i++)
+	{
+		std::cout << weightMoviesArr[i]->getValue() << std::endl;
+		// movies are created in ascending order
+	}
+	// empty dictionary means no matches found in the table of bsts
+	if (weightedMovieTitles.keys().getLength() == 0)
+		return new List<Movie>();
+	// unpack into a list start from the end of the ascending-sort list of pairs
+	// mem clean
+	return sortedByWeightMovies;
+	//std::cout << weightedMovieTitles << std::endl;
 }
 
 std::string NotIMDB_Database::__processSearchEntry(const std::string & query) const
@@ -286,7 +319,16 @@ std::string NotIMDB_Database::__processSearchEntry(const std::string & query) co
 
 void NotIMDB_Database::testKeywordWeightedSearch(const std::string & searchEntry) const
 {
-	List<Movie> weightedMovies = __getKeywordWeightedMovies(searchEntry);
+	List<Movie>* weightedMovies = __getKeywordWeightedMovies(searchEntry);
+	if (weightedMovies->getLength() == 0)
+		std::cout << "There were no matches for your search\n";
+	else
+	{
+		int size = weightedMovies->getLength();
+		for (int i = 0; i < size; i++)
+			std::cout << weightedMovies->getEntry(i) << std::endl;
+	}
+	delete weightedMovies;
 }
 
 bool NotIMDB_Database::foundMovie(std::string key)
@@ -386,7 +428,9 @@ void NotIMDB_Database::unitTest()
 	//db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
 	//db.displaySearchEngineState();	// BUGGED
 	//db.testKeywordWeightedSearch("Miss");
-	db.testKeywordWeightedSearch("batman");
+	//db.testKeywordWeightedSearch("jerry");
+	db.displaySearchEngineState();
+
 	system("pause");
 }
 

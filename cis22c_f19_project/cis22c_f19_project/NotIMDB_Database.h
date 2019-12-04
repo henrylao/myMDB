@@ -1,10 +1,10 @@
-#pragma once
+#ifndef NOT_IMDB_DB_H
+#define NOT_IMDB_DB_H
 
 #include "FileIO.h"
-//#include "person.h"
 #include "HashTable.h"
 #include "list.h"
-//#include "binary_search_tree.h"
+#include "pair.h"
 #include "Movie.h"
 #include "stack.h"
 #include "BST_pair.h"
@@ -31,7 +31,11 @@ private:
 	op == 1 : editted title
 	op == 2 : editted year  */
 	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
-	List<Movie>			__getKeywordWeightedMovies(const std::string& searchEntry) const;
+	/* function for generating a list of movie titles weighted by their number of occurences within 
+	a keyword-node
+	
+	*/
+	List<Movie>*		__getKeywordWeightedMovies(const std::string& searchEntry) const;
 	/* Internal function for processing a search entry.
 	First strips the search entry string of whitespaces from the left and right.
 	Then, replaces any remaining whitespaces with an underscore: "_"
@@ -106,3 +110,4 @@ public:
 	void				displaySearchEngineState() const;
 	void				unitTest();
 };
+#endif // !NOT_IMDB_DB_H

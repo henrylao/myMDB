@@ -133,9 +133,11 @@
     <ClInclude Include="menu_dialog.h" />
     <ClInclude Include="Movie.h" />
     <ClInclude Include="NotFoundException.h" />
+    <ClInclude Include="pair.h" />
     <ClInclude Include="PrecondViolatedExcep.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="queue_interface.h" />
+    <ClInclude Include="SortAlgos.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="stack_interface.h" />
     <ClInclude Include="StringUtil.h" />
