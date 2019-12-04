@@ -92,7 +92,7 @@ public:
 	bool				is_empty() const;
 	/** Gets the current number of entries in this list.
 	@return The integer number of entries currently in the list. */
-	int					size() const;
+	size_t					size() const;
 	/** Gets the entry at the given position in this list.
 	@pre 1 <= position <= getLength().
 	@post The desired entry has been returned.
@@ -258,7 +258,7 @@ void LinkedList<T>::clear() {
 
 // returns the number of entries in the linked list
 template <class T>
-int LinkedList<T>::size() const {
+size_t LinkedList<T>::size() const {
 	return __list.size();
 }
 

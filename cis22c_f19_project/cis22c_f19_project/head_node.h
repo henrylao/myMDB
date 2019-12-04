@@ -17,7 +17,7 @@ public:
 	LinkNode<T>* get_last() const;
 	void set_last(LinkNode<T>* t_tail);
 
-	int size() const;
+	size_t size() const;
 	void set_size(int  t_size);
 
 private:
@@ -64,7 +64,7 @@ void HeadNode<T>::set_last(LinkNode<T>* t_tail) {
 }
 
 template <class T>
-int HeadNode<T>::size() const {
+size_t HeadNode<T>::size() const {
 	return m_size;
 }
 
