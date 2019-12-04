@@ -30,7 +30,7 @@ protected:
 	BinaryNode<K, V>* removeLeftmostNode(BinaryNode<K, V>* subNode, K& t_inorder_successor);
 	// Returns a pointer to the node containing the given value,
 	// or nullptr if not found.
-	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& targeKey) const;
+	BinaryNode<K, V>* findNode(BinaryNode<K, V>* t_tree_ptr, const K& targetKey) const;
 	// call on root or parent tree to find the leftmost node
 	BinaryNode<K, V>* getLeftmostNode(BinaryNode<K, V>* t_root);
 	void printSingleLevel(BinaryNode<K,V>* pNode);
@@ -322,7 +322,7 @@ BinaryNode<K, V>* BinarySearchTree<K, V>::removeNode(BinaryNode<K, V>* t_node_to
 template <class K, class V>
 BinaryNode<K, V>* BinarySearchTree<K, V>::removeValue(
 	BinaryNode<K, V>* subNode,
-	const K& targeKey,
+	const K& targetKey,
 	const V& targetVal,
 	bool& t_success)
 {
@@ -333,17 +333,17 @@ BinaryNode<K, V>* BinarySearchTree<K, V>::removeValue(
 		return nullptr;
 	}
 	// target found case
-	else if (subNode->getKey() == targeKey )
+	else if (subNode->getKey() == targetKey )
 	{
 		subNode->removeByValue(targetVal);
 		t_success = true;
 		return subNode;
 	}
 	// handle left of tree case
-	else if (subNode->getKey() > targeKey)
+	else if (subNode->getKey() > targetKey)
 	{
 		BinaryNode<K, V>* temp_node_ptr = nullptr;
-		temp_node_ptr = this->removeValue(subNode->getLeftChildPtr(), targeKey, targetVal, t_success);
+		temp_node_ptr = this->removeValue(subNode->getLeftChildPtr(), targetKey, targetVal, t_success);
 		subNode->setLeftChildPtr(temp_node_ptr);
 		return subNode;
 	}
@@ -351,7 +351,7 @@ BinaryNode<K, V>* BinarySearchTree<K, V>::removeValue(
 	else
 	{
 		BinaryNode<K, V>* temp_node_ptr = nullptr;
-		temp_node_ptr = this->removeValue(subNode->getRightChildPtr(), targeKey, targetVal, t_success);
+		temp_node_ptr = this->removeValue(subNode->getRightChildPtr(), targetKey, targetVal, t_success);
 		subNode->setRightChildPtr(temp_node_ptr);
 		return subNode;
 	}
@@ -359,10 +359,10 @@ BinaryNode<K, V>* BinarySearchTree<K, V>::removeValue(
 template <class K, class V>
 BinaryNode<K, V>* BinarySearchTree<K, V>::findNode(
 	BinaryNode<K, V>* t_tree_ptr,
-	const K& targeKey) const
+	const K& targetKey) const
 {
 	bool success = false;
-	BinaryNode<K, V>* found_ptr = BinaryNodeTree<K, V>::findNode(t_tree_ptr, targeKey, success);
+	BinaryNode<K, V>* found_ptr = BinaryNodeTree<K, V>::findNode(t_tree_ptr, targetKey, success);
 	return found_ptr;
 }
 template <class K, class V>

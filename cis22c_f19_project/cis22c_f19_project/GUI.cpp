@@ -63,6 +63,7 @@ bool GUI::isValidYear(string year) {
 	}
 	return true;
 }
+<<<<<<< Updated upstream
 void GUI::UI_search(const NotIMDB_Database& db) {
 	std::string in;
 	int choice = GUI::menu_prompt("How do you want to search movies by?", GUI::menu_search, 6);
@@ -141,6 +142,86 @@ void GUI::UI_search(const NotIMDB_Database& db) {
 			return;
 		}
 	}
+=======
+
+void GUI::UI_search(const NotIMDB_Database &db)
+{
+	bool doneSearching = false;
+	int choice;
+	while (!doneSearching)
+	{
+		std::string user_in;
+		std::cout << "Please enter any keywords related to the movie youd like to search" << std::endl;
+		getline(std::cin, user_in);
+		db.readMovie(user_in);
+		choice = menu_prompt("What would you like to do?", menu_continue_search, 2);
+		if (choice == 2)
+			break;
+	}
+
+	//int choice = GUI::menu_prompt("How do you want to search movies by?", GUI::menu_search, 6);
+	//switch (choice)
+	//{
+	//case 1:
+	//{
+	//	std::cout << "Please insert the title of the movie you want to search: " << std::endl;
+	//	std::getline(std::cin, in);
+	//	UI_search_by_title(in, db);
+	//	break;
+	//}
+	//case 2:
+	//{
+	//	std::cout << "Please insert the release year of the movie you want to search: " << std::endl;
+	//	std::getline(std::cin, in);
+	//	UI_search_by_year(std::stoi(in), db);
+	//	break;
+	//}
+	//case 3:
+	//{
+	//	bool b = false;
+	//	do
+	//	{
+	//		try
+	//		{
+	//			std::cout << "Please insert the ratings of the movie you want to search\n";
+	//			std::cout << "(Should between 0.0 ~ 10.0): " << std::endl;
+	//			std::getline(std::cin, in);
+	//			if (std::stod(in) > 10.0 || std::stod(in) < 0.0)
+	//				throw CustomException("Error: invalid movie rating");;
+	//			UI_search_by_ratings(std::stod(in), db);
+	//			b = true;
+	//		}
+	//		catch(const CustomException& e)
+	//		{
+	//			std::cout << e.getMessage() << std::endl;
+	//		}
+	//	} while (!b);
+	//	break;
+	//}
+	//case 4:
+	//{
+	//	bool b = false;
+	//	do
+	//	{
+	//		try
+	//		{
+	//			std::cout << "Please insert the genre of the movie you want to search: " << std::endl;
+	//			std::getline(std::cin, in);
+	//			// TODO: genre validation
+	//			UI_search_by_genre(in, db);
+	//			b = true;
+	//		}
+	//		catch(const CustomException& e)
+	//		{
+	//			std::cout << e.getMessage() << std::endl;
+	//		}
+	//	} while (!b);
+	//	break;
+	//}
+	//default:
+	//	break;
+	//}
+>>>>>>> Stashed changes
 }
 
 void GUI::UI_add(NotIMDB_Database & db)
@@ -272,10 +353,16 @@ void GUI::UI_remove(NotIMDB_Database& db) {
 		}
 		else
 		{
+<<<<<<< Updated upstream
 			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
 			if (tryAgain == 1)
 				continue;
 			else
+=======
+			std::cout << e.getMessage() << std::endl;
+			int tryAgain = menu_prompt("Would you like to try again?", menu_yes_no, 2);
+			if (tryAgain != 1)
+>>>>>>> Stashed changes
 				return;
 		}
 	}
@@ -286,10 +373,17 @@ void GUI::promptLoadFile(NotIMDB_Database& db)
 {
 	int try_again;
 	bool done_file_load = false;
+<<<<<<< Updated upstream
 	string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
 	string infile_prompt = "Enter the file path for an input file\nExample: C:\\data\\input.txt\nHit enter to use the default input.txt file in this program's directory\n";
 	string user_in = "";
 	string defaultPath = "InputData.txt";
+=======
+	//std::string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
+	std::string infile_prompt = "Enter the file path for an input file .tsv file\nExample: C:\\data\\input.txt\nHit enter to use the default input.txt file in this program's directory\n";
+	std::string user_in = "";
+	std::string defaultPath = "title_basics_cleaned_final_trimmed_200.tsv";
+>>>>>>> Stashed changes
 	ifstream infile;
 
 	// prompt file path loop

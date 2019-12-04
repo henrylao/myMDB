@@ -30,11 +30,13 @@ private:
 	update the search engine bst when edits are made to movies via removal
 	op == 1 : editted title
 	op == 2 : editted year  */
-	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
-	/* function for generating a list of movie titles weighted by their number of occurences within 
-	a keyword-node
-	
-	*/
+	Movie				__updateSearchEngineBST(
+		const std::string edittedAttribute, 
+		 Movie* movieToEdit, int op);
+	/* function for generating a list of movie titles weighted by their occurences within 
+	the table of binary trees containining keywords associated with movies
+	@param any search entry
+	@return pointer to a list of movie pointers */
 	List<Movie*>*		__getKeywordWeightedMovies(const std::string& searchEntry) const;
 	/* Internal function for processing a search entry.
 	First strips the search entry string of whitespaces from the left and right.
@@ -42,6 +44,7 @@ private:
 	@param any search entry of either digits or alphabet characters
 	@return a processed string of the form == "example3232_processed!_str" */
 	std::string			__processSearchEntry(const std::string& searchEntry) const;
+	void				__searchEngineDeletionHandler( Movie* movieToDelete);
 
 public:
 	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
@@ -52,6 +55,7 @@ public:
 		__deletedMovies = new Stack<Movie*>();
 		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>*>(1000);
 	}
+<<<<<<< Updated upstream
 	virtual ~NotIMDB_Database() {
 		std::string key;
 		List<std::string> keys = __searchEngineBST->keys();
@@ -64,6 +68,9 @@ public:
 		// delete the table
 		delete __searchEngineBST;
 	}
+=======
+	virtual ~NotIMDB_Database();
+>>>>>>> Stashed changes
 	// ------------------------------------------
 	// Create/FileIO Section
 	// ------------------------------------------
@@ -104,7 +111,14 @@ public:
 	// Read Section
 	// ------------------------------------------
 	void				displayMovieTableStats() const;
+<<<<<<< Updated upstream
 	bool				readMovie(std::string key) const;
+=======
+	/* Function handles string cleaning to and processing with 
+	the keyword search engine. Displayed is a list of movies 
+	in order of relevance to the userEntry */
+	List<Movie>* 		readMovie(std::string key) const;
+>>>>>>> Stashed changes
 	void				displaySearchEngineState() const;
 	void				unitTest();
 };

@@ -154,6 +154,7 @@
     <ClCompile Include="Movie.cpp" />
     <ClCompile Include="NotFoundException.cpp" />
     <ClCompile Include="PrecondViolatedExcep.cpp" />
+    <ClCompile Include="SortUtil.cpp" />
     <ClCompile Include="StringUtil.cpp" />
     <ClCompile Include="NotIMDB_Database.cpp" />
   </ItemGroup>

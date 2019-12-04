@@ -162,6 +162,9 @@
     <ClCompile Include="CustomException.cpp">
       <Filter>Exception</Filter>
     </ClCompile>
+    <ClCompile Include="SortUtil.cpp">
+      <Filter>Util\SortUtil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="primes2.txt">
