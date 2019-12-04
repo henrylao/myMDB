@@ -45,7 +45,7 @@ private:
 
 public:
 	bool				canUndoDelete() const {
-		return (__deletedMovies->size() > 0 ? true : false;);
+		return (__deletedMovies->size() > 0 ? true : false);
 	}
 	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
 	std::string			processSearchEntry(const std::string& searchEntry) const;
