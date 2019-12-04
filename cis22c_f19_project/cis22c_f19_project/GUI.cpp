@@ -73,7 +73,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 		else {
 			List<Movie>* sortedMovies = db.readMovie(user_in, exactMatch);
 			const int START = 0;
-			const int END = sortedMovies->getLength();
+			const int MSIZE = sortedMovies->getLength();
 			if (sortedMovies->getLength() == 0)
 			{
 				int choice;
@@ -120,20 +120,20 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							{
 							// view next set
 							case 1:
-								for (int i = currentIndex; i < currentIndex + 3 && currentIndex + 3 < END; i++)
+								for (int i = currentIndex; i < currentIndex + 3 && currentIndex + 3 < MSIZE; i++)
 								{
 									std::cout << sortedMovies->getEntry(currentIndex);
 									std::cout << divider << endl;
 								}
 								currentIndex += 3;
-								if (currentIndex > END)
+								if (currentIndex > MSIZE)
 								{
-									currentIndex = END;
+									currentIndex = MSIZE;
 								}
 								break;
 							// view previous set 
 							case 2:
-								for (int i = currentIndex - 3; i > START && i < END && i < currentIndex; i++)
+								for (int i = currentIndex - 3; i > START && i < MSIZE && i < currentIndex; i++)
 								{
 									std::cout << sortedMovies->getEntry(i);
 									std::cout << divider << endl;
@@ -157,10 +157,10 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							// go to the end of the list showing the last few results ~3/4
 							case 4:
 							{
-								currentIndex = END - 4;
+								currentIndex = MSIZE - 4;
 								if (currentIndex < 0)
 									currentIndex = 0;
-								for (currentIndex; currentIndex < END; currentIndex++)
+								for (currentIndex; currentIndex < MSIZE; currentIndex++)
 								{
 									std::cout << sortedMovies->getEntry(currentIndex);
 									std::cout << divider << endl;
@@ -448,15 +448,42 @@ void GUI::UI_edit(NotIMDB_Database &db)
 {
 	bool exactMatchFound = false;
 	bool b = false;
+	bool movieSelectedFromList = false;
+	// input required to be atleast 1 character long
+	bool goodInput = false;	
+	std::string selectedMovieTitle = "";
 	do
 	{
+		while (!goodInput)
+		{
+			if (!movieSelectedFromList) {
+				selectedMovieTitle = "";
+				std::cout << "Enter the title and year of a movie you want to edit or a keyword of the movie: ";
+				std::getline(std::cin, selectedMovieTitle);
+				selectedMovieTitle = StringUtil::strip(selectedMovieTitle);
+				if (!(selectedMovieTitle.length() > 0))
+				{
+					std::cout << "I can't process your input" << std::endl;
+					int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+					goodInput = false;
+					if (tryAgain != 1)
+					{
+						return;
+					}
+				}
+				else
+					break;
+			}
+			else
+				break;
+		}
 		try
 		{
-			std::string selectedMovieTitle;
-			std::cout << "Enter the title of the movie you want to edit: ";
-			std::getline(std::cin, selectedMovieTitle);
+			// clean query 
+			selectedMovieTitle = db.processSearchEntry(selectedMovieTitle);
 			if (!(db.foundMovie(selectedMovieTitle)))
 			{
+				movieSelectedFromList = false;
 				throw CustomException("Error: movie not found in database");
 			}
 			std::cout << std::endl << GUI::divider << std::endl;
@@ -565,13 +592,27 @@ void GUI::UI_edit(NotIMDB_Database &db)
 		}
 		catch (const CustomException& e)
 		{
-			std::cout << e.getMessage() << std::endl;
-			int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
-			if (tryAgain != 1)
-			{
+			selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
+			if (selectedMovieTitle.length() == 0 && b == true)
 				return;
+			// no potential movies found
+			else if (selectedMovieTitle.length() == 0 && b != true)
+			{
+				std::cout << e.getMessage() << std::endl;
+				int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+				goodInput = false;
+				if (tryAgain != 1)
+				{
+					return;
+				}
 			}
+			else {
+				// movie was chosen from the list therefore don't reprompt
+				movieSelectedFromList = true;
+			}
+			
 		}
+
 	} while (!b);
 }
 
@@ -603,4 +644,76 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 			break;
 		}
 	} while (!b);
+}
+
+/* Allow user to select from a list of approximated matches
+@param db is the database of movies
+@param userIn is the users input to find approx matched movies 
+@param exit signify if the user wants to leave the edit section and go back to main menu 
+@return a raw string of a selected == "movie_title + <whitespace> + movie_year" */
+std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, const std::string& userIn, bool& exit)
+{
+	if (StringUtil::strip(userIn).length() < 1)
+	{
+		return "";
+	}
+	bool exactMatch = false;
+	List<Movie>* keywordMovies = db.readMovie(userIn, exactMatch);
+	bool doneSelecting = false;
+	exit = false;
+	const int START = 0;
+	const int MSIZE = keywordMovies->getLength();
+	// return nothing 
+	if (MSIZE == 0)
+		return "";
+	int choice;
+	int currentIndex = 0;
+	std::string menu_select_from_edit_menu[] =
+	{
+		"Movie Option 1", 
+		"Movie Option 2",
+		"Movie Option 3",
+		"Go back to the previous 3 movies",
+		"Move onto the next 3 movies",
+		"Return to the main menu"
+	};
+	// display 3 items at a time
+	while (!doneSelecting)
+	{
+		int optionNum = 1;
+		std::cout << divider << std::endl;
+		std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
+		//std::cout << std::endl;
+		//for (int i = currentIndex; i < currentIndex + 3 && i < MSIZE; i++)
+		//{
+		//	//std::cout << i % 4 << std::endl;
+		//	std::cout << "Option " << optionNum << ":\n";
+		//	std::cout << divider << std::endl;
+		//	std::cout << keywordMovies->getEntry(i) << std::endl;
+		//	std::cout << divider << std::endl;
+		//	optionNum++;
+		//}
+		//currentIndex = currentIndex + optionNum - 1;
+		//optionNum = 1;
+		//if (currentIndex > MSIZE)
+		//{
+		//	currentIndex = MSIZE - 3;
+		//}
+		choice = menu_prompt("What would you like to do?", menu_search_browse, 3);
+		// exit case 
+		switch(choice) {
+		// browse list of movies found
+		case 1:
+			break;
+		// return to the main search menu
+		case 2:
+			break;
+		// return the main menu
+		case 3:
+			exit = true;
+			return "";
+			break;
+		}
+	}
+
 }

@@ -41,11 +41,11 @@ private:
 	Then, replaces any remaining whitespaces with an underscore: "_"
 	@param any search entry of either digits or alphabet characters
 	@return a processed string of the form == "example3232_processed!_str" */
-	std::string			__processSearchEntry(const std::string& searchEntry) const;
 	void				__searchEngineDeletionHandler(Movie * movieToDelete);
 
 public:
 	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
+	std::string			processSearchEntry(const std::string& searchEntry) const;
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------

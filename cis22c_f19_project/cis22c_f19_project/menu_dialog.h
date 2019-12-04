@@ -74,6 +74,11 @@ namespace GUI {
 		"Exit to main menu"
 	};
 
+	const std::string menu_search_browse[] = {
+		"Browse the list of movies",
+		"Start a new search",
+		"Exit to the main menu"
+	};
 	const std::string menu_continue_search[] = {
 		"Continue searching",
 		"Return to main menu"

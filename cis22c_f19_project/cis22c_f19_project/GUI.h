@@ -25,5 +25,6 @@ namespace GUI
 	// Edit help funciton
 	void UI_edit(NotIMDB_Database & db);
 	void UI_run_application(NotIMDB_Database & db);
+	std::string UI_pick_from_potential_matches_to_edit(NotIMDB_Database& db, const std::string& userIn, bool& exit);
 }
 #endif
