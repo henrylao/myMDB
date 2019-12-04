@@ -96,3 +96,15 @@ bool StringUtil::containsAlpha(const std::string & data)
 
 
 
+std::string StringUtil::join(List<std::string>* target, std::string delim) {
+	unsigned int i, n;
+	std::string result = "";
+	n = target->getLength();
+	for (i = 0; i < n; i++) {
+		result += (*target)[i];
+		if (i < n - 1) {
+			result += delim;
+		}
+	}
+	return result;
+}

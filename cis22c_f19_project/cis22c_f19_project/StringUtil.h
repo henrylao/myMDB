@@ -29,6 +29,7 @@ namespace StringUtil
 	@post none
 	@return true if the string contains a character of the alphabet else false */
 	bool					containsAlpha(const std::string& data);
+	std::string join(List<std::string>* target, std::string delim);
 };
 #endif // ! _STRING_UTIL
 
