@@ -60,14 +60,14 @@ void GUI::UI_search(const NotIMDB_Database &db)
 	{
 		std::cout << "Please insert the title of the movie you want to search: " << std::endl;
 		std::getline(std::cin, in);
-		UI_search_by_title(in /*const database& database*/);
+		UI_search_by_title(in, db);
 		break;
 	}
 	case 2:
 	{
 		std::cout << "Please insert the release year of the movie you want to search: " << std::endl;
 		std::getline(std::cin, in);
-		UI_search_by_year(std::stoi(in) /*const database& database*/);
+		UI_search_by_year(std::stoi(in), db);
 		break;
 	}
 	case 3:
@@ -82,7 +82,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 				std::getline(std::cin, in);
 				if (std::stod(in) > 10.0 || std::stod(in) < 0.0)
 					throw CustomException("Error: invalid movie rating");;
-				UI_search_by_ratings(std::stod(in) /*const database& database*/);
+				UI_search_by_ratings(std::stod(in), db);
 				b = true;
 			}
 			catch(const CustomException& e)
@@ -102,7 +102,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 				std::cout << "Please insert the genre of the movie you want to search: " << std::endl;
 				std::getline(std::cin, in);
 				// TODO: genre validation
-				UI_search_by_genre(in /*const database& database*/);
+				UI_search_by_genre(in, db);
 				b = true;
 			}
 			catch(const CustomException& e)
@@ -195,7 +195,6 @@ void GUI::UI_remove(NotIMDB_Database &db)
 					}
 				}
 			}
-
 			b = true;
 		}
 		catch (const CustomException& e)
@@ -208,6 +207,7 @@ void GUI::UI_remove(NotIMDB_Database &db)
 	} while (!b);
 }
 
+// TODO
 void GUI::promptLoadFile(NotIMDB_Database &db)
 {
 	int try_again;
@@ -217,191 +217,112 @@ void GUI::promptLoadFile(NotIMDB_Database &db)
 	std::string user_in = "";
 	std::string defaultPath = "InputData.txt";
 	ifstream infile;
-
-	// prompt file path loop
-	while (!done_file_load)
-	{
-		std::string input;
-		bool found = false;
-
-		std::cout << "Please insert the title of the movie you want to remove: " << std::endl;
-		std::getline(std::cin, input);
-
-		//TODO:
-		//Search the obj
-		//If found, set boolean found = true
-
-		if (!found)
-		{
-			std::cout << "The movie you want to remove does not exist!" << std::endl;
-			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
-			if (tryAgain == 1)
-				continue;
-			else
-				return;
-		}
-		std::cout << "This is the movie you want to remove:" << std::endl;
-		// TODO: Display the obj
-
-		int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
-		if (confirm == 1)
-		{
-			//TODO: Remove obj from database
-
-			std::cout << "Deleted successfully!" << std::endl;
-			int tryAgain = menu_prompt("Would you like to insert again?", menu_continue_remove, 2);
-			if (tryAgain == 1)
-				continue;
-			else
-				return;
-		}
-		else
-		{
-			int tryAgain = menu_prompt("Would you like to insert again?", menu_yes_no, 2);
-			if (tryAgain == 1)
-				continue;
-			else
-				return;
-		}
-	}
 }
 
 void GUI::UI_edit(NotIMDB_Database &db)
 {
-	while (1)
+	bool b = false;
+	do
 	{
-		std::string input;
-		bool found = false;
-
-		std::cout << "Please insert the title of the movie you want to edit: " << std::endl;
-		std::getline(std::cin, input);
-
-		//TODO:
-		//Search the obj
-		//If found, set boolean found = true
-
-		if (!found)
+		try
 		{
-			std::cout << "The movie you want to remove does not exist!" << std::endl;
-			int tryAgain = GUI::menu_prompt("Would you like to insert again?", menu_yes_no, 2);
-			if (tryAgain == 1)
-				continue;
-			else
-				return;
-		}
-		std::cout << "This is the movie you want to edit:" << std::endl;
-		// TODO: Display the obj
-
-		std::string tmp;
-		std::string in_title;
-		int in_year;
-		double in_rate;
-		List<std::string> in_g;
-		List<std::string> in_c;
-
-		//Insert title
-		std::cout << "Please insert the title you want to change to: " << std::endl;
-		std::getline(std::cin, in_title);
-		std::cout << std::endl;
-
-		//Insert release year
-		while (1)
-		{
-			try
+			std::string selectedMovieTitle;
+			std::cout << "Enter the title of the movie you want to edit: ";
+			std::getline(std::cin, selectedMovieTitle);
+			if (!(db.foundMovie(selectedMovieTitle)))
 			{
-				std::cout << "Please insert the release year you want to change to(Should be less than 2019): " << std::endl;
-				std::getline(std::cin, tmp);
-				if (std::stoi(tmp) > 2019)
-					throw 0;
+				throw CustomException("Error: movie not found in database");
+			}
+			std::cout << std::endl << GUI::divider << std::endl;
+			db.readMovie(selectedMovieTitle);
+			std::cout << std::endl << GUI::divider << std::endl;
+
+			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 6);
+			switch (attribute)
+			{
+			case 1:
+			{
+				std::string newMovieTitle;
+				std::cout << "Enter the new title of the movie: ";
+				std::getline(std::cin, newMovieTitle);
+				std::cout << std::endl;
+				if (db.updateMovieName(selectedMovieTitle, newMovieTitle))
+					std::cout << "Edited successfully!" << std::endl;
+				else
+					throw CustomException("Error while updating title: " + selectedMovieTitle);
 				break;
 			}
-			catch (...)
+			case 2:
 			{
-				std::cout << "Year date should less than 2019!" << std::endl;
-			}
-		}
-		in_year = std::stoi(tmp);
-		std::cout << std::endl;
-
-		//Insert ratings
-		while (1)
-		{
-			try
-			{
-				std::cout << "Please insert the ratings you want to change to(Should between 0.0 ~ 10.0): " << std::endl;
-				std::getline(std::cin, tmp);
-				if (std::stod(tmp) < 0.0 || std::stod(tmp) > 10.0)
-					throw 0;
+				// TODO: year validation
+				int newReleaseYear;
+				std::cout << "Enter the new release year of the movie: ";
+				cin >> newReleaseYear;
+				std::cout << std::endl;
+				if (db.updateMovieYear(selectedMovieTitle, std::to_string(newReleaseYear)))
+					std::cout << "Edited successfully!" << std::endl;
+				else
+					throw CustomException("Error while updating year: " + selectedMovieTitle);
 				break;
 			}
-			catch (...)
+			case 3:
 			{
-				std::cout << "Ratings should between 0.0 ~ 10.0" << std::endl;
-			}
-		}
-		in_rate = std::stod(tmp);
-		std::cout << std::endl;
-
-		//Insert genres
-		while (1)
-		{
-			try
-			{
-				std::cout << "Please insert the genre of the the movie you want to change to(Press enter to stop inserting): " << std::endl;
-				std::getline(std::cin, tmp);
-				if (tmp == "")
-					break;
-				//TODO:
-				//if (invalid genre)
-				//	throw 0;
-				in_g.append(tmp);
-			}
-			catch (...)
-			{
-				std::cout << "The genre you insert does not exist!" << std::endl;
-			}
-		}
-		std::cout << std::endl;
-
-		//Insert cast
-		while (1)
-		{
-			std::cout << "Please insert the cast you want to change to(Press enter to stop inserting): " << std::endl;
-			std::getline(std::cin, tmp);
-			if (tmp == "")
+				int newID;
+				std::cout << "Enter the new ID of the movie: ";
+				cin >> newID;
+				std::cout << std::endl;
+				if (db.updateMovieID(selectedMovieTitle, std::to_string(newID)))
+					std::cout << "Edited successfully!" << std::endl;
+				else
+					throw CustomException("Error while updating ID: " + selectedMovieTitle);
 				break;
-			in_c.append(tmp);
+			}
+			case 4:
+			{
+				std::string newRuntime;
+				std::cout << "Enter the new runtime of the movie: ";
+				std::getline(std::cin, newRuntime);
+				std::cout << std::endl;
+				if (db.updateMovieRuntime(selectedMovieTitle, newRuntime))
+					std::cout << "Edited successfully!" << std::endl;
+				else
+					throw CustomException("Error while updating runtime: " + selectedMovieTitle);
+				break;
+			}
+			case 5:
+			{
+				std::string newGenre;
+				std::cout << "Enter the new genre of the movie: ";
+				std::getline(std::cin, newGenre);
+				std::cout << std::endl;
+				if (db.updateMovieGenre(selectedMovieTitle, newGenre, 1))
+					std::cout << "Edited successfully!" << std::endl;
+				else
+					throw CustomException("Error while updating genre: " + selectedMovieTitle);
+				break;
+			}
+			case 6:
+			{
+				// TODO: rating validation
+				break;
+			}
+			default:
+				break;
+			}
+
+			b = true;
 		}
-		std::cout << std::endl;
-
-		//TODO: Edit movie obj
-
-		std::cout << "This is the movie you want change to: " << std::endl;
-		//TODO: Display obj
-
-		int confirm = GUI::menu_prompt("Are you sure you want to edit this movie?", menu_yes_no, 2);
-		if (confirm == 1)
+		catch (const CustomException& e)
 		{
-			//TODO: Remove obj from database
-
-			std::cout << "Edited successfully!" << std::endl;
-			int tryAgain = GUI::menu_prompt("Would you like to edit again?", menu_continue_remove, 2);
-			if (tryAgain == 1)
-				continue;
-			else
+			std::cout << e.getMessage() << std::endl;
+			int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+			if (tryAgain != 1)
+			{
 				return;
+			}
 		}
-		else
-		{
-			int tryAgain = GUI::menu_prompt("Would you like to edit again?", menu_yes_no, 2);
-			if (tryAgain == 1)
-				continue;
-			else
-				return;
-		}
-	}
+	} while (!b);
 }
-
 
 void GUI::UI_run_application()
 {
@@ -435,27 +356,22 @@ void GUI::UI_run_application()
 	//}
 }
 
-void GUI::UI_search_by_title(std::string in_title /*,const database& database*/)
+void GUI::UI_search_by_title(std::string in_title, const NotIMDB_Database& db)
 {
 	//TODO: Search by title
 }
 
-void GUI::UI_search_by_year(int in_year /*,const database& database*/)
+void GUI::UI_search_by_year(int in_year, const NotIMDB_Database& db)
 {
 	//TODO: Search by year
 }
 
-void GUI::UI_search_by_ratings(double in_ratings /*,const database& database*/)
+void GUI::UI_search_by_ratings(double in_ratings, const NotIMDB_Database& db)
 {
 	//TODO: Search by ratings
 }
 
-void GUI::UI_search_by_genre(std::string in_genre /*,const database& database*/)
+void GUI::UI_search_by_genre(std::string in_genre, const NotIMDB_Database& db)
 {
 	//TODO: Search by genre
-}
-
-void GUI::UI_search_by_cast(std::string in_genre /*,const database& database*/)
-{
-	//TODO: Search by cast
 }

@@ -18,11 +18,10 @@ namespace GUI
 	void UI_search(const NotIMDB_Database & db);
 	// Search help funciton
 	//void UI_search(/*const database& database*/);
-	void UI_search_by_title(std::string in_title/*,const database& database*/);
-	void UI_search_by_year(int in_year/*,const database& database*/);
-	void UI_search_by_ratings(double in_ratings/*,const database& database*/);
-	void UI_search_by_genre(std::string in_genre/*,const database& database*/);
-	void UI_search_by_cast(std::string in_genre/*,const database& database*/);	
+	void UI_search_by_title(std::string in_title, const NotIMDB_Database& db);
+	void UI_search_by_year(int in_year, const NotIMDB_Database& db);
+	void UI_search_by_ratings(double in_ratings, const NotIMDB_Database& db);
+	void UI_search_by_genre(std::string in_genre, const NotIMDB_Database& db);
 	// Add help funciton
 	void UI_add(NotIMDB_Database& db);
 	// Remove help funciton
@@ -30,6 +29,7 @@ namespace GUI
 	void promptLoadFile(NotIMDB_Database & db);
 	// Edit help funciton
 	void UI_edit(NotIMDB_Database & db);
+	void UI_edit_old(NotIMDB_Database & db);
 	void UI_run_application();
 }
 #endif
