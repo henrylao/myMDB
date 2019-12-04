@@ -50,10 +50,10 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 			firstCharOfKeyword = std::string(1, keyword[0]);
 			try {
 				// check in the dictionary
-				found = (*__searchEngineBST)[firstCharOfKeyword];
+				found = *(*__searchEngineBST)[firstCharOfKeyword];
 				std::string keywordFound = found.getKey(keyword);
 				// simply add if keywordFound else the exception caught will signify to add the new keyword
-				(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword, newMovie);
+				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, newMovie);
 				//found.printBreadthFirst();	// DBEUG
 
 			}
@@ -63,9 +63,9 @@ void NotIMDB_Database::__buildMovieBST(List<Movie>* movies)
 				// create a new bst such that the first character of the keyword denotes
 				// a key to a tree in the table of bst
 				__searchEngineBST->add(firstCharOfKeyword,
-					BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
-				(*__searchEngineBST)[firstCharOfKeyword].addKey(keyword);
-				(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword,newMovie);
+					new BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
+				(*__searchEngineBST)[firstCharOfKeyword]->addKey(keyword);
+				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword,newMovie);
 				//found.printBreadthFirst();	// DBEUG
 
 			}
@@ -113,7 +113,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 	if (op < 1)
 		throw CustomException("Error: Invalid Update Operation Value");
 
-	BinarySearchTree<std::string, Movie> found;
+	BinarySearchTree<std::string, Movie>* found = nullptr;
 	List<std::string>* keywords;
 	std::string keyword, keywords_preprocess, firstCharOfKeyword;
 
@@ -156,7 +156,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 			// check for existence in the dictionary
 			found = (*__searchEngineBST)[firstCharOfKeyword];
 			// remove from target bst
-			(*__searchEngineBST)[firstCharOfKeyword].remove(keyword, movieToEdit);
+			(*__searchEngineBST)[firstCharOfKeyword]->remove(keyword, movieToEdit);
 		}
 		catch (...)
 		{
@@ -165,7 +165,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 			try {
 				// check in the dictionary
 				found = (*__searchEngineBST)[firstCharOfKeyword];
-				(*__searchEngineBST)[firstCharOfKeyword].remove(keyword, movieToEdit);
+				(*__searchEngineBST)[firstCharOfKeyword]->remove(keyword, movieToEdit);
 			}
 			// first character of a keyword was not found to denote a key in the table
 			catch (const CustomException& e)
@@ -173,7 +173,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 				// create a new bst such that the first character of the keyword denotes
 				// a key to a tree in the table of bst
 				__searchEngineBST->add(std::string(1, keywords->getEntry(j)[0]),
-					BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
+					new BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
 
 			}
 
@@ -193,9 +193,9 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 		try {
 			// check in the dictionary
 			found = (*__searchEngineBST)[firstCharOfKeyword];
-			std::string keywordFound = found.getKey(keyword);
+			std::string keywordFound = found->getKey(keyword);
 			// simply add if keywordFound else the exception caught will signify to add the new keyword
-			(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword, edittedMovie);
+			(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, edittedMovie);
 			//found.printBreadthFirst();	// DBEUG
 
 		}
@@ -205,18 +205,18 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 			// create a new bst such that the first character of the keyword denotes
 			// a key to a tree in the table of bst
 			__searchEngineBST->add(firstCharOfKeyword,
-				BinarySearchTree<std::string, Movie>(keywords->getEntry(i)));
-			(*__searchEngineBST)[firstCharOfKeyword].addKey(keyword);
-			(*__searchEngineBST)[firstCharOfKeyword].addValue(keyword, edittedMovie);
+				new BinarySearchTree<std::string, Movie>(keywords->getEntry(i)));
+			(*__searchEngineBST)[firstCharOfKeyword]->addKey(keyword);
+			(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, edittedMovie);
 			//found.printBreadthFirst();	// DBEUG
 
 		}
 		catch (const NotFoundException& e)
 		{
 			// create the new node holdsing the keyword
-			found.addKey(keyword);
+			found->addKey(keyword);
 			// append to the list of values in the newly created keyword-node
-			found.addValue(keyword, edittedMovie);
+			found->addValue(keyword, edittedMovie);
 			//found.printBreadthFirst();	// DBEUG
 		}
 		delete keywords;
@@ -235,35 +235,31 @@ List<Movie> NotIMDB_Database::__getKeywordWeightedMovies(const std::string & sea
 	// variables for accessing table of BSTs
 	std::string keyword;
 	int SIZE = keywords->getLength();
-	List<Movie> moviesByKeyword;
 	std::string firstCharOfKeyword;
 	// for each keyword get the bst associated with the first character of the keyword
 	for (int i = 0; i < SIZE; i++)
 	{
-		// c
+		// new list of movies for each keyword in a loop
+		List<Movie> moviesByKeyword;
 		keyword = keywords->getEntry(i);
 		firstCharOfKeyword = std::string(1, keyword[0]);
 		// get movies of the asociated keyword-key from the BST
 		//moviesByKeyword = __searchEngineBST[firstCharOfKeyword].getValues(keyword);
-		BinarySearchTree<std::string, Movie> keywordTree(__searchEngineBST->get(firstCharOfKeyword));
+		BinarySearchTree<std::string, Movie>* keywordTree = (__searchEngineBST->get(firstCharOfKeyword));
 		// DEBUG
-		for (int i = 0; i < keywordTree.getValues(keyword)->getLength(); i++)
+		for (int i = 0; i < keywordTree->getValues(keyword)->getLength(); i++)
 		{
-			std::cout << keywordTree.getValues(keyword)->getEntry(i) << std::endl;
+			std::cout << *keywordTree->getValues(keyword) << std::endl;
+			moviesByKeyword.append(keywordTree->getValues(keyword)->getEntry(i));
 		}
-		
-		
-		
-		
-		
 		//.getValues(keyword) << std::endl;
 		int MBK_SIZE = moviesByKeyword.getLength();
 		// loop through the list of values from
-		for (int j = 0; i < MBK_SIZE; i++)
+		for (int j = 0; j < MBK_SIZE; j++)
 		{
 			// create the processedMovieName
-			std::string processedMovieName = moviesByKeyword.getEntry(i).getTitle() 
-				+ " " + moviesByKeyword.getEntry(i).getYearReleased();
+			std::string processedMovieName = moviesByKeyword.getEntry(j).getTitle() 
+				+ " " + moviesByKeyword.getEntry(j).getYearReleased();
 			try {
 				processedMovieName = __processSearchEntry(processedMovieName);
 				// if an associated weight exists for the movie increment by 1
@@ -348,7 +344,7 @@ void NotIMDB_Database::displaySearchEngineState() const
 		std::cout << "Depth-first: " << std::endl;
 		//found = (*__searchEngineBST)[keys.getEntry(i)];
 		//found.printBreadthFirst();
-		(*__searchEngineBST)[keys.getEntry(i)].printBreadthFirst();
+		(*__searchEngineBST)[keys.getEntry(i)]->printBreadthFirst();
 	}
 	// call internal loading functions
 	std::cout << __searchEngineBST->size() << std::endl;	// DEBUG
@@ -361,35 +357,36 @@ void NotIMDB_Database::unitTest()
 	NotIMDB_Database db;
 
 	db.loadFromFile(path);
-	/*db.readMovie("Miss Jerry");
-	db.saveToFile("output.tsv");
+	//db.readMovie("Miss Jerry");
+	//db.saveToFile("output.tsv");
 
-	std::cout << divider << std::endl;
-	std::cout << "Pre-delete:" << std::endl;
-	db.displayMovieTableStats();
-	std::cout << divider << std::endl;
+	//std::cout << divider << std::endl;
+	//std::cout << "Pre-delete:" << std::endl;
+	//db.displayMovieTableStats();
+	//std::cout << divider << std::endl;
 
-	std::cout << "Post-delete:" << std::endl;
-	db.displayMovieTableStats();
-	std::cout << divider << std::endl;
+	//std::cout << "Post-delete:" << std::endl;
+	//db.displayMovieTableStats();
+	//std::cout << divider << std::endl;
 
-	db.showMostRecentDelete();
-	db.undoMostRecentDelete();
-	std::cout << divider << std::endl;
-	db.readMovie("Miss Jerry");
-	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
-	List<Movie>* movies = FileIO::buildMovieList(path);
-	db.createMovie(movies->getEntry(5));
-	db.displayMovieTableStats();
-	db.displaySearchEngineState();
-	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
+	//db.showMostRecentDelete();
+	//db.undoMostRecentDelete();
+	//std::cout << divider << std::endl;
+	//db.readMovie("Miss Jerry");
+	//path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
+	//List<Movie>* movies = FileIO::buildMovieList(path);
+	//db.createMovie(movies->getEntry(5));
+	//db.displayMovieTableStats();
+	//db.displaySearchEngineState();
+	//db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
 
 	//db.displaySearchEngineState();	// BUGGED
-	db.testKeywordWeightedSearch("Miss Jerry");
-	system("pause");
-	db.updateMovieName("Miss Jerry 1894", "Mister Jerry");*/
+	//db.testKeywordWeightedSearch("Miss Jerry");
+	//system("pause");
+	//db.updateMovieName("Miss Jerry 1894", "Mister Jerry");
 	//db.displaySearchEngineState();	// BUGGED
-	db.testKeywordWeightedSearch("Miss");
+	//db.testKeywordWeightedSearch("Miss");
+	db.testKeywordWeightedSearch("batman");
 	system("pause");
 }
 
