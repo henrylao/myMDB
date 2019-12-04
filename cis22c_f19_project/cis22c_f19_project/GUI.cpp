@@ -75,14 +75,8 @@ void GUI::UI_add(NotIMDB_Database &db)
 		{
 			std::cout << "\nEnter the release year: ";
 			std::cin >> newMovieYear;
-			if (newMovieYear > 2020 || newMovieYear < 1820)
+			if (newMovieYear > 2020)
 				throw CustomException("Error: invalid release year");
-
-			std::cout << "\nEnter the movie's rating (0.0 - 10.0): ";
-			std::cin >> newMovieRating;
-			if (newMovieYear > 10.0 || newMovieYear < 0.0)
-				throw CustomException("Error: invalid movie rating");
-
 			b = true;
 		}
 		catch(const CustomException& e)
@@ -91,6 +85,24 @@ void GUI::UI_add(NotIMDB_Database &db)
 		}
 	} while (!b);
 
+	b = false;
+	do
+	{
+		try
+		{
+			std::cout << "\nEnter the movie's rating (0.0 - 10.0): ";
+			std::cin >> newMovieRating;
+			if (newMovieRating > 10.0 || newMovieRating < 0.0)
+				throw CustomException("Error: invalid movie rating");
+			b = true;
+		}
+		catch (const CustomException& e)
+		{
+			std::cout << e.getMessage() << std::endl;
+		}
+	} while (!b);
+
+	std::cin.ignore();
 	std::string newMovieGenre;
 	std::cout << "\nEnter the movie's genre: ";
 	std::getline(std::cin, newMovieGenre);
@@ -101,6 +113,9 @@ void GUI::UI_add(NotIMDB_Database &db)
 	newMovie.setGenre(newMovieGenre);
 	newMovie.setTitle(newMovieTitle);
 	
+	std::cout << "This is the movie you are adding:" << std::endl;
+	std::cout << newMovie << std::endl;
+
 	if (db.createMovie(newMovie))
 	{
 		std::cout << "Added successfully!" << std::endl;
@@ -323,7 +338,7 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 		case 4:
 			UI_edit(db);
 			break;
-		default:
+		case 5:
 			std::cout << "Exiting the program..." << std::endl;
 			b = true;
 			break;
