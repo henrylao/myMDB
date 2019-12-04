@@ -32,10 +32,9 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 	Movie* newMovie = nullptr;
 	List<std::string>* keywords;
 	std::string keyword, keywords_preprocess;
-	BinarySearchTree<std::string, Movie>* found = nullptr;
+	BinarySearchTree<std::string, Movie*>* found = nullptr;
 
 	std::string firstCharOfKeyword;
-	__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>*>(350);
 	// loop the tokenization of movie attribute string == "movie_name_DDDD"
 	for (int i = 0; i < SIZE; i++) {
 		// get the movie
@@ -59,7 +58,7 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 				found = (*__searchEngineBST)[firstCharOfKeyword];
 				std::string keywordFound = found->getKey(keyword);
 				// simply add if keywordFound else the exception caught will signify to add the new keyword
-				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, *newMovie);
+				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, newMovie);
 				//found.printBreadthFirst();	// DBEUG
 
 			}
@@ -69,9 +68,9 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 				// create a new bst such that the first character of the keyword denotes
 				// a key to a tree in the table of bst
 				__searchEngineBST->add(firstCharOfKeyword,
-					new BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
+					new BinarySearchTree<std::string, Movie*>(keywords->getEntry(j)));
 				(*__searchEngineBST)[firstCharOfKeyword]->addKey(keyword);
-				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, *newMovie);
+				(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, newMovie);
 				//found.printBreadthFirst();	// DBEUG
 
 			}
@@ -80,7 +79,7 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 				// create the new node holdsing the keyword
 				found->addKey(keyword);
 				// append to the list of values in the newly created keyword-node
-				found->addValue(keyword, *newMovie);
+				found->addValue(keyword, newMovie);
 				//found.printBreadthFirst();	// DBEUG
 			}
 
@@ -92,65 +91,56 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 	found = nullptr;
 }
 
-/* to be called during updates to a specific movie where either the year or
-	the name of the movie is changed
-	update the search engine bst when edits are made to movies via removal
-	op == 1 : editted title
 /* Internal function for maintaining the keyword search engine
 	be called during updates to a specific movie where either the year or
 	the name of the movie is change update the search engine bst when edits
 	are made to movies via removal
 	toggle between various operations:
-=======
-	op == 2 : editted year
-	3 : ID
-
 	toggle between various comparisons:
 	1 by movieID
 	2 by rating
 	3 by year
 	4 by title
-	5 by runtime
-*/
-Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, const Movie& movieToEdit, int op)
+	5 by runtime */
+Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, Movie* movieToEdit, int op)
 {
 	// check for correct operation
 	if (op < 1)
 		throw CustomException("Error: Invalid Update Operation Value");
 
-	BinarySearchTree<std::string, Movie>* found = nullptr;
+	BinarySearchTree<std::string, Movie*>* found = nullptr;
 	List<std::string>* keywords;
 	std::string keyword, keywords_preprocess, firstCharOfKeyword;
 
 	// create copy of the movie
-	Movie edittedMovie(movieToEdit);
+	Movie* edittedMovie = movieToEdit;
 
 	switch (op)
 	{
 	case 1:
-		edittedMovie.setTitle(newAttribute);
+		edittedMovie->setTitle(newAttribute);
 		break;
 	case 2:
-		edittedMovie.setYearReleased(newAttribute);
+		edittedMovie->setYearReleased(newAttribute);
 		break;
 	case 3:
-		edittedMovie.setID(newAttribute);
+		edittedMovie->setID(newAttribute);
 		break;
 	case 4:
-		edittedMovie.setRuntime(newAttribute);
+		edittedMovie->setRuntime(newAttribute);
 		break;
 	case 5:
-		edittedMovie.setGenre(newAttribute);
+		edittedMovie->setGenre(newAttribute);
 		break;
 	case 6:
-		edittedMovie.setRating(newAttribute);
+		edittedMovie->setRating(newAttribute);
 		break;
 	default:
 		break;
 	}
 
 	// preprocess keyword string
-	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(movieToEdit.getTitle() + " " + movieToEdit.getYearReleased()));
+	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(movieToEdit->getTitle() + " " + movieToEdit->getYearReleased()));
 	keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
 
 	// tokenize the keywords
@@ -181,7 +171,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 				// create a new bst such that the first character of the keyword denotes
 				// a key to a tree in the table of bst
 				__searchEngineBST->add(std::string(1, keywords->getEntry(j)[0]),
-					new BinarySearchTree<std::string, Movie>(keywords->getEntry(j)));
+					new BinarySearchTree<std::string, Movie*>(keywords->getEntry(j)));
 
 			}
 
@@ -190,7 +180,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 	}
 
 	// Add the keyword, movie pairs for updated movie
-	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(edittedMovie.getTitle() + " " + edittedMovie.getYearReleased()));
+	keywords_preprocess = StringUtil::lowercase(StringUtil::strip(edittedMovie->getTitle() + " " + edittedMovie->getYearReleased()));
 	keywords_preprocess = StringUtil::replace(keywords_preprocess, " ", "_");
 	keywords = StringUtil::split(keywords_preprocess, "_");
 	int SIZE = keywords->getLength();
@@ -213,7 +203,7 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 			// create a new bst such that the first character of the keyword denotes
 			// a key to a tree in the table of bst
 			__searchEngineBST->add(firstCharOfKeyword,
-				new BinarySearchTree<std::string, Movie>(keywords->getEntry(i)));
+				new BinarySearchTree<std::string, Movie*>(keywords->getEntry(i)));
 			(*__searchEngineBST)[firstCharOfKeyword]->addKey(keyword);
 			(*__searchEngineBST)[firstCharOfKeyword]->addValue(keyword, edittedMovie);
 			//found.printBreadthFirst();	// DBEUG
@@ -234,12 +224,14 @@ Movie NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, 
 List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & searchEntry) const
 {
 	// process search entry
-	std::string processSearchEntry = __processSearchEntry(searchEntry);
-	// mnovie titles will be associated with an integer value
-	HashTable<int> weightedMovieTitles;
+	std::string processedKey = __processSearchEntry(searchEntry);
+	// table for tallying occurences in the bst
+	HashTable<int> movieTallyTable;
 	// tokenize the processed search entry
-	List<std::string>* keywords = StringUtil::split(processSearchEntry, "_");
+	List<std::string>* keywords = StringUtil::split(processedKey, "_");
 	List<Movie*>* sortedByWeightMovies = new List<Movie*>();
+
+	/* Find all relevant keyword relations to movies */
 	// variables for accessing table of BSTs
 	std::string keyword;
 	int SIZE = keywords->getLength();
@@ -248,17 +240,16 @@ List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & s
 	for (int i = 0; i < SIZE; i++)
 	{
 		// new list of movies for each keyword in a loop
-		List<Movie> moviesByKeyword;
+		List<Movie*> moviesByKeyword;
 		keyword = keywords->getEntry(i);
 		firstCharOfKeyword = std::string(1, keyword[0]);
 		// verified key case
 		try {
 			std::string keyFound = __searchEngineBST->get(firstCharOfKeyword)->getKey(keyword);
-			BinarySearchTree<std::string, Movie>* keywordTree = (__searchEngineBST->get(firstCharOfKeyword));
-			// DEBUG
+			BinarySearchTree<std::string, Movie*>* keywordTree = (__searchEngineBST->get(firstCharOfKeyword));
 			for (int i = 0; i < keywordTree->getValues(keyword)->getLength(); i++)
 			{
-				//std::cout << *keywordTree->getValues(keyword) << std::endl;
+				//std::cout << *keywordTree->getValues(keyword) << std::endl;			 // DEBUG
 				moviesByKeyword.append(keywordTree->getValues(keyword)->getEntry(i));
 			}
 			//.getValues(keyword) << std::endl;
@@ -267,86 +258,84 @@ List<Movie*>* NotIMDB_Database::__getKeywordWeightedMovies(const std::string & s
 			for (int j = 0; j < MBK_SIZE; j++)
 			{
 				// create the processedMovieName
-				std::string processedMovieName = moviesByKeyword.getEntry(j).getTitle()
-					+ " " + moviesByKeyword.getEntry(j).getYearReleased();
+				std::string processedMovieName = moviesByKeyword.getEntry(j)->getTitle()
+					+ " " + moviesByKeyword.getEntry(j)->getYearReleased();
 				try {
 					processedMovieName = __processSearchEntry(processedMovieName);
 					// if an associated weight exists for the movie increment by 1
-					int found = weightedMovieTitles[processedMovieName];
-					weightedMovieTitles[processedMovieName] += 1;
+					int found = movieTallyTable[processedMovieName];
+					movieTallyTable[processedMovieName] += 1;
 				}
 				// processed movie title does not exist in the table of weighted movies
 				catch (const CustomException& e)
 				{
-					weightedMovieTitles.add(processedMovieName, 1);
+					movieTallyTable.add(processedMovieName, 1);
 				}
 			}
 		}
 		// key not found in any node of tree
-		catch (const NotFoundException& e)
-		{
+		catch (...) { 
 			// do nothing
 		}
-
 	}
-	// build the arry of movies sorted by their dictionary*[WM value (weight) here
-	size_t WMT_SIZE = weightedMovieTitles.size();
+	/* Finally check for an exact match == movie_name_and_year
+	and give weight to the exact match denoted by a percentage of
+	the summed values of the keys in the tally table */
+	bool foundExact = false;
+	size_t WMT_SIZE = movieTallyTable.size();
+	try {
+		Movie* exactMovie = (*__movieDB)[processedKey];
+		exactMovie = nullptr;
+		foundExact = true;
+	}
+	catch (...)
+	{
+		// do nothing 
+	}
+	List<std::string> WMT_KEYS = movieTallyTable.keys();
+	int sumOfWeight = 0;
+	if (foundExact)
+	{
+		for (int i = 0; i < movieTallyTable.size(); i++)
+			sumOfWeight += movieTallyTable[WMT_KEYS.getEntry(i)];
+
+		movieTallyTable[processedKey] += (sumOfWeight * .75);
+	}
+
+	// build the array of movies sorted by their tallied values
 	Pair<Movie*, int>** weightMoviesArr = new Pair<Movie*, int>*[WMT_SIZE];
 
-	List<std::string> WMT_KEYS = weightedMovieTitles.keys();
 	for (size_t i = 0; i < WMT_SIZE; i++)
 	{
 		std::string key = WMT_KEYS.getEntry(i);
-		//std::cout << *(*__movieDB)[key] << std::endl;	// DEBUG
+		//std::cout << (*__movieDB)[key] << std::endl;	// DEBUG
 		weightMoviesArr[i] = new Pair<Movie*, int>();
 		weightMoviesArr[i]->setCompareByValue();
-		// movie addresses to be added
+		// movie addresses to be added 
 		weightMoviesArr[i]->setKey((*__movieDB)[key]);
-		weightMoviesArr[i]->setValue(weightedMovieTitles[key]);
-
+		weightMoviesArr[i]->setValue(movieTallyTable[key]);
 		// movies are created in ascending order
 		//std::cout << weightMoviesArr[i]->getKey() << std::endl;	// DEBUG
 	}
-
-	//std::cout << GUI::divider << std::endl;	// DEBUG
-	//std::cout << "Pre Sort" << std::endl;	// DEBUG
-
-	//for (size_t i = 0; i < WMT_SIZE; i++)
-	//{
-	//	//std::cout << *weightMoviesArr[i]->getKey() << std::endl; // DEBUG
-
-	//	//sortedByWeightMovies->append(weightMoviesArr[i]->getKey());
-	//	// movies are created in ascending order
-	//}
-	//std::cout << GUI::divider << std::endl;
-
+	// sort pairs of Movie & Weight by their weight
 	SortUtil::quickSort(weightMoviesArr, 0, WMT_SIZE - 1);
 	//std::cout << "Post Sort" << std::endl;	// DEBUG
+	for (size_t i = 0; i < WMT_SIZE; i++)
+	{
+		//std::cout << *weightMoviesArr[i]->getKey() << std::endl; // DEBUG
 
-	//for (size_t i = 0; i < WMT_SIZE; i++)
-	//{
-	//	std::cout << *weightMoviesArr[i]->getKey() << std::endl; // DEBUG
-
-	//	sortedByWeightMovies->append(weightMoviesArr[i]->getKey());
-	//	// movies are created in ascending order
-	//}
-	//std::cout << GUI::divider << std::endl;
-
-	//std::cout << weightedMovieTitles << std::endl;	// DEBUG
-	//std::cout << GUI::divider << std::endl;
-
-	// empty dictionary means no matches found in the table of bsts
-	if (weightedMovieTitles.keys().getLength() == 0)
+		sortedByWeightMovies->append(weightMoviesArr[i]->getKey());
+		// movies are created in ascending order
+	}
+	if (movieTallyTable.keys().getLength() == 0)
 		return new List<Movie*>();
 	for (size_t i = 0; i < WMT_SIZE; i++)
 	{
 		delete weightMoviesArr[i];
 	}
 	delete[] weightMoviesArr;
-	// unpack into a list start from the end of the ascending-sort list of pairs
 	// mem clean
 	return sortedByWeightMovies;
-	//std::cout << weightedMovieTitles << std::endl;
 }
 
 std::string NotIMDB_Database::__processSearchEntry(const std::string & query) const
@@ -354,6 +343,34 @@ std::string NotIMDB_Database::__processSearchEntry(const std::string & query) co
 	std::string processedKey = StringUtil::lowercase(StringUtil::strip(query));
 	processedKey = StringUtil::replace(processedKey, " ", "_");
 	return processedKey;
+}
+
+void NotIMDB_Database::__searchEngineDeletionHandler(Movie * movieToDelete)
+{
+	std::string unprocessedKey = movieToDelete->getTitle() + " " + movieToDelete->getYearReleased();
+	std::string processedKey = __processSearchEntry(unprocessedKey);
+	List<std::string>* keywords = StringUtil::split(processedKey, "_");
+	int SIZE = keywords->getLength();
+	std::string firstCharOfKeyword;
+	std::string keyword;
+
+	// loop through each keyword to find the appropriate bst to delete from
+	for (int i = 0; i < SIZE; i++)
+	{
+		keyword = keywords->getEntry(i);
+		firstCharOfKeyword = std::string(1, keyword[0]);
+		// verified key case
+		try {
+			std::string keyFound = __searchEngineBST->get(firstCharOfKeyword)->getKey(keyword);
+			List<Movie*>* keywordMovies = __searchEngineBST->get(firstCharOfKeyword)->getValues(keyFound);
+			keywordMovies->removeByValue(movieToDelete);
+		}
+		// regardless of what the exception thrown is key not found in any node of tree 
+		catch (...)
+		{
+			// do nothing 
+		}
+	}
 }
 
 void NotIMDB_Database::testKeywordWeightedSearch(const std::string & searchEntry) const
@@ -380,11 +397,11 @@ void NotIMDB_Database::testKeywordWeightedSearch(const std::string & searchEntry
 	delete weightedMovies;
 }
 
-bool NotIMDB_Database::foundMovie(std::string key)
+bool NotIMDB_Database::foundMovie(std::string key) const
 {
-	Movie found;
+	Movie* found;
 	try {
-		found = *(*__movieDB)[key];
+		found = (*__movieDB)[key];
 		return true;
 	}
 	catch (const CustomException& e)
@@ -400,27 +417,34 @@ void NotIMDB_Database::displayMovieTableStats() const
 	__movieDB->showStats();
 }
 
-bool NotIMDB_Database::readMovie(std::string key) const
+/* Gets a list of movies sorted in descending order of keyword occurences in the search engine
+sets the passed exactMatch to true if an exact match was found 
+@pre exactMatch is unknown 
+@post confirmation of exactMatch and a list of movies if found 
+@param key any keyword
+@return pointer to a list of movies */
+List<Movie>* NotIMDB_Database::readMovie(std::string key, bool& exactMatch) const
 {
 	std::string processedKey = StringUtil::lowercase(StringUtil::strip(key));
 	processedKey = StringUtil::replace(processedKey, " ", "_");
-	try {
-		// 1st match found
-		std::cout << (*__movieDB)[processedKey] << std::endl;
-		// display keyword-weighted movie using the search engine
-		return true;
-	}
-	catch (const CustomException& e)
+	List<Movie>* listOfMoviesByWeight = new List<Movie>();
+	if (foundMovie(processedKey) == true)
+		exactMatch = true;
+	else
+		exactMatch = false;
+	// get all related movies to a tokenized keyword if any 
+	List<Movie*> weightedMovies = *__getKeywordWeightedMovies(processedKey);
+	if (weightedMovies.getLength() > 0)
 	{
-		std::cout << "I couldn't find what you were looking for in the database" << std::endl;
+		// add weighted movies to the list
+		for (int i = 0; i < (weightedMovies).getLength(); i++)
+		{
+			listOfMoviesByWeight->append(*(weightedMovies).getEntry(i));
+		}
 	}
-	std::cout << "Here are the movies most sorted in relevance to your search: " << std::endl;
-	List<Movie*>* weightedMovies = __getKeywordWeightedMovies(key);
-	for (int i = 0; i < weightedMovies->getLength(); i++)
-	{
-		std::cout << *weightedMovies->getEntry(i) << std::endl;
-	}
+	return listOfMoviesByWeight;
 }
+
 
 void NotIMDB_Database::displaySearchEngineState() const
 {
@@ -450,9 +474,9 @@ void NotIMDB_Database::unitTest()
 	std::string divider = "--------------------------------";
 	std::string path = "title_basics_cleaned_final_full_50000.tsv";
 	NotIMDB_Database db;
-
+	bool exactMatchFound = false;
 	db.loadFromFile(path);
-	db.readMovie("Miss Jerry");
+	db.readMovie("Miss Jerry", exactMatchFound);
 	db.saveToFile("output.tsv");
 
 	std::cout << divider << std::endl;
@@ -467,7 +491,7 @@ void NotIMDB_Database::unitTest()
 	db.showMostRecentDelete();
 	db.undoMostRecentDelete();
 	std::cout << divider << std::endl;
-	db.readMovie("Miss Jerry");
+	db.readMovie("Miss Jerry", exactMatchFound);
 	path = "data\\full\\title_basics_cleaned_final_trimmed2.tsv";
 	List<Movie*>* movies = FileIO::buildMovieList(path);
 	db.createMovie(*movies->getEntry(5));
@@ -490,27 +514,105 @@ void NotIMDB_Database::unitTest()
 }
 
 
+
+NotIMDB_Database::~NotIMDB_Database()
+{
+	// memory clean search engine does not delete movie addresses
+	std::string key = "";
+	List<std::string> keys = __searchEngineBST->keys();
+	for (int i = 0; i < __searchEngineBST->keys().getLength(); i++)
+	{
+		key = keys.getEntry(i);
+		// clean mem alloc for a bst
+		delete __searchEngineBST->get(key);
+	}
+	// clean mem alloc for table of bst
+	delete __searchEngineBST;
+
+	/*delete stack all existing movies in memory
+	are deleted using keys stored in the table */
+	int SSIZE = __deletedMovies->size();
+	for (int i = 0; i < SSIZE; i++)
+	{
+		// delete mem alloc to movies that no longer exist in table
+		Movie* toDelete = __deletedMovies->peek();
+		delete toDelete;
+		__deletedMovies->pop();
+		toDelete = nullptr;
+	}
+	// clean mem alloc to the stack
+	delete __deletedMovies;
+
+	// memory clean movie table removing mem alloc for movies and the table
+	size_t SIZE = __movieDB->size();
+	keys = __movieDB->keys();
+	List<std::string> MKEYS = __movieDB->keys();
+
+	Movie* toDelete = nullptr;
+	for (size_t i = 0; i < SIZE; i++)
+	{
+		key = MKEYS.getEntry(i);
+		// delete mem alloc to movies
+		toDelete = __movieDB->get(key);
+		if (toDelete != nullptr)
+			delete toDelete;
+	}
+	toDelete = nullptr;
+	// clean mem alloc table
+	delete __movieDB;
+}
+
+
 bool NotIMDB_Database::loadFromFile(std::string path)
 {
 	List<Movie*>* movies;
+
 	// allocate memory for a list to contain movie values
 	auto start = std::chrono::high_resolution_clock::now();
 	movies = FileIO::buildMovieList(path);
 	auto finish = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = finish - start;
-	std::cout << "File to List Generation Elapsed time: " << elapsed.count() << " s\n";
+	std::string listStatsLabel = "|\tList of Movies Generation Time\t\t\t|\t" 
+		+ std::to_string(elapsed.count()) + "s\t|\n";
+	std::cout << GUI::divider << GUI::divider << "-----\n";
+	std::cout << listStatsLabel;
+	std::cout << GUI::divider << GUI::divider << "-----\n";
+
 	// create table of movies
 	start = std::chrono::high_resolution_clock::now();
 	__loadMovies(movies);
 	finish = std::chrono::high_resolution_clock::now();
 	elapsed = finish - start;
-	std::cout << "Movie Load From List to Table Elapsed time: " << elapsed.count() << " s\n";
+	std::cout << "|\tMovie Load From List to Table Time\t\t|\t" << elapsed.count() << "s\t|\n";
+	std::cout << GUI::divider << GUI::divider << "-----\n";
+
 	// create search engine
 	start = std::chrono::high_resolution_clock::now();
 	__buildBSTSearchEngine(movies);
 	finish = std::chrono::high_resolution_clock::now();
 	elapsed = finish - start;
-	std::cout << "Table of BST Search Engine Creation Elapsed time: " << elapsed.count() << " s\n";
+	std::cout << "|\tTabled BST Search Engine Time\t\t\t|\t" << elapsed.count() << "s\t|\n";
+	std::cout << GUI::divider << GUI::divider << "-----\n";
+
+
+	/* Show statistics of movie table */
+	std::cout << "\n\n";
+	std::cout << GUI::divider << "------------\n";
+	std::string movieStatsLabel = "|\t\tMovie Table Statistics\t\t|\n";
+	std::cout << movieStatsLabel;
+	std::cout << GUI::divider << "------------\n";
+	__movieDB->showStats();
+	std::cout << GUI::divider << "------------\n";
+
+	/* Show statistics of search engine table */
+	std::cout << "\n\n";
+	std::cout << GUI::divider << "------------\n";
+	std::string searchEngineLabel = "|\tTabled BST Search Engine Statistics\t|\n";
+	std::cout << searchEngineLabel;
+	std::cout << GUI::divider << "------------\n";
+	__searchEngineBST->showStats();
+
+	std::cout << GUI::divider << "------------\n";
 	// list memory clean
 	delete movies;
 	return true;
@@ -523,36 +625,41 @@ void NotIMDB_Database::saveToFile(string path)
 
 	std::string out = "";
 	int MSIZE = (int)__movieDB->size();
-	Movie temp;
+	Movie* temp;
 	for (int i = 0; i < MSIZE; i++)
 	{
-		temp = *(*__movieDB)[__movieDB->keys().getEntry(i)];
-		out = temp.getID() + " | "
-			+ temp.getTitle() + " | "
-			+ temp.getYearReleased() + " | "
-			+ temp.getRuntime() + " | "
-			+ temp.getGenres() + "\n";
+		temp = (*__movieDB)[__movieDB->keys().getEntry(i)];
+		out = temp->getID() + " | "
+			+ temp->getTitle() + " | "
+			+ temp->getYearReleased() + " | "
+			+ temp->getRuntime() + " | "
+			+ temp->getGenres() + "\n";
 		outfile << out;
 	}
 	outfile.close();
 }
 
+
 bool NotIMDB_Database::deleteMovie(std::string key)
 {
+	// clean and process to format that can be handled by the database
 	std::string processedKey = __processSearchEntry(key);
-	try{
-		Movie* temp;
-		temp = (*__movieDB)[processedKey];
-		__deletedMovies->push(temp);
+	try {
+		// pointer to hold address of movie to be removed
+		Movie* deletedMovie = nullptr;
+		deletedMovie = (*__movieDB)[processedKey];
+		// removes the address stored in the table therefore no longer exists in the table
+		__movieDB->remove(processedKey);
+		// pushes the movie onto the undo-stack
+		__deletedMovies->push(deletedMovie);
+		__searchEngineDeletionHandler(deletedMovie);
+		return true;
 	}
 	catch (const CustomException& e)
 	{
 		return false;
 	}
-
-	// push onto the stack
-	__movieDB->remove(processedKey);	// movie removed from table
-	return true;
+	return false;
 }
 
 bool NotIMDB_Database::undoMostRecentDelete()
@@ -578,7 +685,7 @@ bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string new
 	// check for existence
 	if (!foundMovie(oldMovieName))
 		return false;
-	Movie edittedMovie = __updateSearchEngineBST(newMovieName, *(*__movieDB)[oldMovieName], 1);
+	Movie edittedMovie = __updateSearchEngineBST(newMovieName, (*__movieDB)[oldMovieName], 1);
 	(*__movieDB)[newMovieName] = new Movie(edittedMovie);
 	return true;
 }
@@ -587,7 +694,7 @@ bool NotIMDB_Database::updateMovieYear(std::string key, std::string newYearRelea
 {
 	try {
 		std::string processedKey = __processSearchEntry(key);
-		Movie newMovie = __updateSearchEngineBST(newYearReleased, *(*__movieDB)[processedKey], 2);
+		Movie newMovie = __updateSearchEngineBST(newYearReleased, (*__movieDB)[processedKey], 2);
 		(*__movieDB)[processedKey] = new Movie(newMovie);
 		return true;
 	}
@@ -602,7 +709,7 @@ bool NotIMDB_Database::updateMovieID(std::string key, std::string newID)
 {
 	try {
 		std::string processedKey = __processSearchEntry(key);
-		Movie newMovie = __updateSearchEngineBST(newID, *(*__movieDB)[processedKey], 3);
+		Movie newMovie = __updateSearchEngineBST(newID, (*__movieDB)[processedKey], 3);
 		delete (*__movieDB)[processedKey];
 		(*__movieDB)[processedKey] = new Movie(newMovie);
 		return true;
@@ -618,7 +725,7 @@ bool NotIMDB_Database::updateMovieRuntime(std::string key, std::string newRuntim
 {
 	try {
 		std::string processedKey = __processSearchEntry(key);
-		Movie newMovie = __updateSearchEngineBST(newRuntime, *(*__movieDB)[processedKey], 4);
+		Movie newMovie = __updateSearchEngineBST(newRuntime, (*__movieDB)[processedKey], 4);
 		delete (*__movieDB)[processedKey];
 		(*__movieDB)[processedKey] = new Movie(newMovie);		return true;
 	}
@@ -638,7 +745,7 @@ bool NotIMDB_Database::updateMovieGenre(std::string key, std::string newGenreNam
 			genres = newGenreName;
 		else
 			genres = (*__movieDB)[processedKey]->getGenres().append(newGenreName);
-		Movie newMovie = __updateSearchEngineBST(genres, *(*__movieDB)[processedKey], 5);
+		Movie newMovie = __updateSearchEngineBST(genres, (*__movieDB)[processedKey], 5);
 		delete (*__movieDB)[processedKey];
 		(*__movieDB)[processedKey] = new Movie(newMovie);		return true;
 	}
@@ -652,7 +759,7 @@ bool NotIMDB_Database::updateMovieRating(std::string key, std::string newKey)
 {
 	try {
 		std::string processedKey = __processSearchEntry(key);
-		Movie newMovie = __updateSearchEngineBST(newKey, *(*__movieDB)[processedKey], 6);
+		Movie newMovie = __updateSearchEngineBST(newKey, (*__movieDB)[processedKey], 6);
 		delete (*__movieDB)[processedKey];
 		(*__movieDB)[processedKey] = new Movie(newMovie);
 		return true;

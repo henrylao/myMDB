@@ -17,7 +17,7 @@ class NotIMDB_Database
 private:
 	HashTable<Movie*>*										__movieDB;
 	Stack<Movie*>*											__deletedMovies;
-	HashTable<BinarySearchTree<std::string, Movie>*>*		__searchEngineBST;
+	HashTable<BinarySearchTree<std::string, Movie*>*>*		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
 	// ------------------------------------------
@@ -30,7 +30,7 @@ private:
 	update the search engine bst when edits are made to movies via removal
 	op == 1 : editted title
 	op == 2 : editted year  */
-	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
+	Movie				__updateSearchEngineBST(const std::string edittedAttribute, Movie* movieToEdit, int op);
 	/* function for generating a list of movie titles weighted by their number of occurences within 
 	a keyword-node
 	
@@ -42,6 +42,7 @@ private:
 	@param any search entry of either digits or alphabet characters
 	@return a processed string of the form == "example3232_processed!_str" */
 	std::string			__processSearchEntry(const std::string& searchEntry) const;
+	void				__searchEngineDeletionHandler(Movie * movieToDelete);
 
 public:
 	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
@@ -50,47 +51,9 @@ public:
 	// ------------------------------------------
 	NotIMDB_Database() {
 		__deletedMovies = new Stack<Movie*>();
-		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>*>(1000);
+		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie*>*>(1000);
 	}
-	virtual ~NotIMDB_Database() {
-		/*HashTable<Movie*>*									
-		Stack<Movie*>*											
-		HashTable<BinarySearchTree<std::string, Movie>*>*		
-		*/
-		// memory clean search engine
-		std::string key;
-		List<std::string> keys = __searchEngineBST->keys();
-		for (int i = 0; i < __searchEngineBST->keys().getLength(); i++)
-		{
-			key = keys.getEntry(i);
-			// delete every BST
-			delete __searchEngineBST->get(key);
-		}
-		// delete the table
-		delete __searchEngineBST;
-
-		
-		// memory clean up for undo stack
-		int SSIZE = __deletedMovies->size();
-		Movie* pMovie;
-		while (__deletedMovies->size() > 0) {
-			pMovie = __deletedMovies->peek();
-			delete pMovie;
-			__deletedMovies->pop();
-		}
-		delete __deletedMovies;
-
-
-		// memory clean movie table
-		size_t SIZE = __movieDB->size();
-		keys = __movieDB->keys();
-		for (size_t i = 0; i < SIZE; i++)
-		{
-			// delete addresses of movies
-			delete (*__movieDB)[keys.getEntry(i)];
-		}
-		delete __movieDB;
-	}
+	virtual ~NotIMDB_Database();
 	// ------------------------------------------
 	// Create/FileIO Section
 	// ------------------------------------------
@@ -126,7 +89,7 @@ public:
 	// ------------------------------------------
 	// Search Section
 	// ------------------------------------------
-	bool				foundMovie(std::string key);
+	bool				foundMovie(std::string key) const;
 	/* verify using actorDB */
 	//bool  				foundActor(std::string actorName) const;
 
@@ -137,7 +100,7 @@ public:
 	/* Function handles string cleaning to and processing with 
 	the keyword search engine. Displayed is a list of movies 
 	in order of relevance to the userEntry */
-	bool				readMovie(std::string key) const;
+	List<Movie>* 		readMovie(std::string key, bool& exactMatch) const;
 	void				displaySearchEngineState() const;
 	void				unitTest();
 };

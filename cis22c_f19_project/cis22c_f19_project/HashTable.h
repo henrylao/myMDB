@@ -1,6 +1,7 @@
 #ifndef  _HASH_TABLE_H
 #define _HASH_TABLE_H
 
+#include <iomanip>
 #include "HashUtil.h"
 #include "MathUtil.h"
 #include <string>
@@ -8,6 +9,7 @@
 #include "HashTableNode.h"
 #include <fstream>
 #include <iostream>
+
 template <typename T>
 class HashTable
 {
@@ -432,10 +434,16 @@ void HashTable<T>::display()
 template<typename T>
 void HashTable<T>::showStats() const
 {
-	std::cout << "Occupancy: " << __occupancy << std::endl;
-	std::cout << "Capacity: " << __capacity << std::endl;
-	std::cout << "Load Factor: " << std::to_string(loadFactor() * 100) << "%" << std::endl;
-	std::cout << "Number of Collisions: " << __collisionCount << std::endl;
+	std::cout << "|\tOccupancy\t\t|\t " << __occupancy << "\t|\t" << std::endl;
+	std::cout << GUI::divider << "------------\n";
+
+	std::cout << "|\tCapacity\t\t|\t" << __capacity << "\t|\t" << std::endl;
+	 std::cout << GUI::divider << "------------\n";
+
+	std::cout << "|\tLoad Factor\t\t|\t" << std::setprecision(4) << (loadFactor() * 100) << "%" << std::setprecision(2) << "\t|\t" << std::endl;
+	 std::cout << GUI::divider << "------------\n";
+
+	std::cout << "|\tNumber of Collisions\t|\t" << __collisionCount << "\t|\t" << std::endl;
 }
 template<typename T>
 List<std::string> HashTable<T>::keys() const

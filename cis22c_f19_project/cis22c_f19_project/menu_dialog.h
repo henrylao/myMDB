@@ -66,6 +66,14 @@ namespace GUI {
 		"Return to main menu"
 	};
 
+	const std::string menu_search_scroll[] = {
+		"View the next set of the movies",
+		"View the previous set of movies",
+		"Go to the start of the list",
+		"Go to the end of the list",
+		"Exit to main menu"
+	};
+
 	const std::string menu_continue_search[] = {
 		"Continue searching",
 		"Return to main menu"
