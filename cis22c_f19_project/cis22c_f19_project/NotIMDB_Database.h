@@ -16,7 +16,7 @@ class NotIMDB_Database
 {
 private:
 	HashTable<Movie*>*										__movieDB;
-	Stack<Movie*>*											__deletedMovies;
+	Stack<Movie**>*											__deletedMovies;
 	HashTable<BinarySearchTree<std::string, Movie*>*>*		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
@@ -30,7 +30,7 @@ private:
 	update the search engine bst when edits are made to movies via removal
 	op == 1 : editted title
 	op == 2 : editted year  */
-	Movie				__updateSearchEngineBST(const std::string edittedAttribute, Movie* movieToEdit, int op);
+	Movie*				__updateSearchEngineBST(const std::string edittedAttribute, Movie* movieToEdit, int op);
 	/* function for generating a list of movie titles weighted by their number of occurences within 
 	a keyword-node
 	
@@ -50,7 +50,7 @@ public:
 	// Constructor & Destructor Section
 	// ------------------------------------------
 	NotIMDB_Database() {
-		__deletedMovies = new Stack<Movie*>();
+		__deletedMovies = new Stack<Movie**>();
 		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie*>*>(1000);
 	}
 	virtual ~NotIMDB_Database();
@@ -82,7 +82,7 @@ public:
 	bool				updateMovieYear(std::string key, std::string newYearReleased);
 	bool				updateMovieID(std::string key, std::string newID);
 	bool				updateMovieRuntime(std::string key, std::string newRuntime);
-	// op 0 appends to the genre string, op 1 sets the genre to newGenreName
+	/*  op 0 appends to the genre string, op 1 sets the genre to newGenreName */
 	bool				updateMovieGenre(std::string key, std::string newGenreName, int op);
 	bool 				updateMovieRating(std::string key, std::string newKey);
 
