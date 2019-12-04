@@ -518,7 +518,7 @@ void GUI::promptLoadFile(NotIMDB_Database &db)
 	//std::string outfile_prompt = "Enter the file path for an output file\nExample: C:\\data\\output.txt\nHit enter for a default output.txt file to be created in this program's directory\n";
 	std::string infile_prompt = "Enter the file path for an input file .tsv file\nExample: C:\\data\\input.tsv\nHit enter to use the default .tsv file in this program's directory\n";
 	std::string user_in = "";
-	std::string defaultPath = "title_basics_cleaned_final_trimmed_500.tsv";
+	std::string defaultPath = "title_basic_demo_data_500.tsv";
 	ifstream infile;
 	while (!done_file_load)
 	{
