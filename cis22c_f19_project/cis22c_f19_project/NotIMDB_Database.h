@@ -3,7 +3,7 @@
 #include "FileIO.h"
 //#include "person.h"
 #include "HashTable.h"
-#include "List.h"
+#include "list.h"
 //#include "binary_search_tree.h"
 #include "Movie.h"
 #include "stack.h"
@@ -15,8 +15,8 @@ class NotIMDB_Database
 {
 private:
 	// movie titles & actor names are keys for accessing the table
-	HashTable<Movie>					__movieDB;
-	Stack<Movie>						__deletedMovies;
+	HashTable<Movie>										__movieDB;
+	Stack<Movie>											__deletedMovies;
 	HashTable<BinarySearchTree<std::string, Movie>>*		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
@@ -30,11 +30,6 @@ private:
 	update the search engine bst when edits are made to movies via removal
 	op == 1 : editted title
 	op == 2 : editted year  */
-<<<<<<< Updated upstream
-	std::string			__processSearchEntry(const std::string& searchEntry);
-	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
-public:
-=======
 	Movie				__updateSearchEngineBST(const std::string edittedAttribute, const Movie& movieToEdit, int op);
 	List<Movie>			__getKeywordWeightedMovies(const std::string& searchEntry) const;
 	/* Internal function for processing a search entry.
@@ -43,7 +38,6 @@ public:
 	@param any search entry of either digits or alphabet characters
 	@return a processed string of the form == "example3232_processed!_str" */
 	std::string			__processSearchEntry(const std::string& searchEntry) const;
->>>>>>> Stashed changes
 
 public:
 	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
@@ -51,7 +45,7 @@ public:
 	// Constructor & Destructor Section
 	// ------------------------------------------
 	NotIMDB_Database() {
-		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>>();
+		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie>>(35);
 	}
 	virtual ~NotIMDB_Database() {
 		delete __searchEngineBST;
