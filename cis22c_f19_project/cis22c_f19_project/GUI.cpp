@@ -61,7 +61,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 		std::string user_in;
 		std::cout << "Please enter any keywords related to the movie youd like to search: " << std::endl;
 		getline(std::cin, user_in);
-	
+
 		if (StringUtil::strip(user_in).length() < 1)
 		{
 			int choice;
@@ -105,7 +105,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					}
 				}
 				// scroll through list
-				else 
+				else if (choice == 1)
 				{
 
 					// show initial found
@@ -114,7 +114,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					int currentPos = 0;
 					std::cout << divider << std::endl;
 					std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
-					// exit case 
+					// exit case
 					if (MSIZE > 3)
 					{
 						std::cout << "Here are the first 3 entries:\n" <<
@@ -140,7 +140,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 						std::cout << divider << endl;
 						switch (choice)
 						{
-							// view next set 
+							// view next set
 						case 1:
 						{
 							currentIndex += 3;
@@ -162,7 +162,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							counter = 0;
 							break;
 						}
-						// view prev. set 
+						// view prev. set
 						case 2:
 						{
 							currentIndex -= 3;
@@ -221,7 +221,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							return;
 							break;
 						}
-						
+
 					} // end scroll loop
 				}
 			}
@@ -253,7 +253,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					int currentPos = 0;
 					std::cout << divider << std::endl;
 					std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
-					// exit case 
+					// exit case
 					if (MSIZE > 3)
 					{
 						std::cout << "Here are the first 3 entries:\n" <<
@@ -280,7 +280,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 						std::cout << divider << endl;
 						switch (choice)
 						{
-							// view next set 
+							// view next set
 						case 1:
 						{
 							currentIndex += 3;
@@ -302,7 +302,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 							counter = 0;
 							break;
 						}
-						// view prev. set 
+						// view prev. set
 						case 2:
 						{
 							currentIndex -= 3;
@@ -368,7 +368,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 			}
 		}
 	}
-	
+
 }
 
 void GUI::UI_add(NotIMDB_Database &db)
@@ -458,7 +458,7 @@ void GUI::UI_add(NotIMDB_Database &db)
 	newMovie.setRating(std::to_string(newMovieRating));
 	newMovie.setGenre(newMovieGenre);
 	newMovie.setTitle(newMovieTitle);
-	
+
 	std::cout << "This is the movie you are adding:" << std::endl;
 	std::cout << newMovie << std::endl;
 
@@ -595,8 +595,8 @@ void GUI::UI_edit(NotIMDB_Database &db)
 		}
 		try
 		{
-			// clean query 
-			selectedMovieTitle = db.processSearchEntry(selectedMovieTitle);
+			// clean query
+			selectedMovieTitle = db.processSearchEntry(selectedMovieTitle);		//getKey
 			if (!(db.foundMovie(selectedMovieTitle)))
 			{
 				movieSelectedFromList = false;
@@ -758,7 +758,7 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 			{
 				std::cout << "This was the most recently deleted movie: " << std::endl;
 				db.showMostRecentDelete();
-				
+
 				int choice = menu_prompt("Would you like to undo this deletion?", menu_yes_no, 2);
 				if (choice == 1)
 				{
@@ -782,8 +782,8 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 
 /* Allow user to select from a list of approximated matches
 @param db is the database of movies
-@param userIn is the users input to find approx matched movies 
-@param exit signify if the user wants to leave the edit section and go back to main menu 
+@param userIn is the users input to find approx matched movies
+@param exit signify if the user wants to leave the edit section and go back to main menu
 @return a raw string of a selected == "movie_title + <whitespace> + movie_year" */
 std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, const std::string& userIn, bool& exit)
 {
@@ -806,7 +806,7 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 	{
 		return "";
 	}
-	// return nothing 
+	// return nothing
 	/*if (MSIZE == 0)
 		return "";*/
 	int choice;
@@ -820,7 +820,7 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 		int currentPos = 0;
 		std::cout << divider << std::endl;
 		std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
-		// exit case 
+		// exit case
 		if (MSIZE > 3)
 		{
 			std::cout << "Here are the first 3 entries:\n" <<
@@ -845,15 +845,15 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 		switch(choice) {
 		// browse list of movies found
 		case 1:
-			
+
 			while (!doneScrolling) {
 				// scrolls by 1 movie each time
 				choice = menu_prompt("What would you like to do?", menu_search_scroll, 5);
 				std::cout << divider << endl;
 				switch (choice)
 				{
-				// view next set 
-				case 1: 
+				// view next set
+				case 1:
 				{
 					currentIndex += 3;
 					if (currentIndex == END || currentIndex > END) {
@@ -876,7 +876,7 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 					counter = 0;
 					break;
 				}
-				// view prev. set 
+				// view prev. set
 				case 2:
 				{
 					currentIndex -= 3;
@@ -940,11 +940,11 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 		// return to the main search menu
 		case 2:
 			exit = false;
-			return "";
+			return "S";
 		// return the main menu
 		case 3:
 			exit = true;
-			return "";
+			return "R";
 		}
 	}
 }

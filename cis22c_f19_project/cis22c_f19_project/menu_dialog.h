@@ -78,7 +78,7 @@ namespace GUI {
 		"View the previous set of movies",
 		"Go to the start of the list",
 		"Go to the end of the list",
-		"Search another entry",
+		"Back to last step",
 		"Return to main menu"
 	};
 	/* 1 browse list | 2 start search | 3 exit to main menu*/
