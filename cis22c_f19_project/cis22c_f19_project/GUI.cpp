@@ -73,7 +73,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 			}
 		}
 		else {
-			List<Movie>* keywordMovies = db.readMovies(user_in, exactMatch);
+			List<Movie>* keywordMovies = db.getKeywordWeightedMovies(user_in, exactMatch);
 			const int START = 0;
 			const int MSIZE = keywordMovies->getLength();
 			const int END = MSIZE - 1;
@@ -476,24 +476,24 @@ void GUI::UI_remove(NotIMDB_Database &db)
 	{
 		try
 		{
-			std::string selectedMovieTitle;
-			std::cout << "\nEnter the title of the movie to remove: ";
-			getline(std::cin, selectedMovieTitle);
-			if (selectedMovieTitle.size() != 0)
+			std::string movieID;
+			std::cout << "\nEnter the ID of the movie to remove: ";
+			getline(std::cin, movieID);
+			if (movieID.size() != 0)
 			{
-				if (!(db.foundMovie(selectedMovieTitle)))
+				if (!(db.foundMovie(movieID)))
 				{
 					throw CustomException("Error: movie not found in database");
 				}
 				else
 				{
 					std::cout << GUI::divider << std::endl;
-					db.readMovies(selectedMovieTitle, exactMatchFound);
+					db.readMovie(movieID);
 					int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
 					if (confirm == 1)
 					{
-						db.deleteMovie(selectedMovieTitle);
-						if (!(db.foundMovie(selectedMovieTitle)))
+						db.deleteMovie(movieID);
+						if (!(db.foundMovie(movieID)))
 						{
 							std::cout << "Deleted successfully!" << std::endl;
 						}
@@ -559,22 +559,24 @@ void GUI::UI_edit(NotIMDB_Database &db)
 {
 	bool exactMatchFound = false;
 	bool b = false;
-	bool movieSelectedFromList = false;
+	bool movieIDEntered = false;
 	// input required to be atleast 1 character long
 	bool goodInput = false;
-	std::string selectedMovieTitle = "";
+	// user 
+	std::string userIn_attrEdit = "";
+	// user id entry
+	std::string userIn_movID;
 	do
 	{
 		while (!goodInput)
 		{
-			if (!movieSelectedFromList) {
-				selectedMovieTitle = "";
-				std::cout << "Enter the title and year of a movie you want to edit or a keyword of the movie: ";
-				std::getline(std::cin, selectedMovieTitle);
-				//std::cout << selectedMovieTitle << std::endl;	// DEBUG
-				selectedMovieTitle = StringUtil::strip(selectedMovieTitle);
-				//std::cout << selectedMovieTitle << std::endl;	// DEBUG
-				if (selectedMovieTitle.length() == 0)
+			if (!movieIDEntered) {
+				std::cout << "Enter the ID of the movie to edit: ";
+				std::getline(std::cin, userIn_movID);
+				//std::cout << userIn_attrEdit << std::endl;	// DEBUG
+				userIn_movID = StringUtil::strip(userIn_movID);
+				//std::cout << userIn_attrEdit << std::endl;	// DEBUG
+				if (userIn_movID.length() == 0)
 				{
 					std::cout << "I can't process your input" << std::endl;
 					int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
@@ -587,6 +589,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				else
 				{
 					goodInput = true;
+					movieIDEntered = true;
 					break;
 				}
 			}
@@ -595,17 +598,17 @@ void GUI::UI_edit(NotIMDB_Database &db)
 		}
 		try
 		{
-			// clean query
-			selectedMovieTitle = db.processSearchEntry(selectedMovieTitle);		//getKey
-			if (!(db.foundMovie(selectedMovieTitle)))
+			std::cout << std::endl << GUI::divider << std::endl;
+			db.readMovie(userIn_movID);
+
+			if (!(db.foundMovie(userIn_movID)))
 			{
-				movieSelectedFromList = false;
+				movieIDEntered = false;
 				throw CustomException("Error: movie not found in database");
+				std::cout << std::endl << GUI::divider << std::endl;
 			}
 			std::cout << std::endl << GUI::divider << std::endl;
-			db.readMovies(selectedMovieTitle, exactMatchFound);
-			std::cout << std::endl << GUI::divider << std::endl;
-			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 6);
+			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 5);
 			switch (attribute)
 			{
 			case 1:
@@ -614,10 +617,13 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				std::cout << "Enter the new title of the movie: ";
 				std::getline(std::cin, newMovieTitle);
 				std::cout << std::endl;
-				if (db.updateMovieName(selectedMovieTitle, newMovieTitle))
-					std::cout << "Edited successfully!" << std::endl;
+				if (db.updateMovieTitle(userIn_movID, newMovieTitle))
+				{
+					std::cout << "Updated to: \n";
+					db.readMovie(userIn_movID);
+				}
 				else
-					throw CustomException("Error while updating title: " + selectedMovieTitle);
+					throw CustomException("Error while updating title: " + userIn_movID);
 				break;
 			}
 			case 2:
@@ -627,10 +633,10 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				std::cout << "Enter the new release year of the movie: ";
 				cin >> newReleaseYear;
 				std::cout << std::endl;
-				if (db.updateMovieYear(selectedMovieTitle, std::to_string(newReleaseYear)))
+				if (db.updateMovieYear(userIn_attrEdit, std::to_string(newReleaseYear)))
 					std::cout << "Edited successfully!" << std::endl;
 				else
-					throw CustomException("Error while updating year: " + selectedMovieTitle);
+					throw CustomException("Error while updating year: " + userIn_attrEdit);
 				break;
 			}
 			case 3:
@@ -639,22 +645,22 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				std::cout << "Enter the new ID of the movie: ";
 				cin >> newID;
 				std::cout << std::endl;
-				if (db.updateMovieID(selectedMovieTitle, std::to_string(newID)))
+				if (db.updateMovieID(userIn_attrEdit, std::to_string(newID)))
 					std::cout << "Edited successfully!" << std::endl;
 				else
-					throw CustomException("Error while updating ID: " + selectedMovieTitle);
+					throw CustomException("Error while updating ID: " + userIn_attrEdit);
 				break;
 			}
 			case 4:
 			{
 				std::string newRuntime;
-				std::cout << "Enter the new runtime of the movie: ";
+				std::cout << "Enter the new runtime (minutes) of the movie: ";
 				std::getline(std::cin, newRuntime);
 				std::cout << std::endl;
-				if (db.updateMovieRuntime(selectedMovieTitle, newRuntime))
+				if (db.updateMovieRuntime(userIn_attrEdit, newRuntime))
 					std::cout << "Edited successfully!" << std::endl;
 				else
-					throw CustomException("Error while updating runtime: " + selectedMovieTitle);
+					throw CustomException("Error while updating runtime: " + userIn_attrEdit);
 				break;
 			}
 			case 5:
@@ -662,17 +668,17 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				bool b = false;
 				do
 				{
-					int select = GUI::menu_prompt("How would you like to edit genres of this movie?", GUI::menu_edit_genre, 2);
+					int select = GUI::menu_prompt("How would you like to edit genre(s) of this movie?", GUI::menu_edit_genre, 2);
 					if (select == 1)
 					{
 						std::string newGenre;
 						std::cout << "Enter the new genre of the movie: ";
 						std::getline(std::cin, newGenre);
 						std::cout << std::endl;
-						if (db.updateMovieGenre(selectedMovieTitle, newGenre, 0))
+						if (db.updateMovieGenre(userIn_attrEdit, newGenre, 0))
 							std::cout << "Edited successfully!" << std::endl;
 						else
-							throw CustomException("Error while updating genre: " + selectedMovieTitle);
+							throw CustomException("Error while updating genre: " + userIn_attrEdit);
 						b = true;
 					}
 					else if (select == 2)
@@ -681,37 +687,37 @@ void GUI::UI_edit(NotIMDB_Database &db)
 						std::cout << "Enter the new genre of the movie: ";
 						std::getline(std::cin, newGenre);
 						std::cout << std::endl;
-						if (db.updateMovieGenre(selectedMovieTitle, newGenre, 1))
+						if (db.updateMovieGenre(userIn_attrEdit, newGenre, 1))
 							std::cout << "Edited successfully!" << std::endl;
 						else
-							throw CustomException("Error while updating genre: " + selectedMovieTitle);
+							throw CustomException("Error while updating genre: " + userIn_attrEdit);
 						b = true;
 					}
 				} while (!b);
 				break;
 			}
-			case 6:
+			/*case 6:
 			{
 				double newMovieRating;
 				std::cout << "Enter the new rating (0.0 - 10.0): ";
 				cin >> newMovieRating;
 				std::cout << std::endl;
-				if (db.updateMovieRating(selectedMovieTitle, std::to_string(newMovieRating)))
+				if (db.updateMovieRating(userIn_attrEdit, std::to_string(newMovieRating)))
 					std::cout << "Edited successfully!" << std::endl;
 				else
-					throw CustomException("Error while updating score: " + selectedMovieTitle);
+					throw CustomException("Error while updating score: " + userIn_attrEdit);
 				break;
-			}
+			}*/
 			}
 
 			b = true;
 		}
 		catch (const CustomException& e) {
-			selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
-			if (selectedMovieTitle.length() == 0 && b == true)
+			userIn_attrEdit = UI_pick_from_potential_matches_to_edit(db, userIn_attrEdit, b);
+			if (userIn_attrEdit.length() == 0 && b == true)
 				return;
 			// no potential movies found
-			else if (selectedMovieTitle.length() == 0 && b != true)
+			else if (userIn_attrEdit.length() == 0 && b != true)
 			{
 				std::cout << e.getMessage() << std::endl;
 				int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
@@ -723,7 +729,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 			}
 			else {
 				// movie was chosen from the list therefore don't reprompt
-				movieSelectedFromList = true;
+				movieIDEntered = true;
 			}
 		}
 
@@ -756,6 +762,7 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 		{
 			if (db.canUndoDelete())
 			{
+				std::cout << "Current delete history size: " << db.getDeleteHistorySize() << std::endl;
 				std::cout << "This was the most recently deleted movie: " << std::endl;
 				db.showMostRecentDelete();
 
@@ -792,7 +799,7 @@ std::string GUI::UI_pick_from_potential_matches_to_edit(NotIMDB_Database & db, c
 		return "";
 	}
 	bool exactMatch = false;
-	List<Movie>* keywordMovies = db.readMovies(userIn, exactMatch);
+	List<Movie>* keywordMovies = db.getKeywordWeightedMovies(userIn, exactMatch);
 	bool doneSelecting = false;
 	exit = false;
 	const int START = 0;

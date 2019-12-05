@@ -118,6 +118,7 @@
     <ClInclude Include="BST_node_pair.h" />
     <ClInclude Include="BST_pair.h" />
     <ClInclude Include="BNT_pair.h" />
+    <ClInclude Include="CustomException.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HashTable.h" />

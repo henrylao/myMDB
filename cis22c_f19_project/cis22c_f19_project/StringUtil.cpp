@@ -94,8 +94,6 @@ bool StringUtil::containsAlpha(const std::string & data)
 	return false;
 }
 
-
-
 std::string StringUtil::join(List<std::string>* target, std::string delim) {
 	unsigned int i, n;
 	std::string result = "";

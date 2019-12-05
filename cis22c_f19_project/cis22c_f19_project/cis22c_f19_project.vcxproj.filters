@@ -126,6 +126,9 @@
     <ClInclude Include="SortAlgos.h">
       <Filter>Util\SortUtil</Filter>
     </ClInclude>
+    <ClInclude Include="CustomException.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathUtil.cpp">
