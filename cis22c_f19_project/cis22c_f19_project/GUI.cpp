@@ -91,7 +91,7 @@ void GUI::UI_search(const NotIMDB_Database &db)
 			else if (exactMatch)
 			{
 				std::cout << "I found an exact match in the database.\n" << keywordMovies->getEntry(0) << std::endl;
-				std::cout << "I also found other related matches as well...\n" << std::endl;
+				std::cout << "I also found " << keywordMovies->getLength() << " related matche(s) as well...\n" << std::endl;
 
 				int choice;
 				choice = menu_prompt("Would you like to see them?", menu_yes_no, 2);
@@ -113,11 +113,11 @@ void GUI::UI_search(const NotIMDB_Database &db)
 					int optionNum = 1;
 					int currentPos = 0;
 					std::cout << divider << std::endl;
-					std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n";
+					std::cout << "I found a total of " << MSIZE << " movie(s) related to your search\n" << GUI::divider << "\n";
 					// exit case
 					if (MSIZE > 3)
 					{
-						std::cout << "Here are the first 3 entries:\n" <<
+						std::cout << "Here are the first 3 entries:\n" << GUI::divider <<
 							keywordMovies->getEntry(0) << divider << "\n" <<
 							keywordMovies->getEntry(1) << divider << "\n" <<
 							keywordMovies->getEntry(2) << divider << "\n";
@@ -608,7 +608,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				std::cout << std::endl << GUI::divider << std::endl;
 			}
 			std::cout << std::endl << GUI::divider << std::endl;
-			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 5);
+			int attribute = menu_prompt("What attribute are you changing?", menu_attributes, 6);
 			switch (attribute)
 			{
 			case 1:
@@ -696,7 +696,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				} while (!b);
 				break;
 			}
-			/*case 6:
+			case 6:
 			{
 				double newMovieRating;
 				std::cout << "Enter the new rating (0.0 - 10.0): ";
@@ -707,7 +707,7 @@ void GUI::UI_edit(NotIMDB_Database &db)
 				else
 					throw CustomException("Error while updating score: " + userIn_attrEdit);
 				break;
-			}*/
+			}
 			}
 
 			b = true;
