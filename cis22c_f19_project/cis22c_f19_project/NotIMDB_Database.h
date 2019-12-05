@@ -16,7 +16,7 @@ class NotIMDB_Database
 {
 private:
 	HashTable<Movie*>*										__movieDB;
-	Stack<Movie**>*											__deletedMovies;
+	Stack<Movie*>*											__deletedMovies;
 	HashTable<BinarySearchTree<std::string, Movie*>*>*		__searchEngineBST;
 	// ------------------------------------------
 	// Internal Helper Method Section
@@ -44,16 +44,14 @@ private:
 	void				__searchEngineDeletionHandler(Movie * movieToDelete);
 
 public:
-	bool				canUndoDelete() const {
-		return (__deletedMovies->size() > 0 ? true : false);
-	}
+	bool				canUndoDelete() const { return (__deletedMovies->size() > 0 ? true : false); }
 	void				testKeywordWeightedSearch(const std::string& searchEntry) const;
 	std::string			processSearchEntry(const std::string& searchEntry) const;
 	// ------------------------------------------
 	// Constructor & Destructor Section
 	// ------------------------------------------
 	NotIMDB_Database() {
-		__deletedMovies = new Stack<Movie**>();
+		__deletedMovies = new Stack<Movie*>();
 		__searchEngineBST = new HashTable<BinarySearchTree<std::string, Movie*>*>(1000);
 	}
 	virtual ~NotIMDB_Database();
@@ -81,7 +79,6 @@ public:
 	// ------------------------------------------
 	// find movie by oldName, hold a copy of the movie delete movie of old name, update copy to newName, finally
 	// add back into table
-	/* Updating requires access to the key == moviename_year */
 	bool				updateMovieName(std::string oldMovieName, std::string newMovieName);
 	bool				updateMovieYear(std::string key, std::string newYearReleased);
 	bool				updateMovieID(std::string key, std::string newID);

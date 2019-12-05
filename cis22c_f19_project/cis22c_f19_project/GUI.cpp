@@ -707,27 +707,23 @@ void GUI::UI_edit(NotIMDB_Database &db)
 			b = true;
 		}
 		catch (const CustomException& e) {
-			int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
-			if (tryAgain != 1)
+			selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
+			if (selectedMovieTitle.length() == 0 && b == true)
+				return;
+			// no potential movies found
+			else if (selectedMovieTitle.length() == 0 && b != true)
 			{
-				selectedMovieTitle = UI_pick_from_potential_matches_to_edit(db, selectedMovieTitle, b);
-				if (selectedMovieTitle.length() == 0 && b == true)
-					return;
-				// no potential movies found
-				else if (selectedMovieTitle.length() == 0 && b != true)
+				std::cout << e.getMessage() << std::endl;
+				int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
+				goodInput = false;
+				if (tryAgain != 1)
 				{
-					std::cout << e.getMessage() << std::endl;
-					int tryAgain = menu_prompt("Try again?", menu_yes_no, 2);
-					goodInput = false;
-					if (tryAgain != 1)
-					{
-						return;
-					}
+					return;
 				}
-				else {
-					// movie was chosen from the list therefore don't reprompt
-					movieSelectedFromList = true;
-				}
+			}
+			else {
+				// movie was chosen from the list therefore don't reprompt
+				movieSelectedFromList = true;
 			}
 		}
 

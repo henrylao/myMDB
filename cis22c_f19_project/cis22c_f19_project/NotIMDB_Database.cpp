@@ -91,19 +91,19 @@ void NotIMDB_Database::__buildBSTSearchEngine(List<Movie*>* movies)
 }
 
 /* Internal function for maintaining the keyword search engine
-	called during updates to a specific movie modifying movies attributes
-	The uneditted movie is not deleted inside and instead is delegated to outer functions.
-	The current implementation only needs to update the table of BSTs 
-	whenever either the title is changed or the year is changed. All other attributes
-	do not require updating of the BST given the current implementation.
-	1 by movieID |	2 by rating |3 by year |4 by title |5 by runtime 
-	@pre movie and search engine are not updated
-	@post movie attribute has been changed in accordance to operation number and the nodes
-	representing keywords and their associations to movie addressses have been updated
-	@return pointer to a newly allocated movie 
-	@param newAttribute is the new value to be updated
-	@param unedittedMovie is the address of the movie to be updated
-	@param op is the integer signifying which operations to carry out when updating*/
+called during updates to a specific movie modifying movies attributes
+The uneditted movie is not deleted inside and instead is delegated to outer functions.
+The current implementation only needs to update the table of BSTs 
+whenever either the title is changed or the year is changed. All other attributes
+do not require updating of the BST given the current implementation.
+1 by movieID |	2 by rating |3 by year |4 by title |5 by runtime 
+@pre movie and search engine are not updated
+@post movie attribute has been changed in accordance to operation number and the nodes
+representing keywords and their associations to movie addressses have been updated
+@return pointer to a newly allocated movie 
+@param newAttribute is the new value to be updated
+@param unedittedMovie is the address of the movie to be updated
+@param op is the integer signifying which operations to carry out when updating*/
 Movie* NotIMDB_Database::__updateSearchEngineBST(const std::string newAttribute, Movie* unedittedMovie, int op)
 {
 	// check for correct operation
@@ -363,7 +363,7 @@ std::string NotIMDB_Database::processSearchEntry(const std::string & query) cons
 		}
 	}
 	// replace if there are multiple keywords seperated by whitespaces
-
+	delete queryTokens;
 	processedKey = StringUtil::replace(processedKey, " ", "_");
 	return processedKey;
 }
@@ -570,8 +570,7 @@ NotIMDB_Database::~NotIMDB_Database()
 	for (size_t i = 0; i < SSIZE; i++)
 	{
 		// delete mem alloc to movies that no longer exist in table
-		Movie** toDelete = __deletedMovies->peek();
-		delete* toDelete;
+		Movie* toDelete = __deletedMovies->peek();
 		delete toDelete;
 		__deletedMovies->pop();
 		toDelete = nullptr;
@@ -682,15 +681,16 @@ bool NotIMDB_Database::deleteMovie(std::string key)
 	std::string processedKey = processSearchEntry(key);
 	try {
 		// pointer to hold address of movie to be removed
-		Movie** deletedMovie = nullptr;
-		*deletedMovie = (*__movieDB)[processedKey];
+		Movie* deletedMovie;
+		deletedMovie = (*__movieDB)[processedKey];
+		(*__movieDB)[processedKey] = nullptr;
 		if (deletedMovie == nullptr)
 			return false;
 		// removes the address stored in the table therefore no longer exists in the table
 		__movieDB->remove(processedKey);
 		// pushes the movie onto the undo-stack
 		__deletedMovies->push(deletedMovie);
-		__searchEngineDeletionHandler(*deletedMovie);
+		__searchEngineDeletionHandler(deletedMovie);
 		return true;
 	}
 	catch (const CustomException& e)
@@ -705,7 +705,7 @@ bool NotIMDB_Database::undoMostRecentDelete()
 	Movie* movieDeleted = nullptr;
 	if (__deletedMovies->size() > 0)
 	{
-		movieDeleted = *__deletedMovies->peek();
+		movieDeleted = __deletedMovies->peek();
 		__deletedMovies->pop();
 		std::cout << *movieDeleted << std::endl;
 		__movieDB->add(movieDeleted->getTitle(), movieDeleted);
@@ -716,7 +716,7 @@ bool NotIMDB_Database::undoMostRecentDelete()
 void NotIMDB_Database::showMostRecentDelete() const
 {
 	if (__deletedMovies->size() > 0)
-		std::cout << __deletedMovies->peek() << std::endl;
+		std::cout << *__deletedMovies->peek() << std::endl;
 }
 
 bool NotIMDB_Database::updateMovieName(std::string oldMovieName, std::string newMovieName)
@@ -805,9 +805,9 @@ bool NotIMDB_Database::updateMovieRating(std::string key, std::string newKey)
 {
 	try {
 		std::string processedKey = processSearchEntry(key);
-		Movie* newMovie = __updateSearchEngineBST(newKey, (*__movieDB)[processedKey], 6);
-		delete (*__movieDB)[processedKey];
-		(*__movieDB)[processedKey] = newMovie;
+		Movie* newMovie = __updateSearchEngineBST(newKey, __movieDB->get(processedKey), 6);
+		__movieDB->remove(processedKey);
+		__movieDB->add(newMovie->getTitle() + " " + newMovie->getYearReleased(), newMovie);
 		return true;
 	}
 	catch (CustomException e)
