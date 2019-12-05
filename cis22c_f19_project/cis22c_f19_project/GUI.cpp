@@ -479,25 +479,28 @@ void GUI::UI_remove(NotIMDB_Database &db)
 			std::string selectedMovieTitle;
 			std::cout << "\nEnter the title of the movie to remove: ";
 			getline(std::cin, selectedMovieTitle);
-
-			if (!(db.foundMovie(selectedMovieTitle)))
+			if (selectedMovieTitle.size() != 0)
 			{
-				throw CustomException("Error: movie not found in database");
-			}
-			else
-			{
-				std::cout << GUI::divider << std::endl;
-				db.readMovies(selectedMovieTitle, exactMatchFound);
-				int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
-				if (confirm == 1)
+				if (!(db.foundMovie(selectedMovieTitle)))
 				{
-					db.deleteMovie(selectedMovieTitle);
-					if (!(db.foundMovie(selectedMovieTitle)))
+					throw CustomException("Error: movie not found in database");
+				}
+				else
+				{
+					std::cout << GUI::divider << std::endl;
+					db.readMovies(selectedMovieTitle, exactMatchFound);
+					int confirm = menu_prompt("Are you sure you want to remove this movie?", menu_yes_no, 2);
+					if (confirm == 1)
 					{
-						std::cout << "Deleted successfully!" << std::endl;
+						db.deleteMovie(selectedMovieTitle);
+						if (!(db.foundMovie(selectedMovieTitle)))
+						{
+							std::cout << "Deleted successfully!" << std::endl;
+						}
 					}
 				}
 			}
+
 			b = true;
 		}
 		catch (const CustomException& e)
@@ -759,7 +762,6 @@ void GUI::UI_run_application(NotIMDB_Database & db)
 			{
 				std::cout << "This was the most recently deleted movie: " << std::endl;
 				db.showMostRecentDelete();
-				std::cout << "Would you like to undo this deletion?" << std::endl;
 				
 				int choice = menu_prompt("Would you like to undo this deletion?", menu_yes_no, 2);
 				if (choice == 1)
