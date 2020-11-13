@@ -16,9 +16,6 @@ an application, in this case it was a movie search engine. Data structures used 
 <img src="https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png" width="500" height="300"/>
 </div>
 
-![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png =802 x 451)
-![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png)
-![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png)
 
 # References:
 * Context Index Searching: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.309.9686&rep=rep1&type=pdf
