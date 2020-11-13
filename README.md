@@ -6,16 +6,18 @@ an application, in this case it was a movie search engine. Data structures used 
 
 # How It Works
 
-![alt text][programFlow]{height=451 width=802}
-
-
-[//]: # (Image References)
-[programFlow]: https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png
-
-
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png" width="802" height="451"/>
+</div>
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png" width="500" height="300"/>
+</div>
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png" width="500" height="300"/>
+</div>
 
 ![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png =802 x 451)
-![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/movieDB.png)
+![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png)
 ![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png)
 
 # References:
