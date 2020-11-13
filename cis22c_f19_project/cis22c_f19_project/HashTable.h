@@ -435,13 +435,13 @@ template<typename T>
 void HashTable<T>::showStats() const
 {
 	std::cout << "|\tOccupancy\t\t|\t " << __occupancy << "\t|\t" << std::endl;
-	std::cout << GUI::divider << "------------\n";
+	//std::cout << GUI::divider << "------------\n";
 
 	std::cout << "|\tCapacity\t\t|\t" << __capacity << "\t|\t" << std::endl;
-	 std::cout << GUI::divider << "------------\n";
+	 //std::cout << GUI::divider << "------------\n";
 
 	std::cout << "|\tLoad Factor\t\t|\t" << std::setprecision(4) << (loadFactor() * 100) << "%" << std::setprecision(2) << "\t|\t" << std::endl;
-	 std::cout << GUI::divider << "------------\n";
+	 //std::cout << GUI::divider << "------------\n";
 
 	std::cout << "|\tNumber of Collisions\t|\t" << __collisionCount << "\t|\t" << std::endl;
 }
