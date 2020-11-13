@@ -1,10 +1,25 @@
 # Context Indexing Movie Search Engine
+This program was written for my data structures class in 2019 as a final project. Constraints required utilization of in-house written data structures to build an application, in this case, it was a movie search engine. <br>
 
-# Overview
-This program was written for my data structures class in 2019 as a final project. Constraints required utilization of in-house written data structures to build
-an application, in this case it was a movie search engine. Data structures used included: SinglyLinkedList, HashTable & BinarySearchTree
+## Data structures used:
+* Singly Linked List
+* Stack
+* HashTable (Quadratic Probing)
+* Binary Search Tree
+
+
 
 # How It Works
+
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png" width="642" height="361"/>
+</div>
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/movieDB.png" width="642" height="361"/>
+</div>
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png" width="642" height="361"/>
+</div>
 
 
 # References:
