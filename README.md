@@ -10,7 +10,7 @@ an application, in this case it was a movie search engine. Data structures used 
 <img src="https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png" width="642" height="361"/>
 </div>
 <div>
-<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png" width="642" height="361"/>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/movieDB.png" width="642" height="361"/>
 </div>
 <div>
 <img src="https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png" width="642" height="361"/>
