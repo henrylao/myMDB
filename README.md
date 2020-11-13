@@ -1,6 +1,10 @@
 # Context Indexing Movie Search Engine
 This program was written for my data structures class in 2019 as a final project. Our professor provided constraints requiring utilization of in-house written data structures to build an application, in this case, it was a movie search engine. <br>
-Data structures used included: SinglyLinkedList, Stack, HashTable & BinarySearchTree
+Data structures used included: 
+* Singly Linked List
+* Stack
+* HashTable (Quadratic Probing)
+* BinarySearchTree
 
 
 
