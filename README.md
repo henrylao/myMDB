@@ -6,6 +6,9 @@ an application, in this case it was a movie search engine. Data structures used 
 
 # How It Works
 
+![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/programFlow.png)
+![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/movieDB.png)
+![alt text](https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png)
 
 # References:
 * Context Index Searching: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.309.9686&rep=rep1&type=pdf
