@@ -1,5 +1,5 @@
 # Context Indexing Movie Search Engine
-This program was written for my data structures class in 2019 as a final project. Constraints required utilization of in-house written data structures to build an application, in this case, it was a movie search engine. <br>
+This program was written for my data structures class in 2019 as a final project. Constraints required utilization of in-house written data structures to build an application and in this case, it was an application utilizing a movie search engine that allowed the user to search,add,remove, edit, and remove applied edits to movies . <br>
 
 ## Data structures used:
 * Singly Linked List
