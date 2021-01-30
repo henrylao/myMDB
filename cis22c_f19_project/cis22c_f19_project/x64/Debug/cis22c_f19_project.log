@@ -1,0 +1,4 @@
+﻿  HashUtil.cpp
+C:\Users\hlao1\Github\movie-search-engine\cis22c_f19_project\cis22c_f19_project\HashUtil.cpp(6,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hlao1\Github\movie-search-engine\cis22c_f19_project\cis22c_f19_project\HashUtil.cpp(15,22): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  cis22c_f19_project.vcxproj -> C:\Users\hlao1\Github\movie-search-engine\cis22c_f19_project\x64\Debug\cis22c_f19_project.exe
