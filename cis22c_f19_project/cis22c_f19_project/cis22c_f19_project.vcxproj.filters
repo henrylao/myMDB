@@ -40,7 +40,7 @@
     <Filter Include="Exception">
       <UniqueIdentifier>{129e41f7-88f9-4042-96cc-de1efc424ced}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Util\SortUtil">
+    <Filter Include="Util\Sort">
       <UniqueIdentifier>{714202d3-ac13-4039-846a-b1fd3d8d5678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -124,13 +124,10 @@
       <Filter>Collection\List</Filter>
     </ClInclude>
     <ClInclude Include="SortAlgos.h">
-      <Filter>Util\SortUtil</Filter>
+      <Filter>Util\Sort</Filter>
     </ClInclude>
     <ClInclude Include="CustomException.h">
       <Filter>Exception</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTest.h">
-      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

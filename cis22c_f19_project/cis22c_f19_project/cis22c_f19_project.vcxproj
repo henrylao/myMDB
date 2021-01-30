@@ -143,7 +143,6 @@
     <ClInclude Include="stack_interface.h" />
     <ClInclude Include="StringUtil.h" />
     <ClInclude Include="NotIMDB_Database.h" />
-    <ClInclude Include="UnitTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CustomException.cpp" />

@@ -18,27 +18,6 @@ size_t HashUtil::hashBirthday(const std::string& str) {
 		sum += std::stoi(std::string(1, sumStr[i]));
 	return sum;
 }
-//
-//size_t HashUtil::hashStringFold(const std::string & str, size_t byteSize)
-//{
-//	size_t intLength = str.length() / 4;
-//	size_t sum = 0;
-//	for (size_t j = 0; j < intLength; j++) {
-//		std::string c = str.substr(j * 4, (j * 4) + 4).c_str();
-//		size_t mult = 1;
-//		for (int k = 0; k < c.length; k++) {
-//			sum += size_t(c[k]) * mult;
-//			mult *= 256;
-//		}
-//	}
-//	std::string c = str.substr(intLength * 4).c_str();
-//	size_t mult = 1;
-//	for (int k = 0; k < c.length; k++) {
-//		sum += c[k] * mult;
-//		mult *= 256;
-//	}
-//	return(sum % byteSize);
-//}
 
 size_t HashUtil::hash_UNIX_ELF(std::string name)
 {
