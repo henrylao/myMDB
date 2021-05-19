@@ -1,5 +1,5 @@
 # Context Indexing Movie Search Engine
-This program was written for DeAnza's CS301 Data Structures class in 2019 as a final project. Constraints required utilization of in-house implementation of template data structures used in development of the application. The application is a CLI interface for interacting with a database of movies using the database's search engine.
+This program was written for DeAnza's CS301 Data Structures class in 2019 as a final project. Constraints required utilization of an in-house implementation of template data structures used in the development of the application. The application is a CLI interface for interacting with a database of movies using the database's search engine.
 
 # Data structures used:
 * Singly Linked List
