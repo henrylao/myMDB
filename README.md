@@ -32,15 +32,7 @@ This program was written for DeAnza's CS301 Data Structures class in 2019 as a f
 * BST entries containing __keywords__ associated with a __movie__ such that that the __first character__ of each tokenized keyword pertaining to a movie signifies a key in the dictionary
     * __NOTE__: tokenized words are the movie attributes such as the movie name, genre, year released, runtime, and id
         - more attributes could have included the cast as well as production -- at the bare minimum there are atleast 5 attributes resulting in 5 keywords
-        - this was the largest computational cost when spinning up the application since it uses a nested loop resulting in an average $O(n^2)$ insertion time
-    * Search Time 
-        - Best Case: $O(1)$
-        - Average Case: $O(logn)$
-        - Worse Case: $O(logn)$
-    * Deletion Time 
-        -  Best Case: $O(1)$
-        - Average Case: $O(logn)$
-        - Worse Case: $O(logn)$
+        - this was the largest computational cost when spinning up the application since it uses a nested loop resulting in an average __O(n^2)__ insertion time
         
 ### Start Up Statistics (Small Dataset)       
 | Process                            | Time       |
@@ -74,9 +66,9 @@ This program was written for DeAnza's CS301 Data Structures class in 2019 as a f
 Reading movies based on relevance of a user's keyword search
 1. Preprocess the keyword(s) search entry into tokenized list
 2. Loop LV 1: For each starting character of a tokenized user entry get the associated BST
-    at $O(1)$ and search for the associated keyword BST node $O(logn)$
+    at __O(1)__ and search for the associated keyword BST node __O(logn)__
     - __NOTE__ user keyword searches are usually short, this would have many issues if there were too many keywords 
-3. Loop LV 2: For each __keyword-node__ containing a list of movies, create a tally value of 1 for each movie associated keyword MovieID incrementing the tally for each existing movieID $O(n^2)$
+3. Loop LV 2: For each __keyword-node__ containing a list of movies, create a tally value of 1 for each movie associated keyword MovieID incrementing the tally for each existing movieID __O(n^2)__
 4. Sort movies based upon their tallied keyword relevance ie `"how many keyword hits did each movie have?"` and return list of movies sorted by relevance measured by the set of tokenized keywords of a user search entry
 
 
