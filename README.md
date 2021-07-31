@@ -33,7 +33,11 @@ This program was written for DeAnza's CS301 Data Structures class in 2019 as a f
     * __NOTE__: tokenized words are the movie attributes such as the movie name, genre, year released, runtime, and id
         - more attributes could have included the cast as well as production -- at the bare minimum there are atleast 5 attributes resulting in 5 keywords
         - this was the largest computational cost when spinning up the application since it uses a nested loop resulting in an average __O(n^2)__ insertion time
-        
+    
+<div>
+<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png" width="642" height="361"/>
+</div>
+
 ### Start Up Statistics (Small Dataset)       
 | Process                            | Time       |
 |------------------------------------|------------|
@@ -58,9 +62,6 @@ This program was written for DeAnza's CS301 Data Structures class in 2019 as a f
 | Load Factor          | 7.869% |
 | Number of Collisions | 0      |
 
-<div>
-<img src="https://github.com/henrylao/movie-search-engine/blob/master/images/contextIndexSearch.png" width="642" height="361"/>
-</div>
 
 # Read
 Reading movies based on relevance of a user's keyword search
